@@ -1,4 +1,4 @@
-# Install script for directory: C:/Projects/open62541-i4Component/examples
+# Install script for directory: C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/examples
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -34,31 +34,31 @@ endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   if("${CMAKE_INSTALL_CONFIG_NAME}" MATCHES "^([Dd][Ee][Bb][Uu][Gg])$")
-    file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE PROGRAM RENAME "ua_server_ctt.exe" FILES "C:/Projects/open62541-i4Component/buildWIN/bin/examples/server_ctt.exe")
+    file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE PROGRAM RENAME "ua_server_ctt.exe" FILES "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/bin/examples/server_ctt.exe")
   elseif("${CMAKE_INSTALL_CONFIG_NAME}" MATCHES "^([Rr][Ee][Ll][Ee][Aa][Ss][Ee])$")
-    file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE PROGRAM RENAME "ua_server_ctt.exe" FILES "C:/Projects/open62541-i4Component/buildWIN/bin/examples/server_ctt.exe")
+    file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE PROGRAM RENAME "ua_server_ctt.exe" FILES "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/bin/examples/server_ctt.exe")
   elseif("${CMAKE_INSTALL_CONFIG_NAME}" MATCHES "^([Mm][Ii][Nn][Ss][Ii][Zz][Ee][Rr][Ee][Ll])$")
-    file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE PROGRAM RENAME "ua_server_ctt.exe" FILES "C:/Projects/open62541-i4Component/buildWIN/bin/examples/server_ctt.exe")
+    file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE PROGRAM RENAME "ua_server_ctt.exe" FILES "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/bin/examples/server_ctt.exe")
   elseif("${CMAKE_INSTALL_CONFIG_NAME}" MATCHES "^([Rr][Ee][Ll][Ww][Ii][Tt][Hh][Dd][Ee][Bb][Ii][Nn][Ff][Oo])$")
-    file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE PROGRAM RENAME "ua_server_ctt.exe" FILES "C:/Projects/open62541-i4Component/buildWIN/bin/examples/server_ctt.exe")
+    file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE PROGRAM RENAME "ua_server_ctt.exe" FILES "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/bin/examples/server_ctt.exe")
   endif()
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   if("${CMAKE_INSTALL_CONFIG_NAME}" MATCHES "^([Dd][Ee][Bb][Uu][Gg])$")
-    file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE PROGRAM RENAME "ua_client" FILES "C:/Projects/open62541-i4Component/buildWIN/bin/examples/client.exe")
+    file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE PROGRAM RENAME "ua_client" FILES "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/bin/examples/client.exe")
   elseif("${CMAKE_INSTALL_CONFIG_NAME}" MATCHES "^([Rr][Ee][Ll][Ee][Aa][Ss][Ee])$")
-    file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE PROGRAM RENAME "ua_client" FILES "C:/Projects/open62541-i4Component/buildWIN/bin/examples/client.exe")
+    file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE PROGRAM RENAME "ua_client" FILES "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/bin/examples/client.exe")
   elseif("${CMAKE_INSTALL_CONFIG_NAME}" MATCHES "^([Mm][Ii][Nn][Ss][Ii][Zz][Ee][Rr][Ee][Ll])$")
-    file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE PROGRAM RENAME "ua_client" FILES "C:/Projects/open62541-i4Component/buildWIN/bin/examples/client.exe")
+    file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE PROGRAM RENAME "ua_client" FILES "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/bin/examples/client.exe")
   elseif("${CMAKE_INSTALL_CONFIG_NAME}" MATCHES "^([Rr][Ee][Ll][Ww][Ii][Tt][Hh][Dd][Ee][Bb][Ii][Nn][Ff][Oo])$")
-    file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE PROGRAM RENAME "ua_client" FILES "C:/Projects/open62541-i4Component/buildWIN/bin/examples/client.exe")
+    file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE PROGRAM RENAME "ua_client" FILES "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/bin/examples/client.exe")
   endif()
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("C:/Projects/open62541-i4Component/buildWIN/examples/nodeset/cmake_install.cmake")
+  include("C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/examples/nodeset/cmake_install.cmake")
 
 endif()
 

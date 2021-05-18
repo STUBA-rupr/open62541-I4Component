@@ -1,51 +1,54 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
   <ItemGroup Label="ProjectConfigurations">
-    <ProjectConfiguration Include="Debug|Win32">
+    <ProjectConfiguration Include="Debug|x64">
       <Configuration>Debug</Configuration>
-      <Platform>Win32</Platform>
+      <Platform>x64</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="Release|Win32">
+    <ProjectConfiguration Include="Release|x64">
       <Configuration>Release</Configuration>
-      <Platform>Win32</Platform>
+      <Platform>x64</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="MinSizeRel|Win32">
+    <ProjectConfiguration Include="MinSizeRel|x64">
       <Configuration>MinSizeRel</Configuration>
-      <Platform>Win32</Platform>
+      <Platform>x64</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="RelWithDebInfo|Win32">
+    <ProjectConfiguration Include="RelWithDebInfo|x64">
       <Configuration>RelWithDebInfo</Configuration>
-      <Platform>Win32</Platform>
+      <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{86936851-8126-3702-8496-6B39EF5CD98A}</ProjectGuid>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <ProjectGuid>{BC0E685B-4C94-3E5D-814A-8FB436A97194}</ProjectGuid>
+    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
     <Keyword>Win32Proj</Keyword>
-    <Platform>Win32</Platform>
+    <Platform>x64</Platform>
     <ProjectName>server_settimestamp</ProjectName>
     <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'" Label="Configuration">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'" Label="Configuration">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -56,42 +59,41 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
-    <LocalDebuggerWorkingDirectory Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:/Projects/open62541-i4Component/buildWIN/bin</LocalDebuggerWorkingDirectory>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\Projects\open62541-i4Component\buildWIN\bin\examples\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">server_settimestamp.dir\Debug\</IntDir>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">server_settimestamp</TargetName>
-    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.exe</TargetExt>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
-    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</GenerateManifest>
-    <LocalDebuggerWorkingDirectory Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:/Projects/open62541-i4Component/buildWIN/bin</LocalDebuggerWorkingDirectory>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\Projects\open62541-i4Component\buildWIN\bin\examples\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">server_settimestamp.dir\Release\</IntDir>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">server_settimestamp</TargetName>
-    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.exe</TargetExt>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
-    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</GenerateManifest>
-    <LocalDebuggerWorkingDirectory Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">C:/Projects/open62541-i4Component/buildWIN/bin</LocalDebuggerWorkingDirectory>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">C:\Projects\open62541-i4Component\buildWIN\bin\examples\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">server_settimestamp.dir\MinSizeRel\</IntDir>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">server_settimestamp</TargetName>
-    <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">.exe</TargetExt>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkIncremental>
-    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">true</GenerateManifest>
-    <LocalDebuggerWorkingDirectory Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">C:/Projects/open62541-i4Component/buildWIN/bin</LocalDebuggerWorkingDirectory>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">C:\Projects\open62541-i4Component\buildWIN\bin\examples\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">server_settimestamp.dir\RelWithDebInfo\</IntDir>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">server_settimestamp</TargetName>
-    <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">.exe</TargetExt>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">true</LinkIncremental>
-    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">true</GenerateManifest>
+    <LocalDebuggerWorkingDirectory Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/bin</LocalDebuggerWorkingDirectory>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\bin\examples\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">server_settimestamp.dir\Debug\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">server_settimestamp</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</GenerateManifest>
+    <LocalDebuggerWorkingDirectory Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/bin</LocalDebuggerWorkingDirectory>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\bin\examples\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">server_settimestamp.dir\Release\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">server_settimestamp</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</GenerateManifest>
+    <LocalDebuggerWorkingDirectory Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/bin</LocalDebuggerWorkingDirectory>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\bin\examples\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">server_settimestamp.dir\MinSizeRel\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">server_settimestamp</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">true</GenerateManifest>
+    <LocalDebuggerWorkingDirectory Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/bin</LocalDebuggerWorkingDirectory>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\bin\examples\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">server_settimestamp.dir\RelWithDebInfo\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">server_settimestamp</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">true</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">true</GenerateManifest>
   </PropertyGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Projects\open62541-i4Component\examples;C:\Projects\open62541-i4Component\arch;C:\Projects\open62541-i4Component\src;C:\Projects\open62541-i4Component\arch\win32;C:\Projects\open62541-i4Component\include;C:\Projects\open62541-i4Component\plugins\include;C:\Projects\open62541-i4Component\deps;C:\Projects\open62541-i4Component\src\pubsub;C:\Projects\open62541-i4Component\buildWIN\src_generated;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\examples;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\arch;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\arch\win32;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\include;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\plugins\include;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\deps;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\pubsub;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\src_generated;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>%(AdditionalOptions) /w44996</AdditionalOptions>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
-      <CompileAs>CompileAsC</CompileAs>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <ExceptionHandling>
       </ExceptionHandling>
@@ -107,10 +109,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;UA_ARCHITECTURE_WIN32;CMAKE_INTDIR=\"Debug\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Projects\open62541-i4Component\examples;C:\Projects\open62541-i4Component\arch;C:\Projects\open62541-i4Component\src;C:\Projects\open62541-i4Component\arch\win32;C:\Projects\open62541-i4Component\include;C:\Projects\open62541-i4Component\plugins\include;C:\Projects\open62541-i4Component\deps;C:\Projects\open62541-i4Component\src\pubsub;C:\Projects\open62541-i4Component\buildWIN\src_generated;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\examples;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\arch;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\arch\win32;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\include;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\plugins\include;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\deps;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\pubsub;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\src_generated;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:\Projects\open62541-i4Component\examples;C:\Projects\open62541-i4Component\arch;C:\Projects\open62541-i4Component\src;C:\Projects\open62541-i4Component\arch\win32;C:\Projects\open62541-i4Component\include;C:\Projects\open62541-i4Component\plugins\include;C:\Projects\open62541-i4Component\deps;C:\Projects\open62541-i4Component\src\pubsub;C:\Projects\open62541-i4Component\buildWIN\src_generated;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\examples;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\arch;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\arch\win32;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\include;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\plugins\include;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\deps;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\pubsub;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\src_generated;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -120,24 +122,22 @@
     <Link>
       <AdditionalDependencies>..\bin\Debug\open62541.lib;ws2_32.lib;iphlpapi.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <ImportLibrary>C:/Projects/open62541-i4Component/buildWIN/bin/Debug/server_settimestamp.lib</ImportLibrary>
-      <ProgramDataBaseFile>C:/Projects/open62541-i4Component/buildWIN/bin/examples/server_settimestamp.pdb</ProgramDataBaseFile>
-      <StackReserveSize>8000000</StackReserveSize>
+      <ImportLibrary>C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/bin/Debug/server_settimestamp.lib</ImportLibrary>
+      <ProgramDataBaseFile>C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/bin/examples/server_settimestamp.pdb</ProgramDataBaseFile>
       <SubSystem>Console</SubSystem>
     </Link>
     <ProjectReference>
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
     </ProjectReference>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Projects\open62541-i4Component\examples;C:\Projects\open62541-i4Component\arch;C:\Projects\open62541-i4Component\src;C:\Projects\open62541-i4Component\arch\win32;C:\Projects\open62541-i4Component\include;C:\Projects\open62541-i4Component\plugins\include;C:\Projects\open62541-i4Component\deps;C:\Projects\open62541-i4Component\src\pubsub;C:\Projects\open62541-i4Component\buildWIN\src_generated;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\examples;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\arch;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\arch\win32;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\include;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\plugins\include;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\deps;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\pubsub;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\src_generated;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>%(AdditionalOptions) /w44996</AdditionalOptions>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
-      <CompileAs>CompileAsC</CompileAs>
       <ExceptionHandling>
       </ExceptionHandling>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
@@ -154,10 +154,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;UA_ARCHITECTURE_WIN32;CMAKE_INTDIR=\"Release\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Projects\open62541-i4Component\examples;C:\Projects\open62541-i4Component\arch;C:\Projects\open62541-i4Component\src;C:\Projects\open62541-i4Component\arch\win32;C:\Projects\open62541-i4Component\include;C:\Projects\open62541-i4Component\plugins\include;C:\Projects\open62541-i4Component\deps;C:\Projects\open62541-i4Component\src\pubsub;C:\Projects\open62541-i4Component\buildWIN\src_generated;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\examples;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\arch;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\arch\win32;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\include;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\plugins\include;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\deps;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\pubsub;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\src_generated;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:\Projects\open62541-i4Component\examples;C:\Projects\open62541-i4Component\arch;C:\Projects\open62541-i4Component\src;C:\Projects\open62541-i4Component\arch\win32;C:\Projects\open62541-i4Component\include;C:\Projects\open62541-i4Component\plugins\include;C:\Projects\open62541-i4Component\deps;C:\Projects\open62541-i4Component\src\pubsub;C:\Projects\open62541-i4Component\buildWIN\src_generated;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\examples;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\arch;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\arch\win32;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\include;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\plugins\include;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\deps;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\pubsub;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\src_generated;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -167,24 +167,22 @@
     <Link>
       <AdditionalDependencies>..\bin\Release\open62541.lib;ws2_32.lib;iphlpapi.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <ImportLibrary>C:/Projects/open62541-i4Component/buildWIN/bin/Release/server_settimestamp.lib</ImportLibrary>
-      <ProgramDataBaseFile>C:/Projects/open62541-i4Component/buildWIN/bin/examples/server_settimestamp.pdb</ProgramDataBaseFile>
-      <StackReserveSize>8000000</StackReserveSize>
+      <ImportLibrary>C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/bin/Release/server_settimestamp.lib</ImportLibrary>
+      <ProgramDataBaseFile>C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/bin/examples/server_settimestamp.pdb</ProgramDataBaseFile>
       <SubSystem>Console</SubSystem>
     </Link>
     <ProjectReference>
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
     </ProjectReference>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Projects\open62541-i4Component\examples;C:\Projects\open62541-i4Component\arch;C:\Projects\open62541-i4Component\src;C:\Projects\open62541-i4Component\arch\win32;C:\Projects\open62541-i4Component\include;C:\Projects\open62541-i4Component\plugins\include;C:\Projects\open62541-i4Component\deps;C:\Projects\open62541-i4Component\src\pubsub;C:\Projects\open62541-i4Component\buildWIN\src_generated;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\examples;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\arch;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\arch\win32;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\include;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\plugins\include;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\deps;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\pubsub;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\src_generated;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>%(AdditionalOptions) /w44996</AdditionalOptions>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
-      <CompileAs>CompileAsC</CompileAs>
       <ExceptionHandling>
       </ExceptionHandling>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
@@ -201,10 +199,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;UA_ARCHITECTURE_WIN32;CMAKE_INTDIR=\"MinSizeRel\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Projects\open62541-i4Component\examples;C:\Projects\open62541-i4Component\arch;C:\Projects\open62541-i4Component\src;C:\Projects\open62541-i4Component\arch\win32;C:\Projects\open62541-i4Component\include;C:\Projects\open62541-i4Component\plugins\include;C:\Projects\open62541-i4Component\deps;C:\Projects\open62541-i4Component\src\pubsub;C:\Projects\open62541-i4Component\buildWIN\src_generated;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\examples;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\arch;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\arch\win32;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\include;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\plugins\include;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\deps;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\pubsub;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\src_generated;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:\Projects\open62541-i4Component\examples;C:\Projects\open62541-i4Component\arch;C:\Projects\open62541-i4Component\src;C:\Projects\open62541-i4Component\arch\win32;C:\Projects\open62541-i4Component\include;C:\Projects\open62541-i4Component\plugins\include;C:\Projects\open62541-i4Component\deps;C:\Projects\open62541-i4Component\src\pubsub;C:\Projects\open62541-i4Component\buildWIN\src_generated;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\examples;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\arch;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\arch\win32;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\include;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\plugins\include;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\deps;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\pubsub;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\src_generated;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -214,24 +212,22 @@
     <Link>
       <AdditionalDependencies>..\bin\MinSizeRel\open62541.lib;ws2_32.lib;iphlpapi.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <ImportLibrary>C:/Projects/open62541-i4Component/buildWIN/bin/MinSizeRel/server_settimestamp.lib</ImportLibrary>
-      <ProgramDataBaseFile>C:/Projects/open62541-i4Component/buildWIN/bin/examples/server_settimestamp.pdb</ProgramDataBaseFile>
-      <StackReserveSize>8000000</StackReserveSize>
+      <ImportLibrary>C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/bin/MinSizeRel/server_settimestamp.lib</ImportLibrary>
+      <ProgramDataBaseFile>C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/bin/examples/server_settimestamp.pdb</ProgramDataBaseFile>
       <SubSystem>Console</SubSystem>
     </Link>
     <ProjectReference>
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
     </ProjectReference>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Projects\open62541-i4Component\examples;C:\Projects\open62541-i4Component\arch;C:\Projects\open62541-i4Component\src;C:\Projects\open62541-i4Component\arch\win32;C:\Projects\open62541-i4Component\include;C:\Projects\open62541-i4Component\plugins\include;C:\Projects\open62541-i4Component\deps;C:\Projects\open62541-i4Component\src\pubsub;C:\Projects\open62541-i4Component\buildWIN\src_generated;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\examples;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\arch;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\arch\win32;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\include;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\plugins\include;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\deps;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\pubsub;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\src_generated;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>%(AdditionalOptions) /w44996</AdditionalOptions>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
-      <CompileAs>CompileAsC</CompileAs>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <ExceptionHandling>
       </ExceptionHandling>
@@ -247,10 +243,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;UA_ARCHITECTURE_WIN32;CMAKE_INTDIR=\"RelWithDebInfo\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Projects\open62541-i4Component\examples;C:\Projects\open62541-i4Component\arch;C:\Projects\open62541-i4Component\src;C:\Projects\open62541-i4Component\arch\win32;C:\Projects\open62541-i4Component\include;C:\Projects\open62541-i4Component\plugins\include;C:\Projects\open62541-i4Component\deps;C:\Projects\open62541-i4Component\src\pubsub;C:\Projects\open62541-i4Component\buildWIN\src_generated;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\examples;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\arch;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\arch\win32;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\include;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\plugins\include;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\deps;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\pubsub;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\src_generated;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:\Projects\open62541-i4Component\examples;C:\Projects\open62541-i4Component\arch;C:\Projects\open62541-i4Component\src;C:\Projects\open62541-i4Component\arch\win32;C:\Projects\open62541-i4Component\include;C:\Projects\open62541-i4Component\plugins\include;C:\Projects\open62541-i4Component\deps;C:\Projects\open62541-i4Component\src\pubsub;C:\Projects\open62541-i4Component\buildWIN\src_generated;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\examples;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\arch;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\arch\win32;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\include;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\plugins\include;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\deps;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\pubsub;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\src_generated;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -260,12 +256,11 @@
     <Link>
       <AdditionalDependencies>..\bin\RelWithDebInfo\open62541.lib;ws2_32.lib;iphlpapi.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <ImportLibrary>C:/Projects/open62541-i4Component/buildWIN/bin/RelWithDebInfo/server_settimestamp.lib</ImportLibrary>
-      <ProgramDataBaseFile>C:/Projects/open62541-i4Component/buildWIN/bin/examples/server_settimestamp.pdb</ProgramDataBaseFile>
-      <StackReserveSize>8000000</StackReserveSize>
+      <ImportLibrary>C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/bin/RelWithDebInfo/server_settimestamp.lib</ImportLibrary>
+      <ProgramDataBaseFile>C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/bin/examples/server_settimestamp.pdb</ProgramDataBaseFile>
       <SubSystem>Console</SubSystem>
     </Link>
     <ProjectReference>
@@ -273,10 +268,11 @@
     </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <CustomBuild Include="C:\Projects\open62541-i4Component\examples\CMakeLists.txt">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Building Custom Rule C:/Projects/open62541-i4Component/examples/CMakeLists.txt</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -SC:/Projects/open62541-i4Component -BC:/Projects/open62541-i4Component/buildWIN --check-stamp-file C:/Projects/open62541-i4Component/buildWIN/examples/CMakeFiles/generate.stamp
+    <CustomBuild Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\examples\CMakeLists.txt">
+      <StdOutEncoding>UTF-8</StdOutEncoding>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/examples/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component -BC:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN --check-stamp-file C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/examples/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -284,12 +280,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\Projects\open62541-i4Component\buildWIN\examples\CMakeFiles\generate.stamp</Outputs>
-      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Building Custom Rule C:/Projects/open62541-i4Component/examples/CMakeLists.txt</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -SC:/Projects/open62541-i4Component -BC:/Projects/open62541-i4Component/buildWIN --check-stamp-file C:/Projects/open62541-i4Component/buildWIN/examples/CMakeFiles/generate.stamp
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\examples\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/examples/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component -BC:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN --check-stamp-file C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/examples/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -297,12 +293,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\Projects\open62541-i4Component\buildWIN\examples\CMakeFiles\generate.stamp</Outputs>
-      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Building Custom Rule C:/Projects/open62541-i4Component/examples/CMakeLists.txt</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -SC:/Projects/open62541-i4Component -BC:/Projects/open62541-i4Component/buildWIN --check-stamp-file C:/Projects/open62541-i4Component/buildWIN/examples/CMakeFiles/generate.stamp
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\examples\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Building Custom Rule C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/examples/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component -BC:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN --check-stamp-file C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/examples/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -310,12 +306,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">C:\Projects\open62541-i4Component\buildWIN\examples\CMakeFiles\generate.stamp</Outputs>
-      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Building Custom Rule C:/Projects/open62541-i4Component/examples/CMakeLists.txt</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -SC:/Projects/open62541-i4Component -BC:/Projects/open62541-i4Component/buildWIN --check-stamp-file C:/Projects/open62541-i4Component/buildWIN/examples/CMakeFiles/generate.stamp
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\examples\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Building Custom Rule C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/examples/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component -BC:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN --check-stamp-file C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/examples/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -323,24 +319,24 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">C:\Projects\open62541-i4Component\buildWIN\examples\CMakeFiles\generate.stamp</Outputs>
-      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">false</LinkObjects>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\examples\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="C:\Projects\open62541-i4Component\examples\server_settimestamp.c" />
-    <ClInclude Include="C:\Projects\open62541-i4Component\examples\common.h" />
+    <ClCompile Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\examples\server_settimestamp.c" />
+    <ClInclude Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\examples\common.h" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="C:\Projects\open62541-i4Component\buildWIN\ZERO_CHECK.vcxproj">
-      <Project>{3B5D5D17-477D-3DFE-8880-099E76C6AE4C}</Project>
+    <ProjectReference Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\ZERO_CHECK.vcxproj">
+      <Project>{B11AB80B-C491-3854-AD62-89AE733E7157}</Project>
       <Name>ZERO_CHECK</Name>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </ProjectReference>
-    <ProjectReference Include="C:\Projects\open62541-i4Component\buildWIN\open62541.vcxproj">
-      <Project>{BE1BA860-BA25-34EA-B0A6-E725577BD74C}</Project>
+    <ProjectReference Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\open62541.vcxproj">
+      <Project>{BEA65854-B7F8-312D-B034-1EB0866857D5}</Project>
       <Name>open62541</Name>
     </ProjectReference>
   </ItemGroup>

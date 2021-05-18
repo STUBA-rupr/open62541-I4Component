@@ -1,0 +1,10 @@
+^C:\USERS\RUDOLF\SOURCE\REPOS\STUBA-RUPR\OPEN62541-I4COMPONENT\BUILDWIN\CMAKEFILES\F9825F7F5C92EEDE7457D6413558919B\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component -BC:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/open62541.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

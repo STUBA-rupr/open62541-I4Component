@@ -1,0 +1,28 @@
+^C:\USERS\RUDOLF\SOURCE\REPOS\STUBA-RUPR\OPEN62541-I4COMPONENT\BUILDWIN\CMAKEFILES\7DC60401D3773F32C473F2413958F9B6\TRANSPORT_GENERATED.C.RULE
+setlocal
+C:\Users\Rudolf\AppData\Local\Programs\Python\Python39\python.exe C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/tools/generate_datatypes.py --selected-types=C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/tools/schema/datatypes_transport.txt --type-bsd=C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/tools/schema/Custom.Opc.Ua.Transport.bsd --import=TYPES#C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/deps/ua-nodeset/Schema/Opc.Ua.Types.bsd --type-csv=C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/deps/ua-nodeset/Schema/NodeIds.csv --no-builtin --internal C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/src_generated/open62541/transport
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\RUDOLF\SOURCE\REPOS\STUBA-RUPR\OPEN62541-I4COMPONENT\BUILDWIN\CMAKEFILES\F9825F7F5C92EEDE7457D6413558919B\OPEN62541-GENERATOR-TRANSPORT.RULE
+setlocal
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\RUDOLF\SOURCE\REPOS\STUBA-RUPR\OPEN62541-I4COMPONENT\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component -BC:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN --check-stamp-file C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

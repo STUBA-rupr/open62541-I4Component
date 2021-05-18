@@ -1,4 +1,4 @@
-# Install script for directory: C:/Projects/open62541-i4Component/examples/nodeset
+# Install script for directory: C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/examples/nodeset
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

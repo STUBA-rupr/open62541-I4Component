@@ -1,19 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="C:\Projects\open62541-i4Component\examples\custom_datatype\server_types_custom.c" />
+    <ClCompile Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\examples\custom_datatype\server_types_custom.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="C:\Projects\open62541-i4Component\examples\common.h">
+    <ClInclude Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\examples\common.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="C:\Projects\open62541-i4Component\examples\CMakeLists.txt" />
+    <CustomBuild Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\examples\CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">
-      <UniqueIdentifier>{C91119E9-2ADA-3103-A3E0-974224A3E12E}</UniqueIdentifier>
+      <UniqueIdentifier>{7A90BE5E-180C-3A98-9EC0-B1783BE8CA52}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

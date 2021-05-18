@@ -4,7 +4,7 @@ if("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" LESS 2.5)
    message(FATAL_ERROR "CMake >= 2.6.0 required")
 endif()
 cmake_policy(PUSH)
-cmake_policy(VERSION 2.6)
+cmake_policy(VERSION 2.6...3.18)
 #----------------------------------------------------------------
 # Generated CMake target import file.
 #----------------------------------------------------------------
@@ -46,7 +46,7 @@ add_library(open62541::open62541 STATIC IMPORTED)
 
 set_target_properties(open62541::open62541 PROPERTIES
   INTERFACE_COMPILE_DEFINITIONS "UA_ARCHITECTURE_WIN32"
-  INTERFACE_INCLUDE_DIRECTORIES "C:/Projects/open62541-i4Component/arch;C:/Projects/open62541-i4Component/src;C:/Projects/open62541-i4Component/arch/win32;C:/Projects/open62541-i4Component/include;C:/Projects/open62541-i4Component/plugins/include;C:/Projects/open62541-i4Component/deps;C:/Projects/open62541-i4Component/src/pubsub;C:/Projects/open62541-i4Component/buildWIN/src_generated"
+  INTERFACE_INCLUDE_DIRECTORIES "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/arch;C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/src;C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/arch/win32;C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/include;C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/plugins/include;C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/deps;C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/src/pubsub;C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/src_generated"
   INTERFACE_LINK_LIBRARIES "ws2_32;iphlpapi"
 )
 
@@ -54,28 +54,28 @@ set_target_properties(open62541::open62541 PROPERTIES
 set_property(TARGET open62541::open62541 APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
 set_target_properties(open62541::open62541 PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "C"
-  IMPORTED_LOCATION_DEBUG "C:/Projects/open62541-i4Component/buildWIN/bin/Debug/open62541.lib"
+  IMPORTED_LOCATION_DEBUG "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/bin/Debug/open62541.lib"
   )
 
 # Import target "open62541::open62541" for configuration "Release"
 set_property(TARGET open62541::open62541 APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(open62541::open62541 PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "C"
-  IMPORTED_LOCATION_RELEASE "C:/Projects/open62541-i4Component/buildWIN/bin/Release/open62541.lib"
+  IMPORTED_LOCATION_RELEASE "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/bin/Release/open62541.lib"
   )
 
 # Import target "open62541::open62541" for configuration "MinSizeRel"
 set_property(TARGET open62541::open62541 APPEND PROPERTY IMPORTED_CONFIGURATIONS MINSIZEREL)
 set_target_properties(open62541::open62541 PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_MINSIZEREL "C"
-  IMPORTED_LOCATION_MINSIZEREL "C:/Projects/open62541-i4Component/buildWIN/bin/MinSizeRel/open62541.lib"
+  IMPORTED_LOCATION_MINSIZEREL "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/bin/MinSizeRel/open62541.lib"
   )
 
 # Import target "open62541::open62541" for configuration "RelWithDebInfo"
 set_property(TARGET open62541::open62541 APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
 set_target_properties(open62541::open62541 PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "C"
-  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Projects/open62541-i4Component/buildWIN/bin/RelWithDebInfo/open62541.lib"
+  IMPORTED_LOCATION_RELWITHDEBINFO "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/bin/RelWithDebInfo/open62541.lib"
   )
 
 # This file does not depend on other imported targets which have

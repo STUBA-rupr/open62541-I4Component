@@ -1,0 +1,81 @@
+{
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_custom_target"
+		],
+		"files" : 
+		[
+			"CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 1195,
+				"parent" : 0
+			}
+		]
+	},
+	"dependencies" : 
+	[
+		{
+			"id" : "open62541-generator-types::@6890427a1f51a3e7e1df"
+		},
+		{
+			"id" : "open62541-generator-transport::@6890427a1f51a3e7e1df"
+		},
+		{
+			"id" : "open62541-generator-statuscode::@6890427a1f51a3e7e1df"
+		},
+		{
+			"id" : "open62541-generator-namespace::@6890427a1f51a3e7e1df"
+		}
+	],
+	"id" : "open62541-code-generation::@6890427a1f51a3e7e1df",
+	"name" : "open62541-code-generation",
+	"paths" : 
+	{
+		"build" : ".",
+		"source" : "."
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "",
+			"sourceIndexes" : 
+			[
+				0
+			]
+		},
+		{
+			"name" : "CMake Rules",
+			"sourceIndexes" : 
+			[
+				1
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "out/build/x64-Debug (default)/CMakeFiles/open62541-code-generation",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "out/build/x64-Debug (default)/CMakeFiles/open62541-code-generation.rule",
+			"sourceGroupIndex" : 1
+		}
+	],
+	"type" : "UTILITY"
+}

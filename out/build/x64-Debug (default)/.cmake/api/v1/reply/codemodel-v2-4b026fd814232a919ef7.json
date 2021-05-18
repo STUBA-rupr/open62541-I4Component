@@ -1,0 +1,294 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1,
+						8,
+						9
+					],
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.0"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						5,
+						6,
+						7,
+						8,
+						9,
+						10,
+						11,
+						12,
+						13
+					]
+				},
+				{
+					"build" : "arch",
+					"childIndexes" : 
+					[
+						2,
+						3,
+						4,
+						5,
+						6,
+						7
+					],
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.0"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "arch"
+				},
+				{
+					"build" : "arch/posix",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.0"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 0,
+					"source" : "arch/posix"
+				},
+				{
+					"build" : "arch/win32",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.0"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 0,
+					"source" : "arch/win32"
+				},
+				{
+					"build" : "arch/freertosLWIP",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.0"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 0,
+					"source" : "arch/freertosLWIP"
+				},
+				{
+					"build" : "arch/vxworks",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.0"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 0,
+					"source" : "arch/vxworks"
+				},
+				{
+					"build" : "arch/eCos",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.0"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 0,
+					"source" : "arch/eCos"
+				},
+				{
+					"build" : "arch/wec7",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.0"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 0,
+					"source" : "arch/wec7"
+				},
+				{
+					"build" : "doc",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.0"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "doc",
+					"targetIndexes" : 
+					[
+						2,
+						3,
+						4
+					]
+				},
+				{
+					"build" : "tools/packaging",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.0"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "tools/packaging"
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7,
+						8,
+						9
+					],
+					"name" : "open62541",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7,
+						8,
+						9,
+						10,
+						11,
+						12,
+						13
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "clang-tidy::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-clang-tidy-Debug-707587e69c2d7976f93a.json",
+					"name" : "clang-tidy",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "cpplint::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-cpplint-Debug-940eb30bb87e00929cd7.json",
+					"name" : "cpplint",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 8,
+					"id" : "doc::@c2466c91de71b9c692d9",
+					"jsonFile" : "target-doc-Debug-a65735f1af1cee9313cb.json",
+					"name" : "doc",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 8,
+					"id" : "doc_latex::@c2466c91de71b9c692d9",
+					"jsonFile" : "target-doc_latex-Debug-256836c5fc48dba4fd97.json",
+					"name" : "doc_latex",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 8,
+					"id" : "doc_pdf::@c2466c91de71b9c692d9",
+					"jsonFile" : "target-doc_pdf-Debug-4e39e7273eb4c441dd73.json",
+					"name" : "doc_pdf",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "open62541::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-open62541-Debug-63cfdc7f634268345e3d.json",
+					"name" : "open62541",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "open62541-code-generation::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-open62541-code-generation-Debug-ea5e6f99a85b44e9cca4.json",
+					"name" : "open62541-code-generation",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "open62541-generator-ids-ns0::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-open62541-generator-ids-ns0-Debug-ec91ad9d7c941d021377.json",
+					"name" : "open62541-generator-ids-ns0",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "open62541-generator-namespace::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-open62541-generator-namespace-Debug-93d0a18fa4ea23d10081.json",
+					"name" : "open62541-generator-namespace",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "open62541-generator-statuscode::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-open62541-generator-statuscode-Debug-a5c23d64939ca7d46e8d.json",
+					"name" : "open62541-generator-statuscode",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "open62541-generator-transport::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-open62541-generator-transport-Debug-767db3775abded365a10.json",
+					"name" : "open62541-generator-transport",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "open62541-generator-types::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-open62541-generator-types-Debug-c7803014500016dfac7f.json",
+					"name" : "open62541-generator-types",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "open62541-object::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-open62541-object-Debug-4ec99421662fe31f2740.json",
+					"name" : "open62541-object",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "open62541-plugins::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-open62541-plugins-Debug-08f77000a3a486309ddb.json",
+					"name" : "open62541-plugins",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/out/build/x64-Debug (default)",
+		"source" : "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 1
+	}
+}

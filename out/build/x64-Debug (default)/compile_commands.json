@@ -1,0 +1,297 @@
+[
+{
+  "directory": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/out/build/x64-Debug (default)",
+  "command": "C:\\PROGRA~2\\MICROS~1\\2019\\ENTERP~1\\VC\\Tools\\MSVC\\1428~1.293\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUA_ARCHITECTURE_WIN32 -DUA_DYNAMIC_LINKING_EXPORT -I..\\..\\..\\src -I..\\..\\..\\arch -I..\\..\\..\\arch\\win32 -I..\\..\\..\\include -I..\\..\\..\\plugins\\include -I..\\..\\..\\deps -I..\\..\\..\\src\\pubsub -Isrc_generated -I. /DWIN32 /D_WINDOWS /W3 /W3 /WX /w44996 /MTd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\open62541-object.dir\\src\\ua_types.c.obj /FdTARGET_COMPILE_PDB /FS -c C:\\Users\\Rudolf\\source\\repos\\STUBA-rupr\\open62541-i4Component\\src\\ua_types.c",
+  "file": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/src/ua_types.c"
+},
+{
+  "directory": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/out/build/x64-Debug (default)",
+  "command": "C:\\PROGRA~2\\MICROS~1\\2019\\ENTERP~1\\VC\\Tools\\MSVC\\1428~1.293\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUA_ARCHITECTURE_WIN32 -DUA_DYNAMIC_LINKING_EXPORT -I..\\..\\..\\src -I..\\..\\..\\arch -I..\\..\\..\\arch\\win32 -I..\\..\\..\\include -I..\\..\\..\\plugins\\include -I..\\..\\..\\deps -I..\\..\\..\\src\\pubsub -Isrc_generated -I. /DWIN32 /D_WINDOWS /W3 /W3 /WX /w44996 /MTd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\open62541-object.dir\\src\\ua_types_encoding_binary.c.obj /FdTARGET_COMPILE_PDB /FS -c C:\\Users\\Rudolf\\source\\repos\\STUBA-rupr\\open62541-i4Component\\src\\ua_types_encoding_binary.c",
+  "file": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/src/ua_types_encoding_binary.c"
+},
+{
+  "directory": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/out/build/x64-Debug (default)",
+  "command": "C:\\PROGRA~2\\MICROS~1\\2019\\ENTERP~1\\VC\\Tools\\MSVC\\1428~1.293\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUA_ARCHITECTURE_WIN32 -DUA_DYNAMIC_LINKING_EXPORT -I..\\..\\..\\src -I..\\..\\..\\arch -I..\\..\\..\\arch\\win32 -I..\\..\\..\\include -I..\\..\\..\\plugins\\include -I..\\..\\..\\deps -I..\\..\\..\\src\\pubsub -Isrc_generated -I. /DWIN32 /D_WINDOWS /W3 /W3 /WX /w44996 /MTd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\open62541-object.dir\\src\\ua_types_print.c.obj /FdTARGET_COMPILE_PDB /FS -c C:\\Users\\Rudolf\\source\\repos\\STUBA-rupr\\open62541-i4Component\\src\\ua_types_print.c",
+  "file": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/src/ua_types_print.c"
+},
+{
+  "directory": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/out/build/x64-Debug (default)",
+  "command": "C:\\PROGRA~2\\MICROS~1\\2019\\ENTERP~1\\VC\\Tools\\MSVC\\1428~1.293\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUA_ARCHITECTURE_WIN32 -DUA_DYNAMIC_LINKING_EXPORT -I..\\..\\..\\src -I..\\..\\..\\arch -I..\\..\\..\\arch\\win32 -I..\\..\\..\\include -I..\\..\\..\\plugins\\include -I..\\..\\..\\deps -I..\\..\\..\\src\\pubsub -Isrc_generated -I. /DWIN32 /D_WINDOWS /W3 /W3 /WX /w44996 /MTd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\open62541-object.dir\\src_generated\\open62541\\types_generated.c.obj /FdTARGET_COMPILE_PDB /FS -c \"C:\\Users\\Rudolf\\source\\repos\\STUBA-rupr\\open62541-i4Component\\out\\build\\x64-Debug (default)\\src_generated\\open62541\\types_generated.c\"",
+  "file": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/out/build/x64-Debug (default)/src_generated/open62541/types_generated.c"
+},
+{
+  "directory": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/out/build/x64-Debug (default)",
+  "command": "C:\\PROGRA~2\\MICROS~1\\2019\\ENTERP~1\\VC\\Tools\\MSVC\\1428~1.293\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUA_ARCHITECTURE_WIN32 -DUA_DYNAMIC_LINKING_EXPORT -I..\\..\\..\\src -I..\\..\\..\\arch -I..\\..\\..\\arch\\win32 -I..\\..\\..\\include -I..\\..\\..\\plugins\\include -I..\\..\\..\\deps -I..\\..\\..\\src\\pubsub -Isrc_generated -I. /DWIN32 /D_WINDOWS /W3 /W3 /WX /w44996 /MTd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\open62541-object.dir\\src_generated\\open62541\\transport_generated.c.obj /FdTARGET_COMPILE_PDB /FS -c \"C:\\Users\\Rudolf\\source\\repos\\STUBA-rupr\\open62541-i4Component\\out\\build\\x64-Debug (default)\\src_generated\\open62541\\transport_generated.c\"",
+  "file": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/out/build/x64-Debug (default)/src_generated/open62541/transport_generated.c"
+},
+{
+  "directory": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/out/build/x64-Debug (default)",
+  "command": "C:\\PROGRA~2\\MICROS~1\\2019\\ENTERP~1\\VC\\Tools\\MSVC\\1428~1.293\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUA_ARCHITECTURE_WIN32 -DUA_DYNAMIC_LINKING_EXPORT -I..\\..\\..\\src -I..\\..\\..\\arch -I..\\..\\..\\arch\\win32 -I..\\..\\..\\include -I..\\..\\..\\plugins\\include -I..\\..\\..\\deps -I..\\..\\..\\src\\pubsub -Isrc_generated -I. /DWIN32 /D_WINDOWS /W3 /W3 /WX /w44996 /MTd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\open62541-object.dir\\src_generated\\open62541\\statuscodes.c.obj /FdTARGET_COMPILE_PDB /FS -c \"C:\\Users\\Rudolf\\source\\repos\\STUBA-rupr\\open62541-i4Component\\out\\build\\x64-Debug (default)\\src_generated\\open62541\\statuscodes.c\"",
+  "file": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/out/build/x64-Debug (default)/src_generated/open62541/statuscodes.c"
+},
+{
+  "directory": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/out/build/x64-Debug (default)",
+  "command": "C:\\PROGRA~2\\MICROS~1\\2019\\ENTERP~1\\VC\\Tools\\MSVC\\1428~1.293\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUA_ARCHITECTURE_WIN32 -DUA_DYNAMIC_LINKING_EXPORT -I..\\..\\..\\src -I..\\..\\..\\arch -I..\\..\\..\\arch\\win32 -I..\\..\\..\\include -I..\\..\\..\\plugins\\include -I..\\..\\..\\deps -I..\\..\\..\\src\\pubsub -Isrc_generated -I. /DWIN32 /D_WINDOWS /W3 /W3 /WX /w44996 /MTd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\open62541-object.dir\\src\\ua_util.c.obj /FdTARGET_COMPILE_PDB /FS -c C:\\Users\\Rudolf\\source\\repos\\STUBA-rupr\\open62541-i4Component\\src\\ua_util.c",
+  "file": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/src/ua_util.c"
+},
+{
+  "directory": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/out/build/x64-Debug (default)",
+  "command": "C:\\PROGRA~2\\MICROS~1\\2019\\ENTERP~1\\VC\\Tools\\MSVC\\1428~1.293\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUA_ARCHITECTURE_WIN32 -DUA_DYNAMIC_LINKING_EXPORT -I..\\..\\..\\src -I..\\..\\..\\arch -I..\\..\\..\\arch\\win32 -I..\\..\\..\\include -I..\\..\\..\\plugins\\include -I..\\..\\..\\deps -I..\\..\\..\\src\\pubsub -Isrc_generated -I. /DWIN32 /D_WINDOWS /W3 /W3 /WX /w44996 /MTd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\open62541-object.dir\\src\\ua_timer.c.obj /FdTARGET_COMPILE_PDB /FS -c C:\\Users\\Rudolf\\source\\repos\\STUBA-rupr\\open62541-i4Component\\src\\ua_timer.c",
+  "file": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/src/ua_timer.c"
+},
+{
+  "directory": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/out/build/x64-Debug (default)",
+  "command": "C:\\PROGRA~2\\MICROS~1\\2019\\ENTERP~1\\VC\\Tools\\MSVC\\1428~1.293\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUA_ARCHITECTURE_WIN32 -DUA_DYNAMIC_LINKING_EXPORT -I..\\..\\..\\src -I..\\..\\..\\arch -I..\\..\\..\\arch\\win32 -I..\\..\\..\\include -I..\\..\\..\\plugins\\include -I..\\..\\..\\deps -I..\\..\\..\\src\\pubsub -Isrc_generated -I. /DWIN32 /D_WINDOWS /W3 /W3 /WX /w44996 /MTd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\open62541-object.dir\\src\\ua_connection.c.obj /FdTARGET_COMPILE_PDB /FS -c C:\\Users\\Rudolf\\source\\repos\\STUBA-rupr\\open62541-i4Component\\src\\ua_connection.c",
+  "file": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/src/ua_connection.c"
+},
+{
+  "directory": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/out/build/x64-Debug (default)",
+  "command": "C:\\PROGRA~2\\MICROS~1\\2019\\ENTERP~1\\VC\\Tools\\MSVC\\1428~1.293\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUA_ARCHITECTURE_WIN32 -DUA_DYNAMIC_LINKING_EXPORT -I..\\..\\..\\src -I..\\..\\..\\arch -I..\\..\\..\\arch\\win32 -I..\\..\\..\\include -I..\\..\\..\\plugins\\include -I..\\..\\..\\deps -I..\\..\\..\\src\\pubsub -Isrc_generated -I. /DWIN32 /D_WINDOWS /W3 /W3 /WX /w44996 /MTd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\open62541-object.dir\\src\\ua_securechannel.c.obj /FdTARGET_COMPILE_PDB /FS -c C:\\Users\\Rudolf\\source\\repos\\STUBA-rupr\\open62541-i4Component\\src\\ua_securechannel.c",
+  "file": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/src/ua_securechannel.c"
+},
+{
+  "directory": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/out/build/x64-Debug (default)",
+  "command": "C:\\PROGRA~2\\MICROS~1\\2019\\ENTERP~1\\VC\\Tools\\MSVC\\1428~1.293\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUA_ARCHITECTURE_WIN32 -DUA_DYNAMIC_LINKING_EXPORT -I..\\..\\..\\src -I..\\..\\..\\arch -I..\\..\\..\\arch\\win32 -I..\\..\\..\\include -I..\\..\\..\\plugins\\include -I..\\..\\..\\deps -I..\\..\\..\\src\\pubsub -Isrc_generated -I. /DWIN32 /D_WINDOWS /W3 /W3 /WX /w44996 /MTd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\open62541-object.dir\\src\\ua_securechannel_crypto.c.obj /FdTARGET_COMPILE_PDB /FS -c C:\\Users\\Rudolf\\source\\repos\\STUBA-rupr\\open62541-i4Component\\src\\ua_securechannel_crypto.c",
+  "file": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/src/ua_securechannel_crypto.c"
+},
+{
+  "directory": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/out/build/x64-Debug (default)",
+  "command": "C:\\PROGRA~2\\MICROS~1\\2019\\ENTERP~1\\VC\\Tools\\MSVC\\1428~1.293\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUA_ARCHITECTURE_WIN32 -DUA_DYNAMIC_LINKING_EXPORT -I..\\..\\..\\src -I..\\..\\..\\arch -I..\\..\\..\\arch\\win32 -I..\\..\\..\\include -I..\\..\\..\\plugins\\include -I..\\..\\..\\deps -I..\\..\\..\\src\\pubsub -Isrc_generated -I. /DWIN32 /D_WINDOWS /W3 /W3 /WX /w44996 /MTd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\open62541-object.dir\\src\\server\\ua_session.c.obj /FdTARGET_COMPILE_PDB /FS -c C:\\Users\\Rudolf\\source\\repos\\STUBA-rupr\\open62541-i4Component\\src\\server\\ua_session.c",
+  "file": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/src/server/ua_session.c"
+},
+{
+  "directory": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/out/build/x64-Debug (default)",
+  "command": "C:\\PROGRA~2\\MICROS~1\\2019\\ENTERP~1\\VC\\Tools\\MSVC\\1428~1.293\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUA_ARCHITECTURE_WIN32 -DUA_DYNAMIC_LINKING_EXPORT -I..\\..\\..\\src -I..\\..\\..\\arch -I..\\..\\..\\arch\\win32 -I..\\..\\..\\include -I..\\..\\..\\plugins\\include -I..\\..\\..\\deps -I..\\..\\..\\src\\pubsub -Isrc_generated -I. /DWIN32 /D_WINDOWS /W3 /W3 /WX /w44996 /MTd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\open62541-object.dir\\src\\server\\ua_nodes.c.obj /FdTARGET_COMPILE_PDB /FS -c C:\\Users\\Rudolf\\source\\repos\\STUBA-rupr\\open62541-i4Component\\src\\server\\ua_nodes.c",
+  "file": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/src/server/ua_nodes.c"
+},
+{
+  "directory": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/out/build/x64-Debug (default)",
+  "command": "C:\\PROGRA~2\\MICROS~1\\2019\\ENTERP~1\\VC\\Tools\\MSVC\\1428~1.293\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUA_ARCHITECTURE_WIN32 -DUA_DYNAMIC_LINKING_EXPORT -I..\\..\\..\\src -I..\\..\\..\\arch -I..\\..\\..\\arch\\win32 -I..\\..\\..\\include -I..\\..\\..\\plugins\\include -I..\\..\\..\\deps -I..\\..\\..\\src\\pubsub -Isrc_generated -I. /DWIN32 /D_WINDOWS /W3 /W3 /WX /w44996 /MTd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\open62541-object.dir\\src\\server\\ua_server.c.obj /FdTARGET_COMPILE_PDB /FS -c C:\\Users\\Rudolf\\source\\repos\\STUBA-rupr\\open62541-i4Component\\src\\server\\ua_server.c",
+  "file": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/src/server/ua_server.c"
+},
+{
+  "directory": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/out/build/x64-Debug (default)",
+  "command": "C:\\PROGRA~2\\MICROS~1\\2019\\ENTERP~1\\VC\\Tools\\MSVC\\1428~1.293\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUA_ARCHITECTURE_WIN32 -DUA_DYNAMIC_LINKING_EXPORT -I..\\..\\..\\src -I..\\..\\..\\arch -I..\\..\\..\\arch\\win32 -I..\\..\\..\\include -I..\\..\\..\\plugins\\include -I..\\..\\..\\deps -I..\\..\\..\\src\\pubsub -Isrc_generated -I. /DWIN32 /D_WINDOWS /W3 /W3 /WX /w44996 /MTd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\open62541-object.dir\\src\\server\\ua_server_ns0.c.obj /FdTARGET_COMPILE_PDB /FS -c C:\\Users\\Rudolf\\source\\repos\\STUBA-rupr\\open62541-i4Component\\src\\server\\ua_server_ns0.c",
+  "file": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/src/server/ua_server_ns0.c"
+},
+{
+  "directory": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/out/build/x64-Debug (default)",
+  "command": "C:\\PROGRA~2\\MICROS~1\\2019\\ENTERP~1\\VC\\Tools\\MSVC\\1428~1.293\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUA_ARCHITECTURE_WIN32 -DUA_DYNAMIC_LINKING_EXPORT -I..\\..\\..\\src -I..\\..\\..\\arch -I..\\..\\..\\arch\\win32 -I..\\..\\..\\include -I..\\..\\..\\plugins\\include -I..\\..\\..\\deps -I..\\..\\..\\src\\pubsub -Isrc_generated -I. /DWIN32 /D_WINDOWS /W3 /W3 /WX /w44996 /MTd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\open62541-object.dir\\src\\server\\ua_server_config.c.obj /FdTARGET_COMPILE_PDB /FS -c C:\\Users\\Rudolf\\source\\repos\\STUBA-rupr\\open62541-i4Component\\src\\server\\ua_server_config.c",
+  "file": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/src/server/ua_server_config.c"
+},
+{
+  "directory": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/out/build/x64-Debug (default)",
+  "command": "C:\\PROGRA~2\\MICROS~1\\2019\\ENTERP~1\\VC\\Tools\\MSVC\\1428~1.293\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUA_ARCHITECTURE_WIN32 -DUA_DYNAMIC_LINKING_EXPORT -I..\\..\\..\\src -I..\\..\\..\\arch -I..\\..\\..\\arch\\win32 -I..\\..\\..\\include -I..\\..\\..\\plugins\\include -I..\\..\\..\\deps -I..\\..\\..\\src\\pubsub -Isrc_generated -I. /DWIN32 /D_WINDOWS /W3 /W3 /WX /w44996 /MTd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\open62541-object.dir\\src\\server\\ua_server_binary.c.obj /FdTARGET_COMPILE_PDB /FS -c C:\\Users\\Rudolf\\source\\repos\\STUBA-rupr\\open62541-i4Component\\src\\server\\ua_server_binary.c",
+  "file": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/src/server/ua_server_binary.c"
+},
+{
+  "directory": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/out/build/x64-Debug (default)",
+  "command": "C:\\PROGRA~2\\MICROS~1\\2019\\ENTERP~1\\VC\\Tools\\MSVC\\1428~1.293\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUA_ARCHITECTURE_WIN32 -DUA_DYNAMIC_LINKING_EXPORT -I..\\..\\..\\src -I..\\..\\..\\arch -I..\\..\\..\\arch\\win32 -I..\\..\\..\\include -I..\\..\\..\\plugins\\include -I..\\..\\..\\deps -I..\\..\\..\\src\\pubsub -Isrc_generated -I. /DWIN32 /D_WINDOWS /W3 /W3 /WX /w44996 /MTd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\open62541-object.dir\\src\\server\\ua_server_utils.c.obj /FdTARGET_COMPILE_PDB /FS -c C:\\Users\\Rudolf\\source\\repos\\STUBA-rupr\\open62541-i4Component\\src\\server\\ua_server_utils.c",
+  "file": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/src/server/ua_server_utils.c"
+},
+{
+  "directory": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/out/build/x64-Debug (default)",
+  "command": "C:\\PROGRA~2\\MICROS~1\\2019\\ENTERP~1\\VC\\Tools\\MSVC\\1428~1.293\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUA_ARCHITECTURE_WIN32 -DUA_DYNAMIC_LINKING_EXPORT -I..\\..\\..\\src -I..\\..\\..\\arch -I..\\..\\..\\arch\\win32 -I..\\..\\..\\include -I..\\..\\..\\plugins\\include -I..\\..\\..\\deps -I..\\..\\..\\src\\pubsub -Isrc_generated -I. /DWIN32 /D_WINDOWS /W3 /W3 /WX /w44996 /MTd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\open62541-object.dir\\src\\server\\ua_server_discovery.c.obj /FdTARGET_COMPILE_PDB /FS -c C:\\Users\\Rudolf\\source\\repos\\STUBA-rupr\\open62541-i4Component\\src\\server\\ua_server_discovery.c",
+  "file": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/src/server/ua_server_discovery.c"
+},
+{
+  "directory": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/out/build/x64-Debug (default)",
+  "command": "C:\\PROGRA~2\\MICROS~1\\2019\\ENTERP~1\\VC\\Tools\\MSVC\\1428~1.293\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUA_ARCHITECTURE_WIN32 -DUA_DYNAMIC_LINKING_EXPORT -I..\\..\\..\\src -I..\\..\\..\\arch -I..\\..\\..\\arch\\win32 -I..\\..\\..\\include -I..\\..\\..\\plugins\\include -I..\\..\\..\\deps -I..\\..\\..\\src\\pubsub -Isrc_generated -I. /DWIN32 /D_WINDOWS /W3 /W3 /WX /w44996 /MTd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\open62541-object.dir\\src\\server\\ua_server_async.c.obj /FdTARGET_COMPILE_PDB /FS -c C:\\Users\\Rudolf\\source\\repos\\STUBA-rupr\\open62541-i4Component\\src\\server\\ua_server_async.c",
+  "file": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/src/server/ua_server_async.c"
+},
+{
+  "directory": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/out/build/x64-Debug (default)",
+  "command": "C:\\PROGRA~2\\MICROS~1\\2019\\ENTERP~1\\VC\\Tools\\MSVC\\1428~1.293\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUA_ARCHITECTURE_WIN32 -DUA_DYNAMIC_LINKING_EXPORT -I..\\..\\..\\src -I..\\..\\..\\arch -I..\\..\\..\\arch\\win32 -I..\\..\\..\\include -I..\\..\\..\\plugins\\include -I..\\..\\..\\deps -I..\\..\\..\\src\\pubsub -Isrc_generated -I. /DWIN32 /D_WINDOWS /W3 /W3 /WX /w44996 /MTd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\open62541-object.dir\\src\\pubsub\\ua_pubsub_networkmessage.c.obj /FdTARGET_COMPILE_PDB /FS -c C:\\Users\\Rudolf\\source\\repos\\STUBA-rupr\\open62541-i4Component\\src\\pubsub\\ua_pubsub_networkmessage.c",
+  "file": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/src/pubsub/ua_pubsub_networkmessage.c"
+},
+{
+  "directory": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/out/build/x64-Debug (default)",
+  "command": "C:\\PROGRA~2\\MICROS~1\\2019\\ENTERP~1\\VC\\Tools\\MSVC\\1428~1.293\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUA_ARCHITECTURE_WIN32 -DUA_DYNAMIC_LINKING_EXPORT -I..\\..\\..\\src -I..\\..\\..\\arch -I..\\..\\..\\arch\\win32 -I..\\..\\..\\include -I..\\..\\..\\plugins\\include -I..\\..\\..\\deps -I..\\..\\..\\src\\pubsub -Isrc_generated -I. /DWIN32 /D_WINDOWS /W3 /W3 /WX /w44996 /MTd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\open62541-object.dir\\src\\pubsub\\ua_pubsub_writer.c.obj /FdTARGET_COMPILE_PDB /FS -c C:\\Users\\Rudolf\\source\\repos\\STUBA-rupr\\open62541-i4Component\\src\\pubsub\\ua_pubsub_writer.c",
+  "file": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/src/pubsub/ua_pubsub_writer.c"
+},
+{
+  "directory": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/out/build/x64-Debug (default)",
+  "command": "C:\\PROGRA~2\\MICROS~1\\2019\\ENTERP~1\\VC\\Tools\\MSVC\\1428~1.293\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUA_ARCHITECTURE_WIN32 -DUA_DYNAMIC_LINKING_EXPORT -I..\\..\\..\\src -I..\\..\\..\\arch -I..\\..\\..\\arch\\win32 -I..\\..\\..\\include -I..\\..\\..\\plugins\\include -I..\\..\\..\\deps -I..\\..\\..\\src\\pubsub -Isrc_generated -I. /DWIN32 /D_WINDOWS /W3 /W3 /WX /w44996 /MTd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\open62541-object.dir\\src\\pubsub\\ua_pubsub_reader.c.obj /FdTARGET_COMPILE_PDB /FS -c C:\\Users\\Rudolf\\source\\repos\\STUBA-rupr\\open62541-i4Component\\src\\pubsub\\ua_pubsub_reader.c",
+  "file": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/src/pubsub/ua_pubsub_reader.c"
+},
+{
+  "directory": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/out/build/x64-Debug (default)",
+  "command": "C:\\PROGRA~2\\MICROS~1\\2019\\ENTERP~1\\VC\\Tools\\MSVC\\1428~1.293\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUA_ARCHITECTURE_WIN32 -DUA_DYNAMIC_LINKING_EXPORT -I..\\..\\..\\src -I..\\..\\..\\arch -I..\\..\\..\\arch\\win32 -I..\\..\\..\\include -I..\\..\\..\\plugins\\include -I..\\..\\..\\deps -I..\\..\\..\\src\\pubsub -Isrc_generated -I. /DWIN32 /D_WINDOWS /W3 /W3 /WX /w44996 /MTd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\open62541-object.dir\\src\\pubsub\\ua_pubsub_manager.c.obj /FdTARGET_COMPILE_PDB /FS -c C:\\Users\\Rudolf\\source\\repos\\STUBA-rupr\\open62541-i4Component\\src\\pubsub\\ua_pubsub_manager.c",
+  "file": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/src/pubsub/ua_pubsub_manager.c"
+},
+{
+  "directory": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/out/build/x64-Debug (default)",
+  "command": "C:\\PROGRA~2\\MICROS~1\\2019\\ENTERP~1\\VC\\Tools\\MSVC\\1428~1.293\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUA_ARCHITECTURE_WIN32 -DUA_DYNAMIC_LINKING_EXPORT -I..\\..\\..\\src -I..\\..\\..\\arch -I..\\..\\..\\arch\\win32 -I..\\..\\..\\include -I..\\..\\..\\plugins\\include -I..\\..\\..\\deps -I..\\..\\..\\src\\pubsub -Isrc_generated -I. /DWIN32 /D_WINDOWS /W3 /W3 /WX /w44996 /MTd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\open62541-object.dir\\src\\pubsub\\ua_pubsub_ns0.c.obj /FdTARGET_COMPILE_PDB /FS -c C:\\Users\\Rudolf\\source\\repos\\STUBA-rupr\\open62541-i4Component\\src\\pubsub\\ua_pubsub_ns0.c",
+  "file": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/src/pubsub/ua_pubsub_ns0.c"
+},
+{
+  "directory": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/out/build/x64-Debug (default)",
+  "command": "C:\\PROGRA~2\\MICROS~1\\2019\\ENTERP~1\\VC\\Tools\\MSVC\\1428~1.293\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUA_ARCHITECTURE_WIN32 -DUA_DYNAMIC_LINKING_EXPORT -I..\\..\\..\\src -I..\\..\\..\\arch -I..\\..\\..\\arch\\win32 -I..\\..\\..\\include -I..\\..\\..\\plugins\\include -I..\\..\\..\\deps -I..\\..\\..\\src\\pubsub -Isrc_generated -I. /DWIN32 /D_WINDOWS /W3 /W3 /WX /w44996 /MTd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\open62541-object.dir\\src\\server\\ua_services_view.c.obj /FdTARGET_COMPILE_PDB /FS -c C:\\Users\\Rudolf\\source\\repos\\STUBA-rupr\\open62541-i4Component\\src\\server\\ua_services_view.c",
+  "file": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/src/server/ua_services_view.c"
+},
+{
+  "directory": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/out/build/x64-Debug (default)",
+  "command": "C:\\PROGRA~2\\MICROS~1\\2019\\ENTERP~1\\VC\\Tools\\MSVC\\1428~1.293\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUA_ARCHITECTURE_WIN32 -DUA_DYNAMIC_LINKING_EXPORT -I..\\..\\..\\src -I..\\..\\..\\arch -I..\\..\\..\\arch\\win32 -I..\\..\\..\\include -I..\\..\\..\\plugins\\include -I..\\..\\..\\deps -I..\\..\\..\\src\\pubsub -Isrc_generated -I. /DWIN32 /D_WINDOWS /W3 /W3 /WX /w44996 /MTd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\open62541-object.dir\\src\\server\\ua_services_method.c.obj /FdTARGET_COMPILE_PDB /FS -c C:\\Users\\Rudolf\\source\\repos\\STUBA-rupr\\open62541-i4Component\\src\\server\\ua_services_method.c",
+  "file": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/src/server/ua_services_method.c"
+},
+{
+  "directory": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/out/build/x64-Debug (default)",
+  "command": "C:\\PROGRA~2\\MICROS~1\\2019\\ENTERP~1\\VC\\Tools\\MSVC\\1428~1.293\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUA_ARCHITECTURE_WIN32 -DUA_DYNAMIC_LINKING_EXPORT -I..\\..\\..\\src -I..\\..\\..\\arch -I..\\..\\..\\arch\\win32 -I..\\..\\..\\include -I..\\..\\..\\plugins\\include -I..\\..\\..\\deps -I..\\..\\..\\src\\pubsub -Isrc_generated -I. /DWIN32 /D_WINDOWS /W3 /W3 /WX /w44996 /MTd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\open62541-object.dir\\src\\server\\ua_services_session.c.obj /FdTARGET_COMPILE_PDB /FS -c C:\\Users\\Rudolf\\source\\repos\\STUBA-rupr\\open62541-i4Component\\src\\server\\ua_services_session.c",
+  "file": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/src/server/ua_services_session.c"
+},
+{
+  "directory": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/out/build/x64-Debug (default)",
+  "command": "C:\\PROGRA~2\\MICROS~1\\2019\\ENTERP~1\\VC\\Tools\\MSVC\\1428~1.293\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUA_ARCHITECTURE_WIN32 -DUA_DYNAMIC_LINKING_EXPORT -I..\\..\\..\\src -I..\\..\\..\\arch -I..\\..\\..\\arch\\win32 -I..\\..\\..\\include -I..\\..\\..\\plugins\\include -I..\\..\\..\\deps -I..\\..\\..\\src\\pubsub -Isrc_generated -I. /DWIN32 /D_WINDOWS /W3 /W3 /WX /w44996 /MTd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\open62541-object.dir\\src\\server\\ua_services_attribute.c.obj /FdTARGET_COMPILE_PDB /FS -c C:\\Users\\Rudolf\\source\\repos\\STUBA-rupr\\open62541-i4Component\\src\\server\\ua_services_attribute.c",
+  "file": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/src/server/ua_services_attribute.c"
+},
+{
+  "directory": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/out/build/x64-Debug (default)",
+  "command": "C:\\PROGRA~2\\MICROS~1\\2019\\ENTERP~1\\VC\\Tools\\MSVC\\1428~1.293\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUA_ARCHITECTURE_WIN32 -DUA_DYNAMIC_LINKING_EXPORT -I..\\..\\..\\src -I..\\..\\..\\arch -I..\\..\\..\\arch\\win32 -I..\\..\\..\\include -I..\\..\\..\\plugins\\include -I..\\..\\..\\deps -I..\\..\\..\\src\\pubsub -Isrc_generated -I. /DWIN32 /D_WINDOWS /W3 /W3 /WX /w44996 /MTd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\open62541-object.dir\\src\\server\\ua_services_discovery.c.obj /FdTARGET_COMPILE_PDB /FS -c C:\\Users\\Rudolf\\source\\repos\\STUBA-rupr\\open62541-i4Component\\src\\server\\ua_services_discovery.c",
+  "file": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/src/server/ua_services_discovery.c"
+},
+{
+  "directory": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/out/build/x64-Debug (default)",
+  "command": "C:\\PROGRA~2\\MICROS~1\\2019\\ENTERP~1\\VC\\Tools\\MSVC\\1428~1.293\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUA_ARCHITECTURE_WIN32 -DUA_DYNAMIC_LINKING_EXPORT -I..\\..\\..\\src -I..\\..\\..\\arch -I..\\..\\..\\arch\\win32 -I..\\..\\..\\include -I..\\..\\..\\plugins\\include -I..\\..\\..\\deps -I..\\..\\..\\src\\pubsub -Isrc_generated -I. /DWIN32 /D_WINDOWS /W3 /W3 /WX /w44996 /MTd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\open62541-object.dir\\src\\server\\ua_services_subscription.c.obj /FdTARGET_COMPILE_PDB /FS -c C:\\Users\\Rudolf\\source\\repos\\STUBA-rupr\\open62541-i4Component\\src\\server\\ua_services_subscription.c",
+  "file": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/src/server/ua_services_subscription.c"
+},
+{
+  "directory": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/out/build/x64-Debug (default)",
+  "command": "C:\\PROGRA~2\\MICROS~1\\2019\\ENTERP~1\\VC\\Tools\\MSVC\\1428~1.293\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUA_ARCHITECTURE_WIN32 -DUA_DYNAMIC_LINKING_EXPORT -I..\\..\\..\\src -I..\\..\\..\\arch -I..\\..\\..\\arch\\win32 -I..\\..\\..\\include -I..\\..\\..\\plugins\\include -I..\\..\\..\\deps -I..\\..\\..\\src\\pubsub -Isrc_generated -I. /DWIN32 /D_WINDOWS /W3 /W3 /WX /w44996 /MTd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\open62541-object.dir\\src\\server\\ua_services_monitoreditem.c.obj /FdTARGET_COMPILE_PDB /FS -c C:\\Users\\Rudolf\\source\\repos\\STUBA-rupr\\open62541-i4Component\\src\\server\\ua_services_monitoreditem.c",
+  "file": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/src/server/ua_services_monitoreditem.c"
+},
+{
+  "directory": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/out/build/x64-Debug (default)",
+  "command": "C:\\PROGRA~2\\MICROS~1\\2019\\ENTERP~1\\VC\\Tools\\MSVC\\1428~1.293\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUA_ARCHITECTURE_WIN32 -DUA_DYNAMIC_LINKING_EXPORT -I..\\..\\..\\src -I..\\..\\..\\arch -I..\\..\\..\\arch\\win32 -I..\\..\\..\\include -I..\\..\\..\\plugins\\include -I..\\..\\..\\deps -I..\\..\\..\\src\\pubsub -Isrc_generated -I. /DWIN32 /D_WINDOWS /W3 /W3 /WX /w44996 /MTd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\open62541-object.dir\\src\\server\\ua_services_securechannel.c.obj /FdTARGET_COMPILE_PDB /FS -c C:\\Users\\Rudolf\\source\\repos\\STUBA-rupr\\open62541-i4Component\\src\\server\\ua_services_securechannel.c",
+  "file": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/src/server/ua_services_securechannel.c"
+},
+{
+  "directory": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/out/build/x64-Debug (default)",
+  "command": "C:\\PROGRA~2\\MICROS~1\\2019\\ENTERP~1\\VC\\Tools\\MSVC\\1428~1.293\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUA_ARCHITECTURE_WIN32 -DUA_DYNAMIC_LINKING_EXPORT -I..\\..\\..\\src -I..\\..\\..\\arch -I..\\..\\..\\arch\\win32 -I..\\..\\..\\include -I..\\..\\..\\plugins\\include -I..\\..\\..\\deps -I..\\..\\..\\src\\pubsub -Isrc_generated -I. /DWIN32 /D_WINDOWS /W3 /W3 /WX /w44996 /MTd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\open62541-object.dir\\src\\server\\ua_services_nodemanagement.c.obj /FdTARGET_COMPILE_PDB /FS -c C:\\Users\\Rudolf\\source\\repos\\STUBA-rupr\\open62541-i4Component\\src\\server\\ua_services_nodemanagement.c",
+  "file": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/src/server/ua_services_nodemanagement.c"
+},
+{
+  "directory": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/out/build/x64-Debug (default)",
+  "command": "C:\\PROGRA~2\\MICROS~1\\2019\\ENTERP~1\\VC\\Tools\\MSVC\\1428~1.293\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUA_ARCHITECTURE_WIN32 -DUA_DYNAMIC_LINKING_EXPORT -I..\\..\\..\\src -I..\\..\\..\\arch -I..\\..\\..\\arch\\win32 -I..\\..\\..\\include -I..\\..\\..\\plugins\\include -I..\\..\\..\\deps -I..\\..\\..\\src\\pubsub -Isrc_generated -I. /DWIN32 /D_WINDOWS /W3 /W3 /WX /w44996 /MTd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\open62541-object.dir\\src\\server\\ua_services_discovery_multicast.c.obj /FdTARGET_COMPILE_PDB /FS -c C:\\Users\\Rudolf\\source\\repos\\STUBA-rupr\\open62541-i4Component\\src\\server\\ua_services_discovery_multicast.c",
+  "file": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/src/server/ua_services_discovery_multicast.c"
+},
+{
+  "directory": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/out/build/x64-Debug (default)",
+  "command": "C:\\PROGRA~2\\MICROS~1\\2019\\ENTERP~1\\VC\\Tools\\MSVC\\1428~1.293\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUA_ARCHITECTURE_WIN32 -DUA_DYNAMIC_LINKING_EXPORT -I..\\..\\..\\src -I..\\..\\..\\arch -I..\\..\\..\\arch\\win32 -I..\\..\\..\\include -I..\\..\\..\\plugins\\include -I..\\..\\..\\deps -I..\\..\\..\\src\\pubsub -Isrc_generated -I. /DWIN32 /D_WINDOWS /W3 /W3 /WX /w44996 /MTd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\open62541-object.dir\\src\\client\\ua_client.c.obj /FdTARGET_COMPILE_PDB /FS -c C:\\Users\\Rudolf\\source\\repos\\STUBA-rupr\\open62541-i4Component\\src\\client\\ua_client.c",
+  "file": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/src/client/ua_client.c"
+},
+{
+  "directory": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/out/build/x64-Debug (default)",
+  "command": "C:\\PROGRA~2\\MICROS~1\\2019\\ENTERP~1\\VC\\Tools\\MSVC\\1428~1.293\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUA_ARCHITECTURE_WIN32 -DUA_DYNAMIC_LINKING_EXPORT -I..\\..\\..\\src -I..\\..\\..\\arch -I..\\..\\..\\arch\\win32 -I..\\..\\..\\include -I..\\..\\..\\plugins\\include -I..\\..\\..\\deps -I..\\..\\..\\src\\pubsub -Isrc_generated -I. /DWIN32 /D_WINDOWS /W3 /W3 /WX /w44996 /MTd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\open62541-object.dir\\src\\client\\ua_client_connect.c.obj /FdTARGET_COMPILE_PDB /FS -c C:\\Users\\Rudolf\\source\\repos\\STUBA-rupr\\open62541-i4Component\\src\\client\\ua_client_connect.c",
+  "file": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/src/client/ua_client_connect.c"
+},
+{
+  "directory": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/out/build/x64-Debug (default)",
+  "command": "C:\\PROGRA~2\\MICROS~1\\2019\\ENTERP~1\\VC\\Tools\\MSVC\\1428~1.293\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUA_ARCHITECTURE_WIN32 -DUA_DYNAMIC_LINKING_EXPORT -I..\\..\\..\\src -I..\\..\\..\\arch -I..\\..\\..\\arch\\win32 -I..\\..\\..\\include -I..\\..\\..\\plugins\\include -I..\\..\\..\\deps -I..\\..\\..\\src\\pubsub -Isrc_generated -I. /DWIN32 /D_WINDOWS /W3 /W3 /WX /w44996 /MTd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\open62541-object.dir\\src\\client\\ua_client_discovery.c.obj /FdTARGET_COMPILE_PDB /FS -c C:\\Users\\Rudolf\\source\\repos\\STUBA-rupr\\open62541-i4Component\\src\\client\\ua_client_discovery.c",
+  "file": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/src/client/ua_client_discovery.c"
+},
+{
+  "directory": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/out/build/x64-Debug (default)",
+  "command": "C:\\PROGRA~2\\MICROS~1\\2019\\ENTERP~1\\VC\\Tools\\MSVC\\1428~1.293\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUA_ARCHITECTURE_WIN32 -DUA_DYNAMIC_LINKING_EXPORT -I..\\..\\..\\src -I..\\..\\..\\arch -I..\\..\\..\\arch\\win32 -I..\\..\\..\\include -I..\\..\\..\\plugins\\include -I..\\..\\..\\deps -I..\\..\\..\\src\\pubsub -Isrc_generated -I. /DWIN32 /D_WINDOWS /W3 /W3 /WX /w44996 /MTd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\open62541-object.dir\\src\\client\\ua_client_highlevel.c.obj /FdTARGET_COMPILE_PDB /FS -c C:\\Users\\Rudolf\\source\\repos\\STUBA-rupr\\open62541-i4Component\\src\\client\\ua_client_highlevel.c",
+  "file": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/src/client/ua_client_highlevel.c"
+},
+{
+  "directory": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/out/build/x64-Debug (default)",
+  "command": "C:\\PROGRA~2\\MICROS~1\\2019\\ENTERP~1\\VC\\Tools\\MSVC\\1428~1.293\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUA_ARCHITECTURE_WIN32 -DUA_DYNAMIC_LINKING_EXPORT -I..\\..\\..\\src -I..\\..\\..\\arch -I..\\..\\..\\arch\\win32 -I..\\..\\..\\include -I..\\..\\..\\plugins\\include -I..\\..\\..\\deps -I..\\..\\..\\src\\pubsub -Isrc_generated -I. /DWIN32 /D_WINDOWS /W3 /W3 /WX /w44996 /MTd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\open62541-object.dir\\src\\client\\ua_client_subscriptions.c.obj /FdTARGET_COMPILE_PDB /FS -c C:\\Users\\Rudolf\\source\\repos\\STUBA-rupr\\open62541-i4Component\\src\\client\\ua_client_subscriptions.c",
+  "file": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/src/client/ua_client_subscriptions.c"
+},
+{
+  "directory": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/out/build/x64-Debug (default)",
+  "command": "C:\\PROGRA~2\\MICROS~1\\2019\\ENTERP~1\\VC\\Tools\\MSVC\\1428~1.293\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUA_ARCHITECTURE_WIN32 -DUA_DYNAMIC_LINKING_EXPORT -I..\\..\\..\\src -I..\\..\\..\\arch -I..\\..\\..\\arch\\win32 -I..\\..\\..\\include -I..\\..\\..\\plugins\\include -I..\\..\\..\\deps -I..\\..\\..\\src\\pubsub -Isrc_generated -I. /DWIN32 /D_WINDOWS /W3 /W3 /WX /w44996 /MTd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\open62541-object.dir\\deps\\libc_time.c.obj /FdTARGET_COMPILE_PDB /FS -c C:\\Users\\Rudolf\\source\\repos\\STUBA-rupr\\open62541-i4Component\\deps\\libc_time.c",
+  "file": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/deps/libc_time.c"
+},
+{
+  "directory": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/out/build/x64-Debug (default)",
+  "command": "C:\\PROGRA~2\\MICROS~1\\2019\\ENTERP~1\\VC\\Tools\\MSVC\\1428~1.293\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUA_ARCHITECTURE_WIN32 -DUA_DYNAMIC_LINKING_EXPORT -I..\\..\\..\\src -I..\\..\\..\\arch -I..\\..\\..\\arch\\win32 -I..\\..\\..\\include -I..\\..\\..\\plugins\\include -I..\\..\\..\\deps -I..\\..\\..\\src\\pubsub -Isrc_generated -I. /DWIN32 /D_WINDOWS /W3 /W3 /WX /w44996 /MTd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\open62541-object.dir\\deps\\pcg_basic.c.obj /FdTARGET_COMPILE_PDB /FS -c C:\\Users\\Rudolf\\source\\repos\\STUBA-rupr\\open62541-i4Component\\deps\\pcg_basic.c",
+  "file": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/deps/pcg_basic.c"
+},
+{
+  "directory": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/out/build/x64-Debug (default)",
+  "command": "C:\\PROGRA~2\\MICROS~1\\2019\\ENTERP~1\\VC\\Tools\\MSVC\\1428~1.293\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUA_ARCHITECTURE_WIN32 -DUA_DYNAMIC_LINKING_EXPORT -I..\\..\\..\\src -I..\\..\\..\\arch -I..\\..\\..\\arch\\win32 -I..\\..\\..\\include -I..\\..\\..\\plugins\\include -I..\\..\\..\\deps -I..\\..\\..\\src\\pubsub -Isrc_generated -I. /DWIN32 /D_WINDOWS /W3 /W3 /WX /w44996 /MTd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\open62541-object.dir\\deps\\base64.c.obj /FdTARGET_COMPILE_PDB /FS -c C:\\Users\\Rudolf\\source\\repos\\STUBA-rupr\\open62541-i4Component\\deps\\base64.c",
+  "file": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/deps/base64.c"
+},
+{
+  "directory": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/out/build/x64-Debug (default)",
+  "command": "C:\\PROGRA~2\\MICROS~1\\2019\\ENTERP~1\\VC\\Tools\\MSVC\\1428~1.293\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUA_ARCHITECTURE_WIN32 -DUA_DYNAMIC_LINKING_EXPORT -I..\\..\\..\\src -I..\\..\\..\\arch -I..\\..\\..\\arch\\win32 -I..\\..\\..\\include -I..\\..\\..\\plugins\\include -I..\\..\\..\\deps -I..\\..\\..\\src\\pubsub -Isrc_generated -I. /DWIN32 /D_WINDOWS /W3 /W3 /WX /w44996 /MTd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\open62541-object.dir\\src\\pubsub\\ua_pubsub_config.c.obj /FdTARGET_COMPILE_PDB /FS -c C:\\Users\\Rudolf\\source\\repos\\STUBA-rupr\\open62541-i4Component\\src\\pubsub\\ua_pubsub_config.c",
+  "file": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/src/pubsub/ua_pubsub_config.c"
+},
+{
+  "directory": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/out/build/x64-Debug (default)",
+  "command": "C:\\PROGRA~2\\MICROS~1\\2019\\ENTERP~1\\VC\\Tools\\MSVC\\1428~1.293\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUA_ARCHITECTURE_WIN32 -DUA_DYNAMIC_LINKING_EXPORT -I..\\..\\..\\src -I..\\..\\..\\arch -I..\\..\\..\\arch\\win32 -I..\\..\\..\\include -I..\\..\\..\\plugins\\include -I..\\..\\..\\deps -I..\\..\\..\\src\\pubsub -Isrc_generated -I. /DWIN32 /D_WINDOWS /W3 /W3 /WX /w44996 /MTd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\open62541-object.dir\\src_generated\\open62541\\namespace0_generated.c.obj /FdTARGET_COMPILE_PDB /FS -c \"C:\\Users\\Rudolf\\source\\repos\\STUBA-rupr\\open62541-i4Component\\out\\build\\x64-Debug (default)\\src_generated\\open62541\\namespace0_generated.c\"",
+  "file": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/out/build/x64-Debug (default)/src_generated/open62541/namespace0_generated.c"
+},
+{
+  "directory": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/out/build/x64-Debug (default)",
+  "command": "C:\\PROGRA~2\\MICROS~1\\2019\\ENTERP~1\\VC\\Tools\\MSVC\\1428~1.293\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUA_ARCHITECTURE_WIN32 -DUA_DYNAMIC_LINKING_EXPORT -I..\\..\\..\\src -I..\\..\\..\\arch -I..\\..\\..\\arch\\win32 -I..\\..\\..\\include -I..\\..\\..\\plugins\\include -I..\\..\\..\\deps -I..\\..\\..\\src\\pubsub -Isrc_generated -I. /DWIN32 /D_WINDOWS /W3 /W3 /WX /w44996 /MTd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\open62541-object.dir\\src\\ua_types_lex.c.obj /FdTARGET_COMPILE_PDB /FS -c C:\\Users\\Rudolf\\source\\repos\\STUBA-rupr\\open62541-i4Component\\src\\ua_types_lex.c",
+  "file": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/src/ua_types_lex.c"
+},
+{
+  "directory": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/out/build/x64-Debug (default)",
+  "command": "C:\\PROGRA~2\\MICROS~1\\2019\\ENTERP~1\\VC\\Tools\\MSVC\\1428~1.293\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUA_ARCHITECTURE_WIN32 -DUA_DYNAMIC_LINKING_EXPORT -I..\\..\\..\\src -I..\\..\\..\\arch -I..\\..\\..\\arch\\win32 -I..\\..\\..\\include -I..\\..\\..\\plugins\\include -I..\\..\\..\\deps -I..\\..\\..\\src\\pubsub -Isrc_generated -I. /DWIN32 /D_WINDOWS /W3 /W3 /WX /w44996 /MTd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\open62541-object.dir\\src\\server\\ua_subscription.c.obj /FdTARGET_COMPILE_PDB /FS -c C:\\Users\\Rudolf\\source\\repos\\STUBA-rupr\\open62541-i4Component\\src\\server\\ua_subscription.c",
+  "file": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/src/server/ua_subscription.c"
+},
+{
+  "directory": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/out/build/x64-Debug (default)",
+  "command": "C:\\PROGRA~2\\MICROS~1\\2019\\ENTERP~1\\VC\\Tools\\MSVC\\1428~1.293\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUA_ARCHITECTURE_WIN32 -DUA_DYNAMIC_LINKING_EXPORT -I..\\..\\..\\src -I..\\..\\..\\arch -I..\\..\\..\\arch\\win32 -I..\\..\\..\\include -I..\\..\\..\\plugins\\include -I..\\..\\..\\deps -I..\\..\\..\\src\\pubsub -Isrc_generated -I. /DWIN32 /D_WINDOWS /W3 /W3 /WX /w44996 /MTd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\open62541-object.dir\\src\\server\\ua_subscription_monitoreditem.c.obj /FdTARGET_COMPILE_PDB /FS -c C:\\Users\\Rudolf\\source\\repos\\STUBA-rupr\\open62541-i4Component\\src\\server\\ua_subscription_monitoreditem.c",
+  "file": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/src/server/ua_subscription_monitoreditem.c"
+},
+{
+  "directory": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/out/build/x64-Debug (default)",
+  "command": "C:\\PROGRA~2\\MICROS~1\\2019\\ENTERP~1\\VC\\Tools\\MSVC\\1428~1.293\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUA_ARCHITECTURE_WIN32 -DUA_DYNAMIC_LINKING_EXPORT -I..\\..\\..\\src -I..\\..\\..\\arch -I..\\..\\..\\arch\\win32 -I..\\..\\..\\include -I..\\..\\..\\plugins\\include -I..\\..\\..\\deps -I..\\..\\..\\src\\pubsub -Isrc_generated -I. /DWIN32 /D_WINDOWS /W3 /W3 /WX /w44996 /MTd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\open62541-object.dir\\src\\server\\ua_subscription_datachange.c.obj /FdTARGET_COMPILE_PDB /FS -c C:\\Users\\Rudolf\\source\\repos\\STUBA-rupr\\open62541-i4Component\\src\\server\\ua_subscription_datachange.c",
+  "file": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/src/server/ua_subscription_datachange.c"
+},
+{
+  "directory": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/out/build/x64-Debug (default)",
+  "command": "C:\\PROGRA~2\\MICROS~1\\2019\\ENTERP~1\\VC\\Tools\\MSVC\\1428~1.293\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUA_ARCHITECTURE_WIN32 -DUA_DYNAMIC_LINKING_EXPORT -I..\\..\\..\\plugins -Isrc_generated -I..\\..\\..\\arch -I..\\..\\..\\src -I..\\..\\..\\arch\\win32 -I..\\..\\..\\include -I..\\..\\..\\plugins\\include -I..\\..\\..\\deps -I..\\..\\..\\src\\pubsub -I. /DWIN32 /D_WINDOWS /W3 /W3 /WX /w44996 /MTd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\open62541-plugins.dir\\plugins\\ua_log_stdout.c.obj /FdTARGET_COMPILE_PDB /FS -c C:\\Users\\Rudolf\\source\\repos\\STUBA-rupr\\open62541-i4Component\\plugins\\ua_log_stdout.c",
+  "file": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/plugins/ua_log_stdout.c"
+},
+{
+  "directory": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/out/build/x64-Debug (default)",
+  "command": "C:\\PROGRA~2\\MICROS~1\\2019\\ENTERP~1\\VC\\Tools\\MSVC\\1428~1.293\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUA_ARCHITECTURE_WIN32 -DUA_DYNAMIC_LINKING_EXPORT -I..\\..\\..\\plugins -Isrc_generated -I..\\..\\..\\arch -I..\\..\\..\\src -I..\\..\\..\\arch\\win32 -I..\\..\\..\\include -I..\\..\\..\\plugins\\include -I..\\..\\..\\deps -I..\\..\\..\\src\\pubsub -I. /DWIN32 /D_WINDOWS /W3 /W3 /WX /w44996 /MTd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\open62541-plugins.dir\\plugins\\ua_accesscontrol_default.c.obj /FdTARGET_COMPILE_PDB /FS -c C:\\Users\\Rudolf\\source\\repos\\STUBA-rupr\\open62541-i4Component\\plugins\\ua_accesscontrol_default.c",
+  "file": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/plugins/ua_accesscontrol_default.c"
+},
+{
+  "directory": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/out/build/x64-Debug (default)",
+  "command": "C:\\PROGRA~2\\MICROS~1\\2019\\ENTERP~1\\VC\\Tools\\MSVC\\1428~1.293\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUA_ARCHITECTURE_WIN32 -DUA_DYNAMIC_LINKING_EXPORT -I..\\..\\..\\plugins -Isrc_generated -I..\\..\\..\\arch -I..\\..\\..\\src -I..\\..\\..\\arch\\win32 -I..\\..\\..\\include -I..\\..\\..\\plugins\\include -I..\\..\\..\\deps -I..\\..\\..\\src\\pubsub -I. /DWIN32 /D_WINDOWS /W3 /W3 /WX /w44996 /MTd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\open62541-plugins.dir\\plugins\\ua_nodestore_ziptree.c.obj /FdTARGET_COMPILE_PDB /FS -c C:\\Users\\Rudolf\\source\\repos\\STUBA-rupr\\open62541-i4Component\\plugins\\ua_nodestore_ziptree.c",
+  "file": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/plugins/ua_nodestore_ziptree.c"
+},
+{
+  "directory": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/out/build/x64-Debug (default)",
+  "command": "C:\\PROGRA~2\\MICROS~1\\2019\\ENTERP~1\\VC\\Tools\\MSVC\\1428~1.293\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUA_ARCHITECTURE_WIN32 -DUA_DYNAMIC_LINKING_EXPORT -I..\\..\\..\\plugins -Isrc_generated -I..\\..\\..\\arch -I..\\..\\..\\src -I..\\..\\..\\arch\\win32 -I..\\..\\..\\include -I..\\..\\..\\plugins\\include -I..\\..\\..\\deps -I..\\..\\..\\src\\pubsub -I. /DWIN32 /D_WINDOWS /W3 /W3 /WX /w44996 /MTd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\open62541-plugins.dir\\plugins\\ua_nodestore_hashmap.c.obj /FdTARGET_COMPILE_PDB /FS -c C:\\Users\\Rudolf\\source\\repos\\STUBA-rupr\\open62541-i4Component\\plugins\\ua_nodestore_hashmap.c",
+  "file": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/plugins/ua_nodestore_hashmap.c"
+},
+{
+  "directory": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/out/build/x64-Debug (default)",
+  "command": "C:\\PROGRA~2\\MICROS~1\\2019\\ENTERP~1\\VC\\Tools\\MSVC\\1428~1.293\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUA_ARCHITECTURE_WIN32 -DUA_DYNAMIC_LINKING_EXPORT -I..\\..\\..\\plugins -Isrc_generated -I..\\..\\..\\arch -I..\\..\\..\\src -I..\\..\\..\\arch\\win32 -I..\\..\\..\\include -I..\\..\\..\\plugins\\include -I..\\..\\..\\deps -I..\\..\\..\\src\\pubsub -I. /DWIN32 /D_WINDOWS /W3 /W3 /WX /w44996 /MTd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\open62541-plugins.dir\\plugins\\ua_config_default.c.obj /FdTARGET_COMPILE_PDB /FS -c C:\\Users\\Rudolf\\source\\repos\\STUBA-rupr\\open62541-i4Component\\plugins\\ua_config_default.c",
+  "file": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/plugins/ua_config_default.c"
+},
+{
+  "directory": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/out/build/x64-Debug (default)",
+  "command": "C:\\PROGRA~2\\MICROS~1\\2019\\ENTERP~1\\VC\\Tools\\MSVC\\1428~1.293\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUA_ARCHITECTURE_WIN32 -DUA_DYNAMIC_LINKING_EXPORT -I..\\..\\..\\plugins -Isrc_generated -I..\\..\\..\\arch -I..\\..\\..\\src -I..\\..\\..\\arch\\win32 -I..\\..\\..\\include -I..\\..\\..\\plugins\\include -I..\\..\\..\\deps -I..\\..\\..\\src\\pubsub -I. /DWIN32 /D_WINDOWS /W3 /W3 /WX /w44996 /MTd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\open62541-plugins.dir\\plugins\\crypto\\ua_pki_none.c.obj /FdTARGET_COMPILE_PDB /FS -c C:\\Users\\Rudolf\\source\\repos\\STUBA-rupr\\open62541-i4Component\\plugins\\crypto\\ua_pki_none.c",
+  "file": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/plugins/crypto/ua_pki_none.c"
+},
+{
+  "directory": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/out/build/x64-Debug (default)",
+  "command": "C:\\PROGRA~2\\MICROS~1\\2019\\ENTERP~1\\VC\\Tools\\MSVC\\1428~1.293\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUA_ARCHITECTURE_WIN32 -DUA_DYNAMIC_LINKING_EXPORT -I..\\..\\..\\plugins -Isrc_generated -I..\\..\\..\\arch -I..\\..\\..\\src -I..\\..\\..\\arch\\win32 -I..\\..\\..\\include -I..\\..\\..\\plugins\\include -I..\\..\\..\\deps -I..\\..\\..\\src\\pubsub -I. /DWIN32 /D_WINDOWS /W3 /W3 /WX /w44996 /MTd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\open62541-plugins.dir\\plugins\\crypto\\ua_securitypolicy_none.c.obj /FdTARGET_COMPILE_PDB /FS -c C:\\Users\\Rudolf\\source\\repos\\STUBA-rupr\\open62541-i4Component\\plugins\\crypto\\ua_securitypolicy_none.c",
+  "file": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/plugins/crypto/ua_securitypolicy_none.c"
+},
+{
+  "directory": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/out/build/x64-Debug (default)",
+  "command": "C:\\PROGRA~2\\MICROS~1\\2019\\ENTERP~1\\VC\\Tools\\MSVC\\1428~1.293\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUA_ARCHITECTURE_WIN32 -DUA_DYNAMIC_LINKING_EXPORT -I..\\..\\..\\plugins -Isrc_generated -I..\\..\\..\\arch -I..\\..\\..\\src -I..\\..\\..\\arch\\win32 -I..\\..\\..\\include -I..\\..\\..\\plugins\\include -I..\\..\\..\\deps -I..\\..\\..\\src\\pubsub -I. /DWIN32 /D_WINDOWS /W3 /W3 /WX /w44996 /MTd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\open62541-plugins.dir\\arch\\win32\\ua_clock.c.obj /FdTARGET_COMPILE_PDB /FS -c C:\\Users\\Rudolf\\source\\repos\\STUBA-rupr\\open62541-i4Component\\arch\\win32\\ua_clock.c",
+  "file": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/arch/win32/ua_clock.c"
+},
+{
+  "directory": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/out/build/x64-Debug (default)",
+  "command": "C:\\PROGRA~2\\MICROS~1\\2019\\ENTERP~1\\VC\\Tools\\MSVC\\1428~1.293\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUA_ARCHITECTURE_WIN32 -DUA_DYNAMIC_LINKING_EXPORT -I..\\..\\..\\plugins -Isrc_generated -I..\\..\\..\\arch -I..\\..\\..\\src -I..\\..\\..\\arch\\win32 -I..\\..\\..\\include -I..\\..\\..\\plugins\\include -I..\\..\\..\\deps -I..\\..\\..\\src\\pubsub -I. /DWIN32 /D_WINDOWS /W3 /W3 /WX /w44996 /MTd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\open62541-plugins.dir\\arch\\win32\\ua_architecture_functions.c.obj /FdTARGET_COMPILE_PDB /FS -c C:\\Users\\Rudolf\\source\\repos\\STUBA-rupr\\open62541-i4Component\\arch\\win32\\ua_architecture_functions.c",
+  "file": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/arch/win32/ua_architecture_functions.c"
+},
+{
+  "directory": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/out/build/x64-Debug (default)",
+  "command": "C:\\PROGRA~2\\MICROS~1\\2019\\ENTERP~1\\VC\\Tools\\MSVC\\1428~1.293\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUA_ARCHITECTURE_WIN32 -DUA_DYNAMIC_LINKING_EXPORT -I..\\..\\..\\plugins -Isrc_generated -I..\\..\\..\\arch -I..\\..\\..\\src -I..\\..\\..\\arch\\win32 -I..\\..\\..\\include -I..\\..\\..\\plugins\\include -I..\\..\\..\\deps -I..\\..\\..\\src\\pubsub -I. /DWIN32 /D_WINDOWS /W3 /W3 /WX /w44996 /MTd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\open62541-plugins.dir\\arch\\network_tcp.c.obj /FdTARGET_COMPILE_PDB /FS -c C:\\Users\\Rudolf\\source\\repos\\STUBA-rupr\\open62541-i4Component\\arch\\network_tcp.c",
+  "file": "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/arch/network_tcp.c"
+}
+]

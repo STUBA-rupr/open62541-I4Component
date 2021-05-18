@@ -1,0 +1,2 @@
+C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\open62541Validator\Debug\open62541Validator.exe
+C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\open62541Validator\Debug\open62541Validator.pdb

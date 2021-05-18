@@ -14,13 +14,14 @@ namespace InformationModelHelper
     {
         static void Main(string[] args)
         {
-            const string nsName = "EcI4.0-STM32_rA03_Nodeset2";
+            const string nsName = "stm32-EnvSensor-AASX041";
             Stream stream = new FileStream(nsName + ".xml", FileMode.Open);
             Opc.Ua.Export.UANodeSet[] uaNodeSets;
 
             InformationModelHelper.FixNodeSet2(ref stream);
             InformationModelHelper.SplitNodeSet2byNamespaces(stream, out uaNodeSets);
 
+            
             // add reference OrganizedBy to AASROOT to point to Objects (ns=0;i=85)
             InformationModelHelper.AddReference(ref uaNodeSets[1],
                 uaNodeSets[1].Items.First(i => i.BrowseName.EndsWith("AASROOT")).NodeId,
@@ -28,7 +29,7 @@ namespace InformationModelHelper
                 InformationModelHelper.GetAliasValue("Organizes"),
                 false,
                 false);
-
+            /*
             // add degC to temperature.value
             InformationModelHelper.AddReference(ref uaNodeSets[1],
                 "ns=2;i=209",
@@ -46,9 +47,9 @@ namespace InformationModelHelper
                 "ns=2;i=237",
                 "ns=2;i=121",
                 InformationModelHelper.GetAliasValue("HasComponent"), addReverse: true, isForward: true);
-
+            */
             // replace DataType="ns=1;i=1" or DataType="ns=1;i=2" with String
-
+            /*
             // Get the highest nodeid
             uint maxId = uaNodeSets[1].Items.Where(i => i.NodeId.Split(';')[0].Equals("ns=2")).Max(i => UInt32.Parse(i.NodeId.Split(';')[1].Split('=')[1]));
 
@@ -72,7 +73,7 @@ namespace InformationModelHelper
                 dstNodeId: "ns=2;i=" + maxId.ToString(),
                 srcNodeId: "ns=2;i=237",
                 refType: InformationModelHelper.GetAliasValue("HasComponent"), addReverse: true, isForward: true);
-
+            */
 
             //            return;
 

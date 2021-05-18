@@ -1,4 +1,4 @@
-# Install script for directory: C:/Projects/open62541-i4Component/doc
+# Install script for directory: C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/doc
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

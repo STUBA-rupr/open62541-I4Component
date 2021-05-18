@@ -1,351 +1,351 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="C:\Projects\open62541-i4Component\src\ua_types.c">
+    <ClCompile Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\ua_types.c">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Projects\open62541-i4Component\src\ua_types_encoding_binary.c">
+    <ClCompile Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\ua_types_encoding_binary.c">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Projects\open62541-i4Component\src\ua_types_print.c">
+    <ClCompile Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\ua_types_print.c">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Projects\open62541-i4Component\buildWIN\src_generated\open62541\types_generated.c">
+    <ClCompile Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\src_generated\open62541\types_generated.c">
       <Filter>buildWIN\src_generated\open62541</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Projects\open62541-i4Component\buildWIN\src_generated\open62541\transport_generated.c">
+    <ClCompile Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\src_generated\open62541\transport_generated.c">
       <Filter>buildWIN\src_generated\open62541</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Projects\open62541-i4Component\buildWIN\src_generated\open62541\statuscodes.c">
+    <ClCompile Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\src_generated\open62541\statuscodes.c">
       <Filter>buildWIN\src_generated\open62541</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Projects\open62541-i4Component\src\ua_util.c">
+    <ClCompile Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\ua_util.c">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Projects\open62541-i4Component\src\ua_timer.c">
+    <ClCompile Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\ua_timer.c">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Projects\open62541-i4Component\src\ua_connection.c">
+    <ClCompile Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\ua_connection.c">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Projects\open62541-i4Component\src\ua_securechannel.c">
+    <ClCompile Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\ua_securechannel.c">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Projects\open62541-i4Component\src\ua_securechannel_crypto.c">
+    <ClCompile Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\ua_securechannel_crypto.c">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Projects\open62541-i4Component\src\server\ua_session.c">
+    <ClCompile Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\server\ua_session.c">
       <Filter>src\server</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Projects\open62541-i4Component\src\server\ua_nodes.c">
+    <ClCompile Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\server\ua_nodes.c">
       <Filter>src\server</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Projects\open62541-i4Component\src\server\ua_server.c">
+    <ClCompile Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\server\ua_server.c">
       <Filter>src\server</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Projects\open62541-i4Component\src\server\ua_server_ns0.c">
+    <ClCompile Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\server\ua_server_ns0.c">
       <Filter>src\server</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Projects\open62541-i4Component\src\server\ua_server_config.c">
+    <ClCompile Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\server\ua_server_config.c">
       <Filter>src\server</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Projects\open62541-i4Component\src\server\ua_server_binary.c">
+    <ClCompile Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\server\ua_server_binary.c">
       <Filter>src\server</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Projects\open62541-i4Component\src\server\ua_server_utils.c">
+    <ClCompile Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\server\ua_server_utils.c">
       <Filter>src\server</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Projects\open62541-i4Component\src\server\ua_server_discovery.c">
+    <ClCompile Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\server\ua_server_discovery.c">
       <Filter>src\server</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Projects\open62541-i4Component\src\server\ua_server_async.c">
+    <ClCompile Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\server\ua_server_async.c">
       <Filter>src\server</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Projects\open62541-i4Component\src\pubsub\ua_pubsub_networkmessage.c">
+    <ClCompile Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\pubsub\ua_pubsub_networkmessage.c">
       <Filter>src\pubsub</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Projects\open62541-i4Component\src\pubsub\ua_pubsub_writer.c">
+    <ClCompile Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\pubsub\ua_pubsub_writer.c">
       <Filter>src\pubsub</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Projects\open62541-i4Component\src\pubsub\ua_pubsub_reader.c">
+    <ClCompile Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\pubsub\ua_pubsub_reader.c">
       <Filter>src\pubsub</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Projects\open62541-i4Component\src\pubsub\ua_pubsub_manager.c">
+    <ClCompile Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\pubsub\ua_pubsub_manager.c">
       <Filter>src\pubsub</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Projects\open62541-i4Component\src\pubsub\ua_pubsub_ns0.c">
+    <ClCompile Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\pubsub\ua_pubsub_ns0.c">
       <Filter>src\pubsub</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Projects\open62541-i4Component\src\server\ua_services_view.c">
+    <ClCompile Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\server\ua_services_view.c">
       <Filter>src\server</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Projects\open62541-i4Component\src\server\ua_services_method.c">
+    <ClCompile Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\server\ua_services_method.c">
       <Filter>src\server</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Projects\open62541-i4Component\src\server\ua_services_session.c">
+    <ClCompile Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\server\ua_services_session.c">
       <Filter>src\server</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Projects\open62541-i4Component\src\server\ua_services_attribute.c">
+    <ClCompile Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\server\ua_services_attribute.c">
       <Filter>src\server</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Projects\open62541-i4Component\src\server\ua_services_discovery.c">
+    <ClCompile Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\server\ua_services_discovery.c">
       <Filter>src\server</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Projects\open62541-i4Component\src\server\ua_services_subscription.c">
+    <ClCompile Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\server\ua_services_subscription.c">
       <Filter>src\server</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Projects\open62541-i4Component\src\server\ua_services_monitoreditem.c">
+    <ClCompile Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\server\ua_services_monitoreditem.c">
       <Filter>src\server</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Projects\open62541-i4Component\src\server\ua_services_securechannel.c">
+    <ClCompile Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\server\ua_services_securechannel.c">
       <Filter>src\server</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Projects\open62541-i4Component\src\server\ua_services_nodemanagement.c">
+    <ClCompile Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\server\ua_services_nodemanagement.c">
       <Filter>src\server</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Projects\open62541-i4Component\src\server\ua_services_discovery_multicast.c">
+    <ClCompile Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\server\ua_services_discovery_multicast.c">
       <Filter>src\server</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Projects\open62541-i4Component\src\client\ua_client.c">
+    <ClCompile Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\client\ua_client.c">
       <Filter>src\client</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Projects\open62541-i4Component\src\client\ua_client_connect.c">
+    <ClCompile Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\client\ua_client_connect.c">
       <Filter>src\client</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Projects\open62541-i4Component\src\client\ua_client_discovery.c">
+    <ClCompile Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\client\ua_client_discovery.c">
       <Filter>src\client</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Projects\open62541-i4Component\src\client\ua_client_highlevel.c">
+    <ClCompile Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\client\ua_client_highlevel.c">
       <Filter>src\client</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Projects\open62541-i4Component\src\client\ua_client_subscriptions.c">
+    <ClCompile Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\client\ua_client_subscriptions.c">
       <Filter>src\client</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Projects\open62541-i4Component\deps\libc_time.c">
+    <ClCompile Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\deps\libc_time.c">
       <Filter>deps</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Projects\open62541-i4Component\deps\pcg_basic.c">
+    <ClCompile Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\deps\pcg_basic.c">
       <Filter>deps</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Projects\open62541-i4Component\deps\base64.c">
+    <ClCompile Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\deps\base64.c">
       <Filter>deps</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Projects\open62541-i4Component\src\pubsub\ua_pubsub_config.c">
+    <ClCompile Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\pubsub\ua_pubsub_config.c">
       <Filter>src\pubsub</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Projects\open62541-i4Component\buildWIN\src_generated\open62541\namespace0_generated.c">
+    <ClCompile Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\src_generated\open62541\namespace0_generated.c">
       <Filter>buildWIN\src_generated\open62541</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Projects\open62541-i4Component\src\ua_types_lex.c">
+    <ClCompile Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\ua_types_lex.c">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Projects\open62541-i4Component\src\server\ua_subscription.c">
+    <ClCompile Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\server\ua_subscription.c">
       <Filter>src\server</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Projects\open62541-i4Component\src\server\ua_subscription_monitoreditem.c">
+    <ClCompile Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\server\ua_subscription_monitoreditem.c">
       <Filter>src\server</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Projects\open62541-i4Component\src\server\ua_subscription_datachange.c">
+    <ClCompile Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\server\ua_subscription_datachange.c">
       <Filter>src\server</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="C:\Projects\open62541-i4Component\deps\open62541_queue.h">
+    <ClInclude Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\deps\open62541_queue.h">
       <Filter>deps</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Projects\open62541-i4Component\deps\pcg_basic.h">
+    <ClInclude Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\deps\pcg_basic.h">
       <Filter>deps</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Projects\open62541-i4Component\deps\libc_time.h">
+    <ClInclude Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\deps\libc_time.h">
       <Filter>deps</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Projects\open62541-i4Component\deps\base64.h">
+    <ClInclude Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\deps\base64.h">
       <Filter>deps</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Projects\open62541-i4Component\src\ua_util_internal.h">
+    <ClInclude Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\ua_util_internal.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Projects\open62541-i4Component\src\ua_types_encoding_binary.h">
+    <ClInclude Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\ua_types_encoding_binary.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Projects\open62541-i4Component\buildWIN\src_generated\open62541\types_generated_encoding_binary.h">
+    <ClInclude Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\src_generated\open62541\types_generated_encoding_binary.h">
       <Filter>buildWIN\src_generated\open62541</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Projects\open62541-i4Component\buildWIN\src_generated\open62541\transport_generated.h">
+    <ClInclude Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\src_generated\open62541\transport_generated.h">
       <Filter>buildWIN\src_generated\open62541</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Projects\open62541-i4Component\buildWIN\src_generated\open62541\transport_generated_handling.h">
+    <ClInclude Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\src_generated\open62541\transport_generated_handling.h">
       <Filter>buildWIN\src_generated\open62541</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Projects\open62541-i4Component\buildWIN\src_generated\open62541\transport_generated_encoding_binary.h">
+    <ClInclude Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\src_generated\open62541\transport_generated_encoding_binary.h">
       <Filter>buildWIN\src_generated\open62541</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Projects\open62541-i4Component\src\ua_connection_internal.h">
+    <ClInclude Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\ua_connection_internal.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Projects\open62541-i4Component\src\ua_securechannel.h">
+    <ClInclude Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\ua_securechannel.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Projects\open62541-i4Component\src\ua_timer.h">
+    <ClInclude Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\ua_timer.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Projects\open62541-i4Component\src\server\ua_session.h">
+    <ClInclude Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\server\ua_session.h">
       <Filter>src\server</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Projects\open62541-i4Component\src\server\ua_subscription.h">
+    <ClInclude Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\server\ua_subscription.h">
       <Filter>src\server</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Projects\open62541-i4Component\src\pubsub\ua_pubsub_networkmessage.h">
+    <ClInclude Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\pubsub\ua_pubsub_networkmessage.h">
       <Filter>src\pubsub</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Projects\open62541-i4Component\src\pubsub\ua_pubsub.h">
+    <ClInclude Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\pubsub\ua_pubsub.h">
       <Filter>src\pubsub</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Projects\open62541-i4Component\src\pubsub\ua_pubsub_manager.h">
+    <ClInclude Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\pubsub\ua_pubsub_manager.h">
       <Filter>src\pubsub</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Projects\open62541-i4Component\src\pubsub\ua_pubsub_ns0.h">
+    <ClInclude Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\pubsub\ua_pubsub_ns0.h">
       <Filter>src\pubsub</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Projects\open62541-i4Component\src\server\ua_server_async.h">
+    <ClInclude Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\server\ua_server_async.h">
       <Filter>src\server</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Projects\open62541-i4Component\src\server\ua_server_internal.h">
+    <ClInclude Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\server\ua_server_internal.h">
       <Filter>src\server</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Projects\open62541-i4Component\src\server\ua_services.h">
+    <ClInclude Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\server\ua_services.h">
       <Filter>src\server</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Projects\open62541-i4Component\src\client\ua_client_internal.h">
+    <ClInclude Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\client\ua_client_internal.h">
       <Filter>src\client</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Projects\open62541-i4Component\src\pubsub\ua_pubsub_config.h">
+    <ClInclude Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\src\pubsub\ua_pubsub_config.h">
       <Filter>src\pubsub</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Projects\open62541-i4Component\buildWIN\src_generated\open62541\namespace0_generated.h">
+    <ClInclude Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\src_generated\open62541\namespace0_generated.h">
       <Filter>buildWIN\src_generated\open62541</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Projects\open62541-i4Component\buildWIN\src_generated\open62541\config.h">
+    <ClInclude Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\src_generated\open62541\config.h">
       <Filter>buildWIN\src_generated\open62541</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Projects\open62541-i4Component\arch\win32\ua_architecture.h">
+    <ClInclude Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\arch\win32\ua_architecture.h">
       <Filter>arch\win32</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Projects\open62541-i4Component\deps\ms_stdint.h">
+    <ClInclude Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\deps\ms_stdint.h">
       <Filter>deps</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Projects\open62541-i4Component\include\open62541\architecture_definitions.h">
+    <ClInclude Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\include\open62541\architecture_definitions.h">
       <Filter>include\open62541</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Projects\open62541-i4Component\buildWIN\src_generated\open62541\statuscodes.h">
+    <ClInclude Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\src_generated\open62541\statuscodes.h">
       <Filter>buildWIN\src_generated\open62541</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Projects\open62541-i4Component\buildWIN\src_generated\open62541\nodeids.h">
+    <ClInclude Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\src_generated\open62541\nodeids.h">
       <Filter>buildWIN\src_generated\open62541</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Projects\open62541-i4Component\include\open62541\common.h">
+    <ClInclude Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\include\open62541\common.h">
       <Filter>include\open62541</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Projects\open62541-i4Component\include\open62541\types.h">
+    <ClInclude Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\include\open62541\types.h">
       <Filter>include\open62541</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Projects\open62541-i4Component\buildWIN\src_generated\open62541\types_generated.h">
+    <ClInclude Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\src_generated\open62541\types_generated.h">
       <Filter>buildWIN\src_generated\open62541</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Projects\open62541-i4Component\buildWIN\src_generated\open62541\types_generated_handling.h">
+    <ClInclude Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\src_generated\open62541\types_generated_handling.h">
       <Filter>buildWIN\src_generated\open62541</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Projects\open62541-i4Component\include\open62541\util.h">
+    <ClInclude Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\include\open62541\util.h">
       <Filter>include\open62541</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Projects\open62541-i4Component\include\open62541\plugin\log.h">
+    <ClInclude Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\include\open62541\plugin\log.h">
       <Filter>include\open62541\plugin</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Projects\open62541-i4Component\include\open62541\plugin\network.h">
+    <ClInclude Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\include\open62541\plugin\network.h">
       <Filter>include\open62541\plugin</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Projects\open62541-i4Component\include\open62541\plugin\accesscontrol.h">
+    <ClInclude Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\include\open62541\plugin\accesscontrol.h">
       <Filter>include\open62541\plugin</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Projects\open62541-i4Component\include\open62541\plugin\pki.h">
+    <ClInclude Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\include\open62541\plugin\pki.h">
       <Filter>include\open62541\plugin</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Projects\open62541-i4Component\include\open62541\plugin\securitypolicy.h">
+    <ClInclude Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\include\open62541\plugin\securitypolicy.h">
       <Filter>include\open62541\plugin</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Projects\open62541-i4Component\include\open62541\plugin\pubsub.h">
+    <ClInclude Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\include\open62541\plugin\pubsub.h">
       <Filter>include\open62541\plugin</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Projects\open62541-i4Component\deps\ziptree.h">
+    <ClInclude Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\deps\ziptree.h">
       <Filter>deps</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Projects\open62541-i4Component\include\open62541\plugin\nodestore.h">
+    <ClInclude Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\include\open62541\plugin\nodestore.h">
       <Filter>include\open62541\plugin</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Projects\open62541-i4Component\include\open62541\server.h">
+    <ClInclude Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\include\open62541\server.h">
       <Filter>include\open62541</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Projects\open62541-i4Component\include\open62541\server_pubsub.h">
+    <ClInclude Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\include\open62541\server_pubsub.h">
       <Filter>include\open62541</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Projects\open62541-i4Component\include\open62541\client.h">
+    <ClInclude Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\include\open62541\client.h">
       <Filter>include\open62541</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Projects\open62541-i4Component\include\open62541\client_highlevel.h">
+    <ClInclude Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\include\open62541\client_highlevel.h">
       <Filter>include\open62541</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Projects\open62541-i4Component\include\open62541\client_subscriptions.h">
+    <ClInclude Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\include\open62541\client_subscriptions.h">
       <Filter>include\open62541</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Projects\open62541-i4Component\include\open62541\client_highlevel_async.h">
+    <ClInclude Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\include\open62541\client_highlevel_async.h">
       <Filter>include\open62541</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="C:\Projects\open62541-i4Component\CMakeLists.txt" />
+    <CustomBuild Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="CMake Rules">
-      <UniqueIdentifier>{A5809C94-49FF-32C2-A39C-61B61DF76A5A}</UniqueIdentifier>
+      <UniqueIdentifier>{AF5292DF-B226-3C2A-B6DE-4FC2205251E3}</UniqueIdentifier>
     </Filter>
     <Filter Include="arch">
-      <UniqueIdentifier>{423ED2B5-7557-38BD-962B-C9C3059D2EB0}</UniqueIdentifier>
+      <UniqueIdentifier>{CEC62041-5D62-3FEB-AC7E-82DA3729AE50}</UniqueIdentifier>
     </Filter>
     <Filter Include="arch\win32">
-      <UniqueIdentifier>{BB0874E3-7C8D-37AF-BD6E-2E97DD2E8DDB}</UniqueIdentifier>
+      <UniqueIdentifier>{C38535C3-71C8-32CA-BEA8-D99F5CB06151}</UniqueIdentifier>
     </Filter>
     <Filter Include="buildWIN">
-      <UniqueIdentifier>{1C8BD084-BC62-3738-840B-72FB9D7E2DC4}</UniqueIdentifier>
+      <UniqueIdentifier>{9C0AEE8D-C2DE-3637-952A-D4E54311E7B6}</UniqueIdentifier>
     </Filter>
     <Filter Include="buildWIN\src_generated">
-      <UniqueIdentifier>{6BFDA53D-CF1F-3A17-A700-1BF8E5D77FB9}</UniqueIdentifier>
+      <UniqueIdentifier>{CE19045B-725F-3C6E-818B-B70537332DD4}</UniqueIdentifier>
     </Filter>
     <Filter Include="buildWIN\src_generated\open62541">
-      <UniqueIdentifier>{1928DF45-153F-30F9-87CA-3A94FFFDC5EC}</UniqueIdentifier>
+      <UniqueIdentifier>{0CF46038-7353-3E9D-AE65-3246898C169F}</UniqueIdentifier>
     </Filter>
     <Filter Include="deps">
-      <UniqueIdentifier>{B531D1D2-FBA2-3BBD-BAC7-CBB67A1F22EF}</UniqueIdentifier>
+      <UniqueIdentifier>{E0F47F16-CCC0-3F22-8C21-A39718F4EDBF}</UniqueIdentifier>
     </Filter>
     <Filter Include="include">
-      <UniqueIdentifier>{DB80EE0B-40A4-39FB-8E2B-876FB2CC62E7}</UniqueIdentifier>
+      <UniqueIdentifier>{87B015E5-E123-3410-BE0E-E5D77F86A1C9}</UniqueIdentifier>
     </Filter>
     <Filter Include="include\open62541">
-      <UniqueIdentifier>{B6BCFE7D-6157-34AD-8D84-C1E973DB4AD9}</UniqueIdentifier>
+      <UniqueIdentifier>{6F0C2EBC-5763-3374-A9BD-7666BDF8A703}</UniqueIdentifier>
     </Filter>
     <Filter Include="include\open62541\plugin">
-      <UniqueIdentifier>{1716FE60-D45C-3345-9628-3878E87AD496}</UniqueIdentifier>
+      <UniqueIdentifier>{BEC6A097-C659-3BEF-B74D-36550A0E39EC}</UniqueIdentifier>
     </Filter>
     <Filter Include="src">
-      <UniqueIdentifier>{46A68726-3E15-3306-AB9F-694733AA4CF1}</UniqueIdentifier>
+      <UniqueIdentifier>{8032A76C-B8C5-3599-8AF3-BF29FA7E1263}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\client">
-      <UniqueIdentifier>{73235F31-65DF-34FF-B828-E05FE9165022}</UniqueIdentifier>
+      <UniqueIdentifier>{E7820E69-9AC2-3D10-A6CD-CB4C32D50F1F}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\pubsub">
-      <UniqueIdentifier>{5C0A9836-8F21-319C-8099-B3287B4F78BB}</UniqueIdentifier>
+      <UniqueIdentifier>{2B65E488-410D-3BA0-9833-C12C04324573}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\server">
-      <UniqueIdentifier>{64D84575-4261-3CB7-9A56-B5A4BA29606E}</UniqueIdentifier>
+      <UniqueIdentifier>{A56B9F02-7A9C-3FAD-AE72-DA109B765E09}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

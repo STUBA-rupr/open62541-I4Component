@@ -1,4 +1,4 @@
-# Install script for directory: C:/Projects/open62541-i4Component/arch
+# Install script for directory: C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/arch
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -34,12 +34,12 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("C:/Projects/open62541-i4Component/buildWIN/arch/posix/cmake_install.cmake")
-  include("C:/Projects/open62541-i4Component/buildWIN/arch/win32/cmake_install.cmake")
-  include("C:/Projects/open62541-i4Component/buildWIN/arch/freertosLWIP/cmake_install.cmake")
-  include("C:/Projects/open62541-i4Component/buildWIN/arch/vxworks/cmake_install.cmake")
-  include("C:/Projects/open62541-i4Component/buildWIN/arch/eCos/cmake_install.cmake")
-  include("C:/Projects/open62541-i4Component/buildWIN/arch/wec7/cmake_install.cmake")
+  include("C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/arch/posix/cmake_install.cmake")
+  include("C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/arch/win32/cmake_install.cmake")
+  include("C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/arch/freertosLWIP/cmake_install.cmake")
+  include("C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/arch/vxworks/cmake_install.cmake")
+  include("C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/arch/eCos/cmake_install.cmake")
+  include("C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/arch/wec7/cmake_install.cmake")
 
 endif()
 
