@@ -323,7 +323,7 @@ UA_ARCH_LINKER_FLAGS:STRING=
 UA_ARCH_REMOVE_FLAGS:STRING=
 
 //Build example servers and clients
-UA_BUILD_EXAMPLES:BOOL=ON
+UA_BUILD_EXAMPLES:BOOL=OFF
 
 //Build the fuzzing executables
 UA_BUILD_FUZZING:BOOL=OFF
@@ -348,7 +348,7 @@ UA_DEBUG:BOOL=OFF
 UA_DEBUG_DUMP_PKGS:BOOL=OFF
 
 //Concatenate the library to a single file open62541.h/.c
-UA_ENABLE_AMALGAMATION:BOOL=OFF
+UA_ENABLE_AMALGAMATION:BOOL=ON
 
 //Enable clang coverage
 UA_ENABLE_CLANG_COV:BOOL=OFF
@@ -504,7 +504,7 @@ UA_MSVC_FORCE_STATIC_CRT:BOOL=ON
 UA_MULTITHREADING:STRING=0
 
 //Completeness of the generated namespace zero (minimal/reduced/full)
-UA_NAMESPACE_ZERO:STRING=REDUCED
+UA_NAMESPACE_ZERO:STRING=FULL
 
 //Special build switch used in .deb packaging
 UA_PACK_DEBIAN:BOOL=OFF
@@ -655,7 +655,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_MT
 CMAKE_MT-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=12
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=10
 //Platform information initialized
 CMAKE_PLATFORM_INFO_INITIALIZED:INTERNAL=1
 //noop for ranlib
@@ -843,6 +843,12 @@ UA_NODESET_EXAMPLE_SOURCES:INTERNAL=C:/Users/Rudolf/source/repos/STUBA-rupr/open
 UA_NODESET_EXAMPLE_TARGET:INTERNAL=open62541-generator-ns-example
 //UA_NODESET_I4AAS header files
 UA_NODESET_I4AAS_HEADERS:INTERNAL=C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/src_generated/open62541/namespace_i4aas_generated.h
+//UA_NODESET_I4AAS_INST header files
+UA_NODESET_I4AAS_INST_HEADERS:INTERNAL=C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/src_generated/open62541/namespace_i4aas_inst_generated.h
+//UA_NODESET_I4AAS_INST source files
+UA_NODESET_I4AAS_INST_SOURCES:INTERNAL=C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/src_generated/open62541/namespace_i4aas_inst_generated.c
+//UA_NODESET_I4AAS_INST target
+UA_NODESET_I4AAS_INST_TARGET:INTERNAL=open62541-generator-ns-i4aas_inst
 //UA_NODESET_I4AAS source files
 UA_NODESET_I4AAS_SOURCES:INTERNAL=C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/src_generated/open62541/namespace_i4aas_generated.c
 //UA_NODESET_I4AAS target
@@ -891,6 +897,10 @@ UA_TYPES_DI_SOURCES:INTERNAL=C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i
 UA_TYPES_HEADERS:INTERNAL=C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/src_generated/open62541/types_generated.h;C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/src_generated/open62541/types_generated_handling.h;C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/src_generated/open62541/types_generated_encoding_binary.h
 //types_i4aas header files
 UA_TYPES_I4AAS_HEADERS:INTERNAL=C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/src_generated/open62541/types_i4aas_generated.h;C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/src_generated/open62541/types_i4aas_generated_handling.h;C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/src_generated/open62541/types_i4aas_generated_encoding_binary.h
+//types_i4aas_inst header files
+UA_TYPES_I4AAS_INST_HEADERS:INTERNAL=C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/src_generated/open62541/types_i4aas_inst_generated.h;C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/src_generated/open62541/types_i4aas_inst_generated_handling.h;C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/src_generated/open62541/types_i4aas_inst_generated_encoding_binary.h
+//types_i4aas_inst source files
+UA_TYPES_I4AAS_INST_SOURCES:INTERNAL=C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/src_generated/open62541/types_i4aas_inst_generated.c
 //types_i4aas source files
 UA_TYPES_I4AAS_SOURCES:INTERNAL=C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/src_generated/open62541/types_i4aas_generated.c
 //types_instance header files

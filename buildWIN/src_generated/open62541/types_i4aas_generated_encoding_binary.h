@@ -1,5 +1,5 @@
 /* Generated from Opc.Ua.i4aas.Types.bsd with script C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/tools/generate_datatypes.py
- * on host VM-WIN16-DEV by user Rudolf at 2021-05-17 04:30:57 */
+ * on host VM-WIN16-DEV by user Rudolf at 2021-05-18 08:13:58 */
 
 #ifndef TYPES_I4AAS_GENERATED_ENCODING_BINARY_H_
 #define TYPES_I4AAS_GENERATED_ENCODING_BINARY_H_

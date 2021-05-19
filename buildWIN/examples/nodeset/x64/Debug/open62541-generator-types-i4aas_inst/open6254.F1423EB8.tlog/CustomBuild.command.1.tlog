@@ -1,0 +1,28 @@
+^C:\USERS\RUDOLF\SOURCE\REPOS\STUBA-RUPR\OPEN62541-I4COMPONENT\BUILDWIN\CMAKEFILES\7DC60401D3773F32C473F2413958F9B6\TYPES_I4AAS_INST_GENERATED.C.RULE
+setlocal
+C:\Users\Rudolf\AppData\Local\Programs\Python\Python39\python.exe C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/tools/generate_datatypes.py --namespaceMap=2:http://opcfoundation.org/UA/i4aas --namespaceMap=3:http://admin-shell.io/samples/i4aas/instance --namespaceMap=2:http://opcfoundation.org/UA/i4aas --namespaceMap=3:http://admin-shell.io/samples/i4aas/instance --type-bsd=C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/examples/nodeset/Opc.Ua.i4aas.Types.bsd --type-csv=C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/examples/nodeset/stm32-EnvSensor-AASX041_part2.csv --no-builtin C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/src_generated/open62541/types_i4aas_inst
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\RUDOLF\SOURCE\REPOS\STUBA-RUPR\OPEN62541-I4COMPONENT\BUILDWIN\CMAKEFILES\156FBE6D8A16668BD9530F9C9437BDDE\OPEN62541-GENERATOR-TYPES-I4AAS_INST.RULE
+setlocal
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\RUDOLF\SOURCE\REPOS\STUBA-RUPR\OPEN62541-I4COMPONENT\EXAMPLES\NODESET\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component -BC:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN --check-stamp-file C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/examples/nodeset/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

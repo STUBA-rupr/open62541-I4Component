@@ -36,6 +36,12 @@
     <ClCompile Include="types_instance_generated.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="types_i4aas_inst_generated.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="namespace_i4aas_inst_generated.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="i4aas_nodeids.h">
@@ -57,6 +63,21 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="types_instance_generated.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="types_i4aas_inst_generated.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="types_i4aas_inst_generated_encoding_binary.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="types_i4aas_inst_generated_handling.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="namespace_i4aas_inst_generated.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="i4aas_inst_nodeids.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

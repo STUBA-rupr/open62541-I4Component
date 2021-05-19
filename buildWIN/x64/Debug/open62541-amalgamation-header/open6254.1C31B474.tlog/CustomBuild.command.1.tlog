@@ -1,0 +1,48 @@
+^C:\USERS\RUDOLF\SOURCE\REPOS\STUBA-RUPR\OPEN62541-I4COMPONENT\BUILDWIN\CMAKEFILES\7DC60401D3773F32C473F2413958F9B6\NODEIDS.H.RULE
+setlocal
+C:\Users\Rudolf\AppData\Local\Programs\Python\Python39\python.exe C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/tools/generate_nodeid_header.py C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/deps/ua-nodeset/Schema/NodeIds.csv C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/src_generated/open62541/nodeids NS0
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\RUDOLF\SOURCE\REPOS\STUBA-RUPR\OPEN62541-I4COMPONENT\BUILDWIN\CMAKEFILES\7DC60401D3773F32C473F2413958F9B6\STATUSCODES.H.RULE
+setlocal
+C:\Users\Rudolf\AppData\Local\Programs\Python\Python39\python.exe C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/tools/generate_statuscode_descriptions.py C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/deps/ua-nodeset/Schema/StatusCode.csv C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/src_generated/open62541/statuscodes
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\RUDOLF\SOURCE\REPOS\STUBA-RUPR\OPEN62541-I4COMPONENT\BUILDWIN\CMAKEFILES\BE36BFD8C70FFB0FCBC4BA9E1EDA01AC\OPEN62541.H.RULE
+setlocal
+C:\Users\Rudolf\AppData\Local\Programs\Python\Python39\python.exe C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/tools/amalgamate.py v1.1.2-300-g782d576b-dirty C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/open62541.h C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/src_generated/open62541/config.h C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/arch/win32/ua_architecture.h C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/deps/ms_stdint.h C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/include/open62541/architecture_definitions.h C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/src_generated/open62541/statuscodes.h C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/src_generated/open62541/nodeids.h C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/include/open62541/common.h C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/include/open62541/types.h C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/src_generated/open62541/types_generated.h C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/src_generated/open62541/types_generated_handling.h C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/include/open62541/util.h C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/include/open62541/plugin/log.h C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/include/open62541/plugin/network.h C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/include/open62541/plugin/accesscontrol.h C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/include/open62541/plugin/pki.h C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/include/open62541/plugin/securitypolicy.h C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/include/open62541/plugin/pubsub.h C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/deps/ziptree.h C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/include/open62541/plugin/nodestore.h C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/include/open62541/server.h C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/include/open62541/server_pubsub.h C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/include/open62541/client.h C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/include/open62541/client_highlevel.h C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/include/open62541/client_subscriptions.h C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/include/open62541/client_highlevel_async.h C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/plugins/include/open62541/plugin/accesscontrol_default.h C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/plugins/include/open62541/plugin/pki_default.h C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/plugins/include/open62541/plugin/log_stdout.h C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/plugins/include/open62541/plugin/nodestore_default.h C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/plugins/include/open62541/server_config_default.h C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/plugins/include/open62541/client_config_default.h C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/plugins/include/open62541/plugin/securitypolicy_default.h C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/include/open62541/network_tcp.h C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/include/open62541/architecture_functions.h
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\RUDOLF\SOURCE\REPOS\STUBA-RUPR\OPEN62541-I4COMPONENT\BUILDWIN\CMAKEFILES\F9825F7F5C92EEDE7457D6413558919B\OPEN62541-AMALGAMATION-HEADER.RULE
+setlocal
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\RUDOLF\SOURCE\REPOS\STUBA-RUPR\OPEN62541-I4COMPONENT\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component -BC:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN --check-stamp-file C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

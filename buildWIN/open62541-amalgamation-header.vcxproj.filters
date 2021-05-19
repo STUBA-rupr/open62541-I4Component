@@ -1,26 +1,26 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <CustomBuild Include="C:\Projects\open62541-i4Component\buildWIN\CMakeFiles\b697fb6abc4207c1083d8840b93cbf54\statuscodes.h.rule">
+    <CustomBuild Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\CMakeFiles\7dc60401d3773f32c473f2413958f9b6\nodeids.h.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="C:\Projects\open62541-i4Component\buildWIN\CMakeFiles\b697fb6abc4207c1083d8840b93cbf54\nodeids.h.rule">
+    <CustomBuild Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\CMakeFiles\7dc60401d3773f32c473f2413958f9b6\statuscodes.h.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="C:\Projects\open62541-i4Component\buildWIN\CMakeFiles\b17436d8d187708d3d2f7d224f259340\open62541.h.rule">
+    <CustomBuild Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\CMakeFiles\be36bfd8c70ffb0fcbc4ba9e1eda01ac\open62541.h.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="C:\Projects\open62541-i4Component\buildWIN\CMakeFiles\8508485f90824d5bb0d696ed6c77e96c\open62541-amalgamation-header.rule">
+    <CustomBuild Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\CMakeFiles\f9825f7f5c92eede7457d6413558919b\open62541-amalgamation-header.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
-    <CustomBuild Include="C:\Projects\open62541-i4Component\CMakeLists.txt" />
+    <CustomBuild Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="C:\Projects\open62541-i4Component\buildWIN\CMakeFiles\open62541-amalgamation-header" />
+    <None Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\CMakeFiles\open62541-amalgamation-header" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="CMake Rules">
-      <UniqueIdentifier>{A5809C94-49FF-32C2-A39C-61B61DF76A5A}</UniqueIdentifier>
+      <UniqueIdentifier>{AF5292DF-B226-3C2A-B6DE-4FC2205251E3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -1,0 +1,305 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="MinSizeRel|x64">
+      <Configuration>MinSizeRel</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="RelWithDebInfo|x64">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{9C559FB3-9A5B-34E8-9358-28036F9CED7A}</ProjectGuid>
+    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
+    <Keyword>Win32Proj</Keyword>
+    <Platform>x64</Platform>
+    <ProjectName>open62541-generator-ns-i4aas_inst</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\examples;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\examples;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\examples;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\examples;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\CMakeFiles\7dc60401d3773f32c473f2413958f9b6\namespace_i4aas_inst_generated.c.rule">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generating ../../src_generated/open62541/namespace_i4aas_inst_generated.c, ../../src_generated/open62541/namespace_i4aas_inst_generated.h</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+C:\Users\Rudolf\AppData\Local\Programs\Python\Python39\python.exe C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/tools/nodeset_compiler/nodeset_compiler.py --internal-headers --types-array=UA_TYPES --types-array=UA_TYPES_I4AAS --types-array=UA_TYPES_I4AAS_INST --existing=C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/deps/ua-nodeset/Schema/Opc.Ua.NodeSet2.xml --existing=C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/examples/nodeset/stm32-EnvSensor-AASX041_part1.xml --xml=C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/examples/nodeset/stm32-EnvSensor-AASX041_part2.xml C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/src_generated/open62541/namespace_i4aas_inst_generated
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\tools\nodeset_compiler\nodeset_compiler.py;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\tools\nodeset_compiler\nodes.py;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\tools\nodeset_compiler\nodeset.py;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\tools\nodeset_compiler\datatypes.py;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\tools\nodeset_compiler\backend_open62541.py;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\tools\nodeset_compiler\backend_open62541_nodes.py;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\tools\nodeset_compiler\backend_open62541_datatypes.py;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\examples\nodeset\stm32-EnvSensor-AASX041_part2.xml;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\deps\ua-nodeset\Schema\Opc.Ua.NodeSet2.xml;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\examples\nodeset\stm32-EnvSensor-AASX041_part1.xml;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\src_generated\open62541\namespace_i4aas_inst_generated.c;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\src_generated\open62541\namespace_i4aas_inst_generated.h</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generating ../../src_generated/open62541/namespace_i4aas_inst_generated.c, ../../src_generated/open62541/namespace_i4aas_inst_generated.h</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+C:\Users\Rudolf\AppData\Local\Programs\Python\Python39\python.exe C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/tools/nodeset_compiler/nodeset_compiler.py --internal-headers --types-array=UA_TYPES --types-array=UA_TYPES_I4AAS --types-array=UA_TYPES_I4AAS_INST --existing=C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/deps/ua-nodeset/Schema/Opc.Ua.NodeSet2.xml --existing=C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/examples/nodeset/stm32-EnvSensor-AASX041_part1.xml --xml=C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/examples/nodeset/stm32-EnvSensor-AASX041_part2.xml C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/src_generated/open62541/namespace_i4aas_inst_generated
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\tools\nodeset_compiler\nodeset_compiler.py;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\tools\nodeset_compiler\nodes.py;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\tools\nodeset_compiler\nodeset.py;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\tools\nodeset_compiler\datatypes.py;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\tools\nodeset_compiler\backend_open62541.py;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\tools\nodeset_compiler\backend_open62541_nodes.py;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\tools\nodeset_compiler\backend_open62541_datatypes.py;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\examples\nodeset\stm32-EnvSensor-AASX041_part2.xml;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\deps\ua-nodeset\Schema\Opc.Ua.NodeSet2.xml;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\examples\nodeset\stm32-EnvSensor-AASX041_part1.xml;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\src_generated\open62541\namespace_i4aas_inst_generated.c;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\src_generated\open62541\namespace_i4aas_inst_generated.h</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Generating ../../src_generated/open62541/namespace_i4aas_inst_generated.c, ../../src_generated/open62541/namespace_i4aas_inst_generated.h</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
+C:\Users\Rudolf\AppData\Local\Programs\Python\Python39\python.exe C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/tools/nodeset_compiler/nodeset_compiler.py --internal-headers --types-array=UA_TYPES --types-array=UA_TYPES_I4AAS --types-array=UA_TYPES_I4AAS_INST --existing=C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/deps/ua-nodeset/Schema/Opc.Ua.NodeSet2.xml --existing=C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/examples/nodeset/stm32-EnvSensor-AASX041_part1.xml --xml=C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/examples/nodeset/stm32-EnvSensor-AASX041_part2.xml C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/src_generated/open62541/namespace_i4aas_inst_generated
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\tools\nodeset_compiler\nodeset_compiler.py;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\tools\nodeset_compiler\nodes.py;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\tools\nodeset_compiler\nodeset.py;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\tools\nodeset_compiler\datatypes.py;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\tools\nodeset_compiler\backend_open62541.py;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\tools\nodeset_compiler\backend_open62541_nodes.py;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\tools\nodeset_compiler\backend_open62541_datatypes.py;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\examples\nodeset\stm32-EnvSensor-AASX041_part2.xml;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\deps\ua-nodeset\Schema\Opc.Ua.NodeSet2.xml;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\examples\nodeset\stm32-EnvSensor-AASX041_part1.xml;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\src_generated\open62541\namespace_i4aas_inst_generated.c;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\src_generated\open62541\namespace_i4aas_inst_generated.h</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Generating ../../src_generated/open62541/namespace_i4aas_inst_generated.c, ../../src_generated/open62541/namespace_i4aas_inst_generated.h</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
+C:\Users\Rudolf\AppData\Local\Programs\Python\Python39\python.exe C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/tools/nodeset_compiler/nodeset_compiler.py --internal-headers --types-array=UA_TYPES --types-array=UA_TYPES_I4AAS --types-array=UA_TYPES_I4AAS_INST --existing=C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/deps/ua-nodeset/Schema/Opc.Ua.NodeSet2.xml --existing=C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/examples/nodeset/stm32-EnvSensor-AASX041_part1.xml --xml=C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/examples/nodeset/stm32-EnvSensor-AASX041_part2.xml C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/src_generated/open62541/namespace_i4aas_inst_generated
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\tools\nodeset_compiler\nodeset_compiler.py;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\tools\nodeset_compiler\nodes.py;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\tools\nodeset_compiler\nodeset.py;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\tools\nodeset_compiler\datatypes.py;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\tools\nodeset_compiler\backend_open62541.py;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\tools\nodeset_compiler\backend_open62541_nodes.py;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\tools\nodeset_compiler\backend_open62541_datatypes.py;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\examples\nodeset\stm32-EnvSensor-AASX041_part2.xml;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\deps\ua-nodeset\Schema\Opc.Ua.NodeSet2.xml;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\examples\nodeset\stm32-EnvSensor-AASX041_part1.xml;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\src_generated\open62541\namespace_i4aas_inst_generated.c;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\src_generated\open62541\namespace_i4aas_inst_generated.h</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\CMakeFiles\156fbe6d8a16668bd9530f9c9437bdde\open62541-generator-ns-i4aas_inst.rule">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'"></Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\src_generated\open62541\namespace_i4aas_inst_generated.c;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\src_generated\open62541\namespace_i4aas_inst_generated.h;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\examples\nodeset\CMakeFiles\open62541-generator-ns-i4aas_inst</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
+      <VerifyInputsAndOutputsExist Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</VerifyInputsAndOutputsExist>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'"></Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\src_generated\open62541\namespace_i4aas_inst_generated.c;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\src_generated\open62541\namespace_i4aas_inst_generated.h;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\examples\nodeset\CMakeFiles\open62541-generator-ns-i4aas_inst</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+      <VerifyInputsAndOutputsExist Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</VerifyInputsAndOutputsExist>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'"></Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\src_generated\open62541\namespace_i4aas_inst_generated.c;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\src_generated\open62541\namespace_i4aas_inst_generated.h;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\examples\nodeset\CMakeFiles\open62541-generator-ns-i4aas_inst</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
+      <VerifyInputsAndOutputsExist Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</VerifyInputsAndOutputsExist>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'"></Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\src_generated\open62541\namespace_i4aas_inst_generated.c;C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\src_generated\open62541\namespace_i4aas_inst_generated.h;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\examples\nodeset\CMakeFiles\open62541-generator-ns-i4aas_inst</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
+      <VerifyInputsAndOutputsExist Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</VerifyInputsAndOutputsExist>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\examples\nodeset\CMakeLists.txt">
+      <StdOutEncoding>UTF-8</StdOutEncoding>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/examples/nodeset/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component -BC:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN --check-stamp-file C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/examples/nodeset/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\examples\nodeset\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/examples/nodeset/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component -BC:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN --check-stamp-file C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/examples/nodeset/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\examples\nodeset\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Building Custom Rule C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/examples/nodeset/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component -BC:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN --check-stamp-file C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/examples/nodeset/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\examples\nodeset\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Building Custom Rule C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/examples/nodeset/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component -BC:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN --check-stamp-file C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/examples/nodeset/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\examples\nodeset\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\examples\nodeset\CMakeFiles\open62541-generator-ns-i4aas_inst">
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\ZERO_CHECK.vcxproj">
+      <Project>{B11AB80B-C491-3854-AD62-89AE733E7157}</Project>
+      <Name>ZERO_CHECK</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\examples\nodeset\open62541-generator-ids-i4aas_inst.vcxproj">
+      <Project>{DD2CC079-91BA-3647-9E9A-D7AE468C26EE}</Project>
+      <Name>open62541-generator-ids-i4aas_inst</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\examples\nodeset\open62541-generator-ns-i4aas.vcxproj">
+      <Project>{D37ACF2B-320D-3C2F-9830-8539684809E3}</Project>
+      <Name>open62541-generator-ns-i4aas</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\examples\nodeset\open62541-generator-types-i4aas_inst.vcxproj">
+      <Project>{F1423EB8-C73C-3351-A862-762B6005DC0A}</Project>
+      <Name>open62541-generator-types-i4aas_inst</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

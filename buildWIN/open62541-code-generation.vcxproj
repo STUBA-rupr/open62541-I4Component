@@ -224,9 +224,15 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </ProjectReference>
-    <ProjectReference Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\open62541-generator-namespace.vcxproj">
-      <Project>{91E1EE5E-9193-3D44-BC35-1BD25A853D9C}</Project>
-      <Name>open62541-generator-namespace</Name>
+    <ProjectReference Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\open62541-amalgamation-header.vcxproj">
+      <Project>{1C31B474-F06A-3699-AC8F-82A9BAEB80B7}</Project>
+      <Name>open62541-amalgamation-header</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\open62541-amalgamation-source.vcxproj">
+      <Project>{AC7CD672-FAEF-3D0F-9AF7-FECF09923208}</Project>
+      <Name>open62541-amalgamation-source</Name>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </ProjectReference>

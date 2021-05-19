@@ -1,0 +1,2 @@
+C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\open62541-plugins.dir\Debug\open62541-plugins.lib
+C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\open62541-plugins.dir\Debug\open62541-plugins.pdb

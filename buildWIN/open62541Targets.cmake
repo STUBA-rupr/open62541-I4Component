@@ -46,7 +46,7 @@ add_library(open62541::open62541 STATIC IMPORTED)
 
 set_target_properties(open62541::open62541 PROPERTIES
   INTERFACE_COMPILE_DEFINITIONS "UA_ARCHITECTURE_WIN32"
-  INTERFACE_INCLUDE_DIRECTORIES "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/arch;C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/src;C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/arch/win32;C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/include;C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/plugins/include;C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/deps;C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/src/pubsub;C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/src_generated"
+  INTERFACE_INCLUDE_DIRECTORIES "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN"
   INTERFACE_LINK_LIBRARIES "ws2_32;iphlpapi"
 )
 

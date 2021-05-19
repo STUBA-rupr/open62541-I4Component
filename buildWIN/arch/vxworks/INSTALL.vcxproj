@@ -223,7 +223,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </ProjectReference>
-    <ProjectReference Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\examples\ALL_BUILD.vcxproj">
+    <ProjectReference Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\ALL_BUILD.vcxproj">
       <Project>{2709D106-7B6F-3022-8897-94D15170D22E}</Project>
       <Name>ALL_BUILD</Name>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>

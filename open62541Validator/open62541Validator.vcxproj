@@ -132,18 +132,25 @@
   <ItemGroup>
     <ClCompile Include="main.c" />
     <ClCompile Include="namespace_i4aas_generated.c" />
+    <ClCompile Include="namespace_i4aas_inst_generated.c" />
     <ClCompile Include="namespace_instance_generated.c" />
     <ClCompile Include="open62541.c" />
     <ClCompile Include="types_i4aas_generated.c" />
+    <ClCompile Include="types_i4aas_inst_generated.c" />
     <ClCompile Include="types_instance_generated.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="i4aas_inst_nodeids.h" />
     <ClInclude Include="i4aas_nodeids.h" />
     <ClInclude Include="instance_nodeids.h" />
     <ClInclude Include="namespace_i4aas_generated.h" />
+    <ClInclude Include="namespace_i4aas_inst_generated.h" />
     <ClInclude Include="namespace_instance_generated.h" />
     <ClInclude Include="open62541.h" />
     <ClInclude Include="types_i4aas_generated.h" />
+    <ClInclude Include="types_i4aas_inst_generated.h" />
+    <ClInclude Include="types_i4aas_inst_generated_encoding_binary.h" />
+    <ClInclude Include="types_i4aas_inst_generated_handling.h" />
     <ClInclude Include="types_instance_generated.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
