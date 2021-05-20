@@ -427,3 +427,4 @@ C:\Users\Rudolf\Source\Repos\STUBA-rupr\open62541-i4Component\InformationModelHe
 C:\Users\Rudolf\Source\Repos\STUBA-rupr\open62541-i4Component\InformationModelHelper\obj\Debug\InformationModelHelper.exe
 C:\Users\Rudolf\Source\Repos\STUBA-rupr\open62541-i4Component\InformationModelHelper\obj\Debug\InformationModelHelper.pdb
 C:\Users\Rudolf\Source\Repos\STUBA-rupr\open62541-i4Component\InformationModelHelper\bin\Debug\stm32-EnvSensor-AASX041.xml
+C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\InformationModelHelper\bin\Debug\Opc.Ua.NodeSet2.Reduced_i4aas.xml

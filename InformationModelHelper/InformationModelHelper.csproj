@@ -231,6 +231,9 @@
     <Content Include="Opc.Ua.AAS.Nodeset2.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Opc.Ua.NodeSet2.Reduced_i4aas.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="stm32-EnvSensor-AASX041.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

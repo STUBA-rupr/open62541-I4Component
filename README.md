@@ -1,6 +1,54 @@
 # open62541-I4Component
 This branch is focused to embedded devices. It presetns **SDRAM** extension for heap memory functions to separate memory allocation for communication layer and application layer (node and addres space management). The target device is STM32F769I-DISC1.
 
+## Project InformationModelHelper 
+After generating Nodeset from AASX Package Explorer the nodeset XML needs to be adujsted to allow open62541 to compile it. 
+- The open62541 compiler requires one nodeset XML file for one namespace.
+- There mest be duplicity in references.
+- Namespaces and models needs to be added in the file header.
+
+The i4aas and i4aas_inst nodeset are generated with code:
+``
+ generate namespace from XML file
+ua_generate_nodeset_and_datatypes(
+        NAME "i4aas"
+        FILE_CSV "${FILE_CSV_DIRPREFIX}/stm32-EnvSensor-AASX041_part1.csv"
+        FILE_BSD "${FILE_BSD_DIRPREFIX}/Opc.Ua.i4aas.Types.bsd"        
+        NAMESPACE_MAP "2:http://opcfoundation.org/UA/i4aas;3:http://admin-shell.io/samples/i4aas/instance"
+        FILE_NS "${FILE_NS_DIRPREFIX}/stm32-EnvSensor-AASX041_part1.xml"
+        #DEPENDS "${CMAKE_SOURCE_DIR}/tools/schema/Opc.Ua.NodeSet2.xml"
+        INTERNAL
+   )
+
+    generate namespace from XML file
+ua_generate_nodeset_and_datatypes(
+        NAME "i4aas_inst"
+        FILE_CSV "${FILE_CSV_DIRPREFIX}/stm32-EnvSensor-AASX041_part2.csv"
+        FILE_BSD "${FILE_BSD_DIRPREFIX}/Opc.Ua.i4aas.Types.bsd"        
+        NAMESPACE_MAP "2:http://opcfoundation.org/UA/i4aas;3:http://admin-shell.io/samples/i4aas/instance"
+        FILE_NS "${FILE_NS_DIRPREFIX}/stm32-EnvSensor-AASX041_part2.xml"
+        DEPENDS "i4aas"
+        INTERNAL
+   )
+
+``
+## Project open62541Validator
+Its purpose is to check generated nodesets.
+Generated soruce .c .h needs to be little bit adjusted:
+Define TYPES and 
+
+``
+static UA_StatusCode function_namespace_i4aas_generated_0_begin(UA_Server *server, UA_UInt16* ns) {
+
+UA_StatusCode retVal = UA_STATUSCODE_GOOD;
+  
+  return UA_STATUSCODE_GOOD;
+...
+``
+
+The biggest deal is to use reduced nodeset to generate smaller open62541.c. For that a modified **Opc.Ua.NodeSet2.Reduced.xml** is used.
+There mest be done some modifications in CMAKE to allow Examples for Amalganed and for Reduced model.
+
 # open62541
 
 open62541 (<http://open62541.org>) is an open source and free implementation of OPC UA (OPC Unified Architecture) written in the common subset of the C99 and C++98 languages. The library is usable with all major compilers and provides the necessary tools to implement dedicated OPC UA clients and servers, or to integrate OPC UA-based communication into existing applications. open62541 library is platform independent. All platform-specific functionality is implemented via exchangeable plugins. Plugin implementations are provided for the major operating systems.

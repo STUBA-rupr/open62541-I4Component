@@ -1,6 +1,6 @@
 /* THIS IS A SINGLE-FILE DISTRIBUTION CONCATENATED FROM THE OPEN62541 SOURCES
  * visit http://open62541.org/ for information about this software
- * Git-Revision: v1.1.2-300-g782d576b-dirty
+ * Git-Revision: v.1.2.2-209-gec73882b-dirty
  */
 
 /*
@@ -18,7 +18,7 @@
 #ifndef OPEN62541_H_
 #define OPEN62541_H_
 
-/*********************************** amalgamated original file "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/src_generated/open62541/config.h" ***********************************/
+/*********************************** amalgamated original file "C:/Projects/open62541Upstream/buildWIN/src_generated/open62541/config.h" ***********************************/
 
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -28,11 +28,11 @@
 /**
  * open62541 Version
  * ----------------- */
-#define UA_OPEN62541_VER_MAJOR 1
-#define UA_OPEN62541_VER_MINOR 1
-#define UA_OPEN62541_VER_PATCH 2
-#define UA_OPEN62541_VER_LABEL "-300-g782d576b-dirty" /* Release candidate label, etc. */
-#define UA_OPEN62541_VER_COMMIT "v1.1.2-300-g782d576b-dirty"
+#define UA_OPEN62541_VER_MAJOR 0
+#define UA_OPEN62541_VER_MINOR 0
+#define UA_OPEN62541_VER_PATCH 0
+#define UA_OPEN62541_VER_LABEL "-209-gec73882b-dirty" /* Release candidate label, etc. */
+#define UA_OPEN62541_VER_COMMIT "v.1.2.2-209-gec73882b-dirty"
 
 /**
  * Feature Options
@@ -47,10 +47,9 @@
 #define UA_ENABLE_NODEMANAGEMENT
 #define UA_ENABLE_SUBSCRIPTIONS
 /* #undef UA_ENABLE_PUBSUB */
+/* #undef UA_ENABLE_PUBSUB_ENCRYPTION */
 /* #undef UA_ENABLE_PUBSUB_FILE_CONFIG */
 /* #undef UA_ENABLE_PUBSUB_ETH_UADP */
-/* #undef UA_ENABLE_PUBSUB_ETH_UADP_ETF */
-/* #undef UA_ENABLE_PUBSUB_ETH_UADP_XDP */
 /* #undef UA_ENABLE_PUBSUB_DELTAFRAMES */
 /* #undef UA_ENABLE_PUBSUB_INFORMATIONMODEL */
 /* #undef UA_ENABLE_PUBSUB_INFORMATIONMODEL_METHODS */
@@ -58,11 +57,12 @@
 /* #undef UA_ENABLE_ENCRYPTION */
 /* #undef UA_ENABLE_HISTORIZING */
 #define UA_ENABLE_PARSING
-/* #undef UA_ENABLE_MICRO_EMB_DEV_PROFILE */
 /* #undef UA_ENABLE_EXPERIMENTAL_HISTORIZING */
 /* #undef UA_ENABLE_SUBSCRIPTIONS_EVENTS */
 /* #undef UA_ENABLE_JSON_ENCODING */
 /* #undef UA_ENABLE_PUBSUB_MQTT */
+/* #undef UA_ENABLE_MQTT_TLS */
+/* #undef UA_ENABLE_MQTT_TLS_OPENSSL */
 /* #undef UA_ENABLE_ENCRYPTION_MBEDTLS */
 /* #undef UA_ENABLE_ENCRYPTION_OPENSSL */
 /* #undef UA_ENABLE_SUBSCRIPTIONS_ALARMS_CONDITIONS */
@@ -86,14 +86,16 @@
 /* #undef UA_ENABLE_VALGRIND_INTERACTIVE */
 #define UA_VALGRIND_INTERACTIVE_INTERVAL 1000
 #define UA_GENERATED_NAMESPACE_ZERO
-#define UA_GENERATED_NAMESPACE_ZERO_FULL
+/* #undef UA_GENERATED_NAMESPACE_ZERO_FULL */
+/* #undef UA_ENABLE_PUBSUB_MONITORING */
+/* #undef UA_ENABLE_PUBSUB_BUFMALLOC */
 
 /* #undef UA_PACK_DEBIAN */
 
 /* Options for Debugging */
 #define UA_DEBUG
 /* #undef UA_DEBUG_DUMP_PKGS */
-
+/* #undef UA_DEBUG_FILE_LINE_INFO */
 /**
  * Function Export
  * ---------------
@@ -132,7 +134,7 @@
 
 
 
-/*********************************** amalgamated original file "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/arch/win32/ua_architecture.h" ***********************************/
+/*********************************** amalgamated original file "C:/Projects/open62541Upstream/arch/win32/ua_architecture.h" ***********************************/
 
 /* This work is licensed under a Creative Commons CCZero 1.0 Universal License.
  * See http://creativecommons.org/publicdomain/zero/1.0/ for more information.
@@ -170,6 +172,7 @@
 # include <malloc.h>
 #endif
 
+
 #include <stdio.h>
 #include <errno.h>
 #include <winsock2.h>
@@ -186,8 +189,11 @@
 # define UA_access access
 #endif
 
-#define ssize_t int
-#define OPTVAL_TYPE char
+#ifndef _SSIZE_T_DEFINED
+# define ssize_t int
+#endif
+
+#define OPTVAL_TYPE int
 #ifdef UA_sleep_ms
 void UA_sleep_ms(unsigned long ms);
 #else
@@ -225,6 +231,7 @@ void UA_sleep_ms(unsigned long ms);
 #define UA_recv(sockfd, buf, len, flags) recv(sockfd, buf, (int)(len), flags)
 #define UA_sendto(sockfd, buf, len, flags, dest_addr, addrlen) sendto(sockfd, (const char*)(buf), (int)(len), flags, dest_addr, (int) (addrlen))
 #define UA_recvfrom(sockfd, buf, len, flags, src_addr, addrlen) recvfrom(sockfd, (char*)(buf), (int)(len), flags, src_addr, addrlen)
+#define UA_recvmsg
 #define UA_htonl htonl
 #define UA_ntohl ntohl
 #define UA_close closesocket
@@ -236,8 +243,9 @@ void UA_sleep_ms(unsigned long ms);
 #define UA_accept accept
 #define UA_connect(sockfd, addr, addrlen) connect(sockfd, addr, (int)(addrlen))
 #define UA_getaddrinfo getaddrinfo
-#define UA_getsockopt getsockopt
+#define UA_getsockopt(sockfd, level, optname, optval, optlen) getsockopt(sockfd, level, optname, (char*) (optval), optlen)
 #define UA_setsockopt(sockfd, level, optname, optval, optlen) setsockopt(sockfd, level, optname, (const char*) (optval), optlen)
+#define UA_ioctl
 #define UA_freeaddrinfo freeaddrinfo
 #define UA_gethostname gethostname
 #define UA_getsockname getsockname
@@ -260,6 +268,10 @@ void UA_sleep_ms(unsigned long ms);
 # define UA_realloc realloc
 #endif
 
+#ifdef __CODEGEARC__
+#define _snprintf_s(a,b,c,...) snprintf(a,b,__VA_ARGS__)
+#endif
+
 /* 3rd Argument is the string */
 #define UA_snprintf(source, size, ...) _snprintf_s(source, size, _TRUNCATE, __VA_ARGS__)
 #define UA_strncasecmp _strnicmp
@@ -276,24 +288,45 @@ void UA_sleep_ms(unsigned long ms);
 #define UA_LOG_SOCKET_ERRNO_GAI_WRAP UA_LOG_SOCKET_ERRNO_WRAP
 
 #if UA_MULTITHREADING >= 100
-#define UA_LOCK_TYPE(mutexName) CRITICAL_SECTION mutexName; \
-                                int mutexName##Counter;
-#define UA_LOCK_INIT(mutexName) InitializeCriticalSection(&mutexName); \
-                                mutexName##Counter = 0;
-#define UA_LOCK_DESTROY(mutexName) DeleteCriticalSection(&mutexName);
-#define UA_LOCK(mutexName) EnterCriticalSection(&mutexName); \
-                           UA_assert(++(mutexName##Counter) == 1);
-#define UA_UNLOCK(mutexName) UA_assert(--(mutexName##Counter) == 0); \
-                             LeaveCriticalSection(&mutexName);
-#define UA_LOCK_ASSERT(mutexName, num) UA_assert(mutexName##Counter == num);
+
+typedef struct {
+    CRITICAL_SECTION mutex;
+    int mutexCounter;
+} UA_Lock;
+
+static UA_INLINE void
+UA_LOCK_INIT(UA_Lock *lock) {
+    InitializeCriticalSection(&lock->mutex);
+    lock->mutexCounter = 0;
+}
+
+static UA_INLINE void
+UA_LOCK_DESTROY(UA_Lock *lock) {
+    DeleteCriticalSection(&lock->mutex);
+}
+
+static UA_INLINE void
+UA_LOCK(UA_Lock *lock) {
+    EnterCriticalSection(&lock->mutex);
+    UA_assert(++(lock->mutexCounter) == 1);
+}
+
+static UA_INLINE void
+UA_UNLOCK(UA_Lock *lock) {
+    UA_assert(--(lock->mutexCounter) == 0);
+    LeaveCriticalSection(&lock->mutex);
+}
+
+static UA_INLINE void
+UA_LOCK_ASSERT(UA_Lock *lock, int num) {
+    UA_assert(lock->mutexCounter == num);
+}
 #else
-#define UA_LOCK_TYPE(mutexName)
-#define UA_LOCK_TYPE_POINTER(mutexName)
-#define UA_LOCK_INIT(mutexName)
-#define UA_LOCK_DESTROY(mutexName)
-#define UA_LOCK(mutexName)
-#define UA_UNLOCK(mutexName)
-#define UA_LOCK_ASSERT(mutexName, num)
+#define UA_LOCK_INIT(lock)
+#define UA_LOCK_DESTROY(lock)
+#define UA_LOCK(lock)
+#define UA_UNLOCK(lock)
+#define UA_LOCK_ASSERT(lock, num)
 #endif
 
 
@@ -306,7 +339,7 @@ void UA_sleep_ms(unsigned long ms);
 
 #endif /* UA_ARCHITECTURE_WIN32 */
 
-/*********************************** amalgamated original file "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/deps/ms_stdint.h" ***********************************/
+/*********************************** amalgamated original file "C:/Projects/open62541Upstream/deps/ms_stdint.h" ***********************************/
 
 // ISO C9x  compliant stdint.h for Microsoft Visual Studio
 // Based on ISO/IEC 9899:TC2 Committee draft (May 6, 2005) WG14/N1124 
@@ -563,7 +596,7 @@ typedef uint64_t  uintmax_t;
 
 #endif // !defined(_MSC_VER) || _MSC_VER >= 1600 ]
 
-/*********************************** amalgamated original file "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/include/open62541/architecture_definitions.h" ***********************************/
+/*********************************** amalgamated original file "C:/Projects/open62541Upstream/include/open62541/architecture_definitions.h" ***********************************/
 
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -604,33 +637,47 @@ typedef uint64_t  uintmax_t;
 # define __PRI_8_LENGTH_MODIFIER__ "hh"
 # define __PRI_64_LENGTH_MODIFIER__ "ll"
 
-# define PRId8         __PRI_8_LENGTH_MODIFIER__ "d"
-# define PRIi8         __PRI_8_LENGTH_MODIFIER__ "i"
-# define PRIo8         __PRI_8_LENGTH_MODIFIER__ "o"
-# define PRIu8         __PRI_8_LENGTH_MODIFIER__ "u"
-# define PRIx8         __PRI_8_LENGTH_MODIFIER__ "x"
-# define PRIX8         __PRI_8_LENGTH_MODIFIER__ "X"
+# define PRId8 __PRI_8_LENGTH_MODIFIER__ "d"
+# define PRIi8 __PRI_8_LENGTH_MODIFIER__ "i"
+# define PRIo8 __PRI_8_LENGTH_MODIFIER__ "o"
+# define PRIu8 __PRI_8_LENGTH_MODIFIER__ "u"
+# define PRIx8 __PRI_8_LENGTH_MODIFIER__ "x"
+# define PRIX8 __PRI_8_LENGTH_MODIFIER__ "X"
 
-# define PRId16        "hd"
-# define PRIi16        "hi"
-# define PRIo16        "ho"
-# define PRIu16        "hu"
-# define PRIx16        "hx"
-# define PRIX16        "hX"
+# define PRId16 "hd"
+# define PRIi16 "hi"
+# define PRIo16 "ho"
+# define PRIu16 "hu"
+# define PRIx16 "hx"
+# define PRIX16 "hX"
 
-# define PRId32        "ld"
-# define PRIi32        "li"
-# define PRIo32        "lo"
-# define PRIu32        "lu"
-# define PRIx32        "lx"
-# define PRIX32        "lX"
+# define PRId32 "ld"
+# define PRIi32 "li"
+# define PRIo32 "lo"
+# define PRIu32 "lu"
+# define PRIx32 "lx"
+# define PRIX32 "lX"
 
-# define PRId64        __PRI_64_LENGTH_MODIFIER__ "d"
-# define PRIi64        __PRI_64_LENGTH_MODIFIER__ "i"
-# define PRIo64        __PRI_64_LENGTH_MODIFIER__ "o"
-# define PRIu64        __PRI_64_LENGTH_MODIFIER__ "u"
-# define PRIx64        __PRI_64_LENGTH_MODIFIER__ "x"
-# define PRIX64        __PRI_64_LENGTH_MODIFIER__ "X"
+# define PRId64 __PRI_64_LENGTH_MODIFIER__ "d"
+# define PRIi64 __PRI_64_LENGTH_MODIFIER__ "i"
+# define PRIo64 __PRI_64_LENGTH_MODIFIER__ "o"
+# define PRIu64 __PRI_64_LENGTH_MODIFIER__ "u"
+# define PRIx64 __PRI_64_LENGTH_MODIFIER__ "x"
+# define PRIX64 __PRI_64_LENGTH_MODIFIER__ "X"
+#endif
+
+/**
+ * Thread-local variables
+ * ---------------------- */
+#if UA_MULTITHREADING >= 100
+# if defined(__GNUC__) /* Also covers clang */
+#  define UA_THREAD_LOCAL __thread
+# elif defined(_MSC_VER)
+#  define UA_THREAD_LOCAL __declspec(thread)
+# endif
+#endif
+#ifndef UA_THREAD_LOCAL
+# define UA_THREAD_LOCAL
 #endif
 
 /**
@@ -647,10 +694,10 @@ typedef uint64_t  uintmax_t;
  */
 
 #ifdef UA_ENABLE_MALLOC_SINGLETON
-extern void * (*UA_mallocSingleton)(size_t size);
-extern void (*UA_freeSingleton)(void *ptr);
-extern void * (*UA_callocSingleton)(size_t nelem, size_t elsize);
-extern void * (*UA_reallocSingleton)(void *ptr, size_t size);
+extern UA_THREAD_LOCAL void * (*UA_mallocSingleton)(size_t size);
+extern UA_THREAD_LOCAL void (*UA_freeSingleton)(void *ptr);
+extern UA_THREAD_LOCAL void * (*UA_callocSingleton)(size_t nelem, size_t elsize);
+extern UA_THREAD_LOCAL void * (*UA_reallocSingleton)(void *ptr, size_t size);
 # define UA_malloc(size) UA_mallocSingleton(size)
 # define UA_free(ptr) UA_freeSingleton(ptr)
 # define UA_calloc(num, size) UA_callocSingleton(num, size)
@@ -673,7 +720,7 @@ extern void * (*UA_reallocSingleton)(void *ptr, size_t size);
 #  define UA_alloca(SIZE) alloca(SIZE)
 # endif
 #  define UA_STACKARRAY(TYPE, NAME, SIZE) \
-    TYPE *NAME = (TYPE*)UA_alloca(sizeof(TYPE) * SIZE)
+    TYPE *(NAME) = (TYPE*)UA_alloca(sizeof(TYPE) * (SIZE))
 # endif
 #endif
 
@@ -712,6 +759,10 @@ extern void * (*UA_reallocSingleton)(void *ptr, size_t size);
 # define UA_STATIC_ASSERT(cond,msg) typedef char static_assertion_##msg[(cond)?1:-1]
 #endif
 
+/**
+ * Dynamic Linking
+ * ---------------
+ * Explicit attribute for functions to be exported in a shared library. */
 #if defined(_WIN32) && defined(UA_DYNAMIC_LINKING)
 # ifdef UA_DYNAMIC_LINKING_EXPORT /* export dll */
 #  ifdef __GNUC__
@@ -735,6 +786,13 @@ extern void * (*UA_reallocSingleton)(void *ptr, size_t size);
 # define UA_EXPORT /* fallback to default */
 #endif
 
+/**
+ * Threadsafe functions
+ * --------------------
+ * Functions that can be called from independent threads are marked with
+ * the UA_THREADSAFE macro. This is currently only an information for the
+ * developer. It can be used in the future for instrumentation and static
+ * code analysis. */
 #define UA_THREADSAFE
 
 /**
@@ -753,8 +811,22 @@ extern void * (*UA_reallocSingleton)(void *ptr, size_t size);
 # define UA_RESTRICT __restrict
 #elif defined(__GNUC__)
 # define UA_RESTRICT __restrict__
+#elif defined(__CODEGEARC__)
+# define UA_RESTRICT _RESTRICT
 #else
 # define UA_RESTRICT restrict
+#endif
+
+/**
+ * Likely/Unlikely Conditions
+ * --------------------------
+ * Condition is likely/unlikely, to help branch prediction. */
+#if defined(__GNUC__) || defined(__clang__)
+# define UA_LIKELY(x) __builtin_expect((x), 1)
+# define UA_UNLIKELY(x) __builtin_expect((x), 0)
+#else
+# define UA_LIKELY(x) x
+# define UA_UNLIKELY(x) x
 #endif
 
 /**
@@ -766,6 +838,13 @@ extern void * (*UA_reallocSingleton)(void *ptr, size_t size);
 # define UA_FUNC_ATTR_CONST __attribute__((const))
 # define UA_FUNC_ATTR_WARN_UNUSED_RESULT __attribute__((warn_unused_result))
 # define UA_FORMAT(X,Y) __attribute__ ((format (printf, X, Y)))
+#elif defined(_MSC_VER) && _MSC_VER >= 1800
+# include <sal.h>
+# define UA_FUNC_ATTR_MALLOC
+# define UA_FUNC_ATTR_PURE
+# define UA_FUNC_ATTR_CONST
+# define UA_FUNC_ATTR_WARN_UNUSED_RESULT _Check_return_
+# define UA_FORMAT(X,Y)
 #else
 # define UA_FUNC_ATTR_MALLOC
 # define UA_FUNC_ATTR_PURE
@@ -790,13 +869,15 @@ extern void * (*UA_reallocSingleton)(void *ptr, size_t size);
  * warnings are only triggered for internal code. */
 
 #if defined(UA_INTERNAL) && (defined(__GNUC__) || defined(__clang__))
-# define UA_INTERNAL_DEPRECATED _Pragma ("GCC warning \"Macro is deprecated for internal use\"")
+# define UA_INTERNAL_DEPRECATED \
+    _Pragma ("GCC warning \"Macro is deprecated for internal use\"")
 #else
 # define UA_INTERNAL_DEPRECATED
 #endif
 
 #if defined(UA_INTERNAL) && (defined(__GNUC__) || defined(__clang__))
-# define UA_INTERNAL_FUNC_ATTR_WARN_UNUSED_RESULT __attribute__((warn_unused_result))
+# define UA_INTERNAL_FUNC_ATTR_WARN_UNUSED_RESULT \
+    __attribute__((warn_unused_result))
 #else
 # define UA_INTERNAL_FUNC_ATTR_WARN_UNUSED_RESULT
 #endif
@@ -918,7 +999,7 @@ UA_STATIC_ASSERT(sizeof(bool) == 1, cannot_overlay_integers_with_large_bool);
  * Atomic operations that synchronize across processor cores (for
  * multithreading). Only the inline-functions defined next are used. Replace
  * with architecture-specific operations if necessary. */
-#if UA_MULTITHREADING >= 200
+#if UA_MULTITHREADING >= 100
     #ifdef _MSC_VER /* Visual Studio */
     #define UA_atomic_sync() _ReadWriteBarrier()
     #else /* GCC/Clang */
@@ -930,7 +1011,7 @@ UA_STATIC_ASSERT(sizeof(bool) == 1, cannot_overlay_integers_with_large_bool);
 
 static UA_INLINE void *
 UA_atomic_xchg(void * volatile * addr, void *newptr) {
-#if UA_MULTITHREADING >= 200
+#if UA_MULTITHREADING >= 100
 #ifdef _MSC_VER /* Visual Studio */
     return _InterlockedExchangePointer(addr, newptr);
 #else /* GCC/Clang */
@@ -945,7 +1026,7 @@ UA_atomic_xchg(void * volatile * addr, void *newptr) {
 
 static UA_INLINE void *
 UA_atomic_cmpxchg(void * volatile * addr, void *expected, void *newptr) {
-#if UA_MULTITHREADING >= 200
+#if UA_MULTITHREADING >= 100
 #ifdef _MSC_VER /* Visual Studio */
     return _InterlockedCompareExchangePointer(addr, expected, newptr);
 #else /* GCC/Clang */
@@ -962,7 +1043,7 @@ UA_atomic_cmpxchg(void * volatile * addr, void *expected, void *newptr) {
 
 static UA_INLINE uint32_t
 UA_atomic_addUInt32(volatile uint32_t *addr, uint32_t increase) {
-#if UA_MULTITHREADING >= 200
+#if UA_MULTITHREADING >= 100
 #ifdef _MSC_VER /* Visual Studio */
     return _InterlockedExchangeAdd(addr, increase) + increase;
 #else /* GCC/Clang */
@@ -976,7 +1057,7 @@ UA_atomic_addUInt32(volatile uint32_t *addr, uint32_t increase) {
 
 static UA_INLINE size_t
 UA_atomic_addSize(volatile size_t *addr, size_t increase) {
-#if UA_MULTITHREADING >= 200
+#if UA_MULTITHREADING >= 100
 #ifdef _MSC_VER /* Visual Studio */
     return _InterlockedExchangeAdd(addr, increase) + increase;
 #else /* GCC/Clang */
@@ -990,7 +1071,7 @@ UA_atomic_addSize(volatile size_t *addr, size_t increase) {
 
 static UA_INLINE uint32_t
 UA_atomic_subUInt32(volatile uint32_t *addr, uint32_t decrease) {
-#if UA_MULTITHREADING >= 200
+#if UA_MULTITHREADING >= 100
 #ifdef _MSC_VER /* Visual Studio */
     return _InterlockedExchangeSub(addr, decrease) - decrease;
 #else /* GCC/Clang */
@@ -1004,7 +1085,7 @@ UA_atomic_subUInt32(volatile uint32_t *addr, uint32_t decrease) {
 
 static UA_INLINE size_t
 UA_atomic_subSize(volatile size_t *addr, size_t decrease) {
-#if UA_MULTITHREADING >= 200
+#if UA_MULTITHREADING >= 100
 #ifdef _MSC_VER /* Visual Studio */
     return _InterlockedExchangeSub(addr, decrease) - decrease;
 #else /* GCC/Clang */
@@ -1017,11 +1098,11 @@ UA_atomic_subSize(volatile size_t *addr, size_t decrease) {
 }
 
 
-/*********************************** amalgamated original file "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/src_generated/open62541/statuscodes.h" ***********************************/
+/*********************************** amalgamated original file "C:/Projects/open62541Upstream/buildWIN/src_generated/open62541/statuscodes.h" ***********************************/
 
 /*---------------------------------------------------------
  * Autogenerated -- do not modify
- * Generated from C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/deps/ua-nodeset/Schema/StatusCode.csv with script C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/tools/generate_statuscode_descriptions.py
+ * Generated from C:/Projects/open62541Upstream/tools/schema/StatusCode.csv with script C:/Projects/open62541Upstream/tools/generate_statuscode_descriptions.py
  *-------------------------------------------------------*/
 
 /**
@@ -1035,9 +1116,17 @@ UA_atomic_subSize(volatile size_t *addr, size_t decrease) {
  * with the OPC UA standard. */
 
 /* These StatusCodes are manually generated. */
-#define UA_STATUSCODE_GOOD 0x00
 #define UA_STATUSCODE_INFOTYPE_DATAVALUE 0x00000400
 #define UA_STATUSCODE_INFOBITS_OVERFLOW 0x00000080
+
+/* "The operation succeeded." */
+#define UA_STATUSCODE_GOOD 0x00000000
+
+/* "The operation was uncertain." */
+#define UA_STATUSCODE_UNCERTAIN 0x40000000
+
+/* "The operation failed." */
+#define UA_STATUSCODE_BAD 0x80000000
 
 /* "An unexpected error occurred." */
 #define UA_STATUSCODE_BADUNEXPECTEDERROR 0x80010000
@@ -1480,6 +1569,9 @@ UA_atomic_subSize(volatile size_t *addr, size_t decrease) {
 /* "The sequence number is unknown to the server." */
 #define UA_STATUSCODE_BADSEQUENCENUMBERUNKNOWN 0x807A0000
 
+/* "The Server does not support retransmission queue and acknowledgement of sequence numbers is not available." */
+#define UA_STATUSCODE_GOODRETRANSMISSIONQUEUENOTSUPPORTED 0x00DF0000
+
 /* "The requested notification message is no longer available." */
 #define UA_STATUSCODE_BADMESSAGENOTAVAILABLE 0x807B0000
 
@@ -1672,6 +1764,12 @@ UA_atomic_subSize(volatile size_t *addr, size_t decrease) {
 /* "The request has not been processed by the server yet." */
 #define UA_STATUSCODE_BADREQUESTNOTCOMPLETE 0x81130000
 
+/* "The device identity needs a ticket before it can be accepted." */
+#define UA_STATUSCODE_BADTICKETREQUIRED 0x811F0000
+
+/* "The device identity needs a ticket before it can be accepted." */
+#define UA_STATUSCODE_BADTICKETINVALID 0x81200000
+
 /* "The value does not come from the real source and has been edited by the server." */
 #define UA_STATUSCODE_GOODEDITED 0x00DC0000
 
@@ -1772,11 +1870,11 @@ UA_atomic_subSize(volatile size_t *addr, size_t decrease) {
 #define UA_STATUSCODE_BADMAXCONNECTIONSREACHED 0x80B70000
 
 
-/*********************************** amalgamated original file "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/src_generated/open62541/nodeids.h" ***********************************/
+/*********************************** amalgamated original file "C:/Projects/open62541Upstream/buildWIN/src_generated/open62541/nodeids.h" ***********************************/
 
 /*---------------------------------------------------------
  * Autogenerated -- do not modify
- * Generated from C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/deps/ua-nodeset/Schema/NodeIds.csv with script C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/tools/generate_nodeid_header.py
+ * Generated from C:/Projects/open62541Upstream/tools/schema/NodeIds.csv with script C:/Projects/open62541Upstream/tools/generate_nodeid_header.py
  *-------------------------------------------------------*/
 
 #ifndef UA_NODEIDS_NS0_H_
@@ -1786,7 +1884,7 @@ UA_atomic_subSize(volatile size_t *addr, size_t decrease) {
  * Namespace Zero NodeIds
  * ----------------------
  * Numeric identifiers of standard-defined nodes in namespace zero. The
- * following definitions are autogenerated from the ``C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/deps/ua-nodeset/Schema/NodeIds.csv`` file */
+ * following definitions are autogenerated from the ``C:/Projects/open62541Upstream/tools/schema/NodeIds.csv`` file */
 
 #define UA_NS0ID_BOOLEAN 1 /* DataType */
 #define UA_NS0ID_SBYTE 2 /* DataType */
@@ -1929,8 +2027,6 @@ UA_atomic_subSize(volatile size_t *addr, size_t decrease) {
 #define UA_NS0ID_COUNTER 289 /* DataType */
 #define UA_NS0ID_DURATION 290 /* DataType */
 #define UA_NS0ID_NUMERICRANGE 291 /* DataType */
-#define UA_NS0ID_TIME 292 /* DataType */
-#define UA_NS0ID_DATE 293 /* DataType */
 #define UA_NS0ID_UTCTIME 294 /* DataType */
 #define UA_NS0ID_LOCALEID 295 /* DataType */
 #define UA_NS0ID_ARGUMENT 296 /* DataType */
@@ -8929,7 +9025,6 @@ UA_atomic_subSize(volatile size_t *addr, size_t decrease) {
 #define UA_NS0ID_SERVER_SERVERCAPABILITIES_ROLESET_ADDROLE_OUTPUTARGUMENTS 16303 /* Variable */
 #define UA_NS0ID_SERVER_SERVERCAPABILITIES_ROLESET_REMOVEROLE 16304 /* Method */
 #define UA_NS0ID_SERVER_SERVERCAPABILITIES_ROLESET_REMOVEROLE_INPUTARGUMENTS 16305 /* Variable */
-#define UA_NS0ID_DEFAULTINPUTVALUES 16306 /* Variable */
 #define UA_NS0ID_AUDIODATATYPE 16307 /* DataType */
 #define UA_NS0ID_SUBSCRIBEDDATASETDATATYPE_ENCODING_DEFAULTJSON 16308 /* Object */
 #define UA_NS0ID_SELECTIONLISTTYPE 16309 /* VariableType */
@@ -10356,7 +10451,6 @@ UA_atomic_subSize(volatile size_t *addr, size_t decrease) {
 #define UA_NS0ID_WRITERGROUPTYPE_STATUS 17730 /* Object */
 #define UA_NS0ID_WRITERGROUPTYPE_STATUS_STATE 17731 /* Variable */
 #define UA_NS0ID_AUTHORIZATIONSERVICES 17732 /* Object */
-#define UA_NS0ID_AUTHORIZATIONSERVICES_SERVICENAME_PLACEHOLDER 17733 /* Object */
 #define UA_NS0ID_WRITERGROUPTYPE_STATUS_ENABLE 17734 /* Method */
 #define UA_NS0ID_WRITERGROUPTYPE_STATUS_DISABLE 17735 /* Method */
 #define UA_NS0ID_WRITERGROUPTYPE_WRITERGROUPID 17736 /* Variable */
@@ -10689,12 +10783,9 @@ UA_atomic_subSize(volatile size_t *addr, size_t decrease) {
 #define UA_NS0ID_KEYCREDENTIALDELETEDAUDITEVENTTYPE_INPUTARGUMENTS 18063 /* Variable */
 #define UA_NS0ID_KEYCREDENTIALDELETEDAUDITEVENTTYPE_RESOURCEURI 18064 /* Variable */
 #define UA_NS0ID_READERGROUPTYPE_MAXNETWORKMESSAGESIZE 18065 /* Variable */
-#define UA_NS0ID_AUTHORIZATIONSERVICES_SERVICENAME_PLACEHOLDER_SERVICECERTIFICATE 18066 /* Variable */
 #define UA_NS0ID_READERGROUPTYPE_STATUS 18067 /* Object */
 #define UA_NS0ID_READERGROUPTYPE_STATUS_STATE 18068 /* Variable */
 #define UA_NS0ID_KEYCREDENTIALCONFIGURATIONTYPE_RESOURCEURI 18069 /* Variable */
-#define UA_NS0ID_AUTHORIZATIONSERVICES_SERVICENAME_PLACEHOLDER_SERVICEURI 18070 /* Variable */
-#define UA_NS0ID_AUTHORIZATIONSERVICES_SERVICENAME_PLACEHOLDER_ISSUERENDPOINTURL 18071 /* Variable */
 #define UA_NS0ID_AUTHORIZATIONSERVICECONFIGURATIONTYPE_SERVICEURI 18072 /* Variable */
 #define UA_NS0ID_AUTHORIZATIONSERVICECONFIGURATIONTYPE_ISSUERENDPOINTURL 18073 /* Variable */
 #define UA_NS0ID_READERGROUPTYPE_STATUS_ENABLE 18074 /* Method */
@@ -12073,106 +12164,6 @@ UA_atomic_subSize(volatile size_t *addr, size_t decrease) {
 #define UA_NS0ID_TRUSTLISTOUTOFDATEALARMTYPE_LASTUPDATETIME 19447 /* Variable */
 #define UA_NS0ID_TRUSTLISTOUTOFDATEALARMTYPE_UPDATEFREQUENCY 19448 /* Variable */
 #define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLIST_UPDATEFREQUENCY 19449 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED 19450 /* Object */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_EVENTID 19451 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_EVENTTYPE 19452 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_SOURCENODE 19453 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_SOURCENAME 19454 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_TIME 19455 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_RECEIVETIME 19456 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_LOCALTIME 19457 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_MESSAGE 19458 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_SEVERITY 19459 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_CONDITIONCLASSID 19460 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_CONDITIONCLASSNAME 19461 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_CONDITIONSUBCLASSID 19462 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_CONDITIONSUBCLASSNAME 19463 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_CONDITIONNAME 19464 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_BRANCHID 19465 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_RETAIN 19466 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_ENABLEDSTATE 19467 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_ENABLEDSTATE_ID 19468 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_ENABLEDSTATE_NAME 19469 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_ENABLEDSTATE_NUMBER 19470 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_ENABLEDSTATE_EFFECTIVEDISPLAYNAME 19471 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_ENABLEDSTATE_TRANSITIONTIME 19472 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_ENABLEDSTATE_EFFECTIVETRANSITIONTIME 19473 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_ENABLEDSTATE_TRUESTATE 19474 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_ENABLEDSTATE_FALSESTATE 19475 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_QUALITY 19476 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_QUALITY_SOURCETIMESTAMP 19477 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_LASTSEVERITY 19478 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_LASTSEVERITY_SOURCETIMESTAMP 19479 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_COMMENT 19480 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_COMMENT_SOURCETIMESTAMP 19481 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_CLIENTUSERID 19482 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_DISABLE 19483 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_ENABLE 19484 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_ADDCOMMENT 19485 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_ADDCOMMENT_INPUTARGUMENTS 19486 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_ACKEDSTATE 19487 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_ACKEDSTATE_ID 19488 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_ACKEDSTATE_NAME 19489 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_ACKEDSTATE_NUMBER 19490 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_ACKEDSTATE_EFFECTIVEDISPLAYNAME 19491 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_ACKEDSTATE_TRANSITIONTIME 19492 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_ACKEDSTATE_EFFECTIVETRANSITIONTIME 19493 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_ACKEDSTATE_TRUESTATE 19494 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_ACKEDSTATE_FALSESTATE 19495 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_CONFIRMEDSTATE 19496 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_CONFIRMEDSTATE_ID 19497 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_CONFIRMEDSTATE_NAME 19498 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_CONFIRMEDSTATE_NUMBER 19499 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_CONFIRMEDSTATE_EFFECTIVEDISPLAYNAME 19500 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_CONFIRMEDSTATE_TRANSITIONTIME 19501 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_CONFIRMEDSTATE_EFFECTIVETRANSITIONTIME 19502 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_CONFIRMEDSTATE_TRUESTATE 19503 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_CONFIRMEDSTATE_FALSESTATE 19504 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_ACKNOWLEDGE 19505 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_ACKNOWLEDGE_INPUTARGUMENTS 19506 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_CONFIRM 19507 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_CONFIRM_INPUTARGUMENTS 19508 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_ACTIVESTATE 19509 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_ACTIVESTATE_ID 19510 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_ACTIVESTATE_NAME 19511 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_ACTIVESTATE_NUMBER 19512 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_ACTIVESTATE_EFFECTIVEDISPLAYNAME 19513 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_ACTIVESTATE_TRANSITIONTIME 19514 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_ACTIVESTATE_EFFECTIVETRANSITIONTIME 19515 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_ACTIVESTATE_TRUESTATE 19516 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_ACTIVESTATE_FALSESTATE 19517 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_INPUTNODE 19518 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_SUPPRESSEDSTATE 19519 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_ID 19520 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_NAME 19521 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_NUMBER 19522 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_EFFECTIVEDISPLAYNAME 19523 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_TRANSITIONTIME 19524 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_EFFECTIVETRANSITIONTIME 19525 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_TRUESTATE 19526 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_FALSESTATE 19527 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_OUTOFSERVICESTATE 19528 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_ID 19529 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_NAME 19530 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_NUMBER 19531 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_EFFECTIVEDISPLAYNAME 19532 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_TRANSITIONTIME 19533 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_EFFECTIVETRANSITIONTIME 19534 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_TRUESTATE 19535 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_FALSESTATE 19536 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_SHELVINGSTATE 19537 /* Object */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_SHELVINGSTATE_CURRENTSTATE 19538 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_SHELVINGSTATE_CURRENTSTATE_ID 19539 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_SHELVINGSTATE_CURRENTSTATE_NAME 19540 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_SHELVINGSTATE_CURRENTSTATE_NUMBER 19541 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_SHELVINGSTATE_CURRENTSTATE_EFFECTIVEDISPLAYNAME 19542 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION 19543 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION_ID 19544 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION_NAME 19545 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION_NUMBER 19546 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION_TRANSITIONTIME 19547 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION_EFFECTIVETRANSITIONTIME 19548 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_SHELVINGSTATE_AVAILABLESTATES 19549 /* Variable */
 #define UA_NS0ID_DATASETWRITERTYPE_DIAGNOSTICS 19550 /* Object */
 #define UA_NS0ID_DATASETWRITERTYPE_DIAGNOSTICS_DIAGNOSTICSLEVEL 19551 /* Variable */
 #define UA_NS0ID_DATASETWRITERTYPE_DIAGNOSTICS_TOTALINFORMATION 19552 /* Variable */
@@ -12718,909 +12709,11 @@ UA_atomic_subSize(volatile size_t *addr, size_t decrease) {
 #define UA_NS0ID_PUBSUBDIAGNOSTICSDATASETREADERTYPE_LIVEVALUES_SECURITYTOKENID_DIAGNOSTICSLEVEL 20092 /* Variable */
 #define UA_NS0ID_PUBSUBDIAGNOSTICSDATASETREADERTYPE_LIVEVALUES_TIMETONEXTTOKENID 20093 /* Variable */
 #define UA_NS0ID_PUBSUBDIAGNOSTICSDATASETREADERTYPE_LIVEVALUES_TIMETONEXTTOKENID_DIAGNOSTICSLEVEL 20094 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_SHELVINGSTATE_AVAILABLETRANSITIONS 20095 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_SHELVINGSTATE_UNSHELVETIME 20096 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_SHELVINGSTATE_TIMEDSHELVE 20097 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_SHELVINGSTATE_TIMEDSHELVE_INPUTARGUMENTS 20098 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_SHELVINGSTATE_UNSHELVE 20099 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_SHELVINGSTATE_ONESHOTSHELVE 20100 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_SUPPRESSEDORSHELVED 20101 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_MAXTIMESHELVED 20102 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_AUDIBLEENABLED 20103 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_AUDIBLESOUND 20104 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_AUDIBLESOUND_LISTID 20105 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_AUDIBLESOUND_AGENCYID 20106 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_AUDIBLESOUND_VERSIONID 20107 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_SILENCESTATE 20108 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_SILENCESTATE_ID 20109 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_SILENCESTATE_NAME 20110 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_SILENCESTATE_NUMBER 20111 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_SILENCESTATE_EFFECTIVEDISPLAYNAME 20112 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_SILENCESTATE_TRANSITIONTIME 20113 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_SILENCESTATE_EFFECTIVETRANSITIONTIME 20114 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_SILENCESTATE_TRUESTATE 20115 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_SILENCESTATE_FALSESTATE 20116 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_ONDELAY 20117 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_OFFDELAY 20118 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_FIRSTINGROUPFLAG 20119 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_FIRSTINGROUP 20120 /* Object */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_LATCHEDSTATE 20121 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_LATCHEDSTATE_ID 20122 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_LATCHEDSTATE_NAME 20123 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_LATCHEDSTATE_NUMBER 20124 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_LATCHEDSTATE_EFFECTIVEDISPLAYNAME 20125 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_LATCHEDSTATE_TRANSITIONTIME 20126 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_LATCHEDSTATE_EFFECTIVETRANSITIONTIME 20127 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_LATCHEDSTATE_TRUESTATE 20128 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_LATCHEDSTATE_FALSESTATE 20129 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_REALARMTIME 20130 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_REALARMREPEATCOUNT 20131 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_SILENCE 20132 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_SUPPRESS 20133 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_UNSUPPRESS 20134 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_REMOVEFROMSERVICE 20135 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_PLACEINSERVICE 20136 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_RESET 20137 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_NORMALSTATE 20138 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_EXPIRATIONDATE 20139 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_EXPIRATIONLIMIT 20140 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_CERTIFICATETYPE 20141 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_CERTIFICATEEXPIRED_CERTIFICATE 20142 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE 20143 /* Object */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_EVENTID 20144 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_EVENTTYPE 20145 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_SOURCENODE 20146 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_SOURCENAME 20147 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_TIME 20148 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_RECEIVETIME 20149 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_LOCALTIME 20150 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_MESSAGE 20151 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_SEVERITY 20152 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_CONDITIONCLASSID 20153 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_CONDITIONCLASSNAME 20154 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_CONDITIONSUBCLASSID 20155 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_CONDITIONSUBCLASSNAME 20156 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_CONDITIONNAME 20157 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_BRANCHID 20158 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_RETAIN 20159 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_ENABLEDSTATE 20160 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_ENABLEDSTATE_ID 20161 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_ENABLEDSTATE_NAME 20162 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_ENABLEDSTATE_NUMBER 20163 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_ENABLEDSTATE_EFFECTIVEDISPLAYNAME 20164 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_ENABLEDSTATE_TRANSITIONTIME 20165 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_ENABLEDSTATE_EFFECTIVETRANSITIONTIME 20166 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_ENABLEDSTATE_TRUESTATE 20167 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_ENABLEDSTATE_FALSESTATE 20168 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_QUALITY 20169 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_QUALITY_SOURCETIMESTAMP 20170 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_LASTSEVERITY 20171 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_LASTSEVERITY_SOURCETIMESTAMP 20172 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_COMMENT 20173 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_COMMENT_SOURCETIMESTAMP 20174 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_CLIENTUSERID 20175 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_DISABLE 20176 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_ENABLE 20177 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_ADDCOMMENT 20178 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_ADDCOMMENT_INPUTARGUMENTS 20179 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_ACKEDSTATE 20180 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_ACKEDSTATE_ID 20181 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_ACKEDSTATE_NAME 20182 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_ACKEDSTATE_NUMBER 20183 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_ACKEDSTATE_EFFECTIVEDISPLAYNAME 20184 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_ACKEDSTATE_TRANSITIONTIME 20185 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_ACKEDSTATE_EFFECTIVETRANSITIONTIME 20186 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_ACKEDSTATE_TRUESTATE 20187 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_ACKEDSTATE_FALSESTATE 20188 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE 20189 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_ID 20190 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_NAME 20191 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_NUMBER 20192 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_EFFECTIVEDISPLAYNAME 20193 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_TRANSITIONTIME 20194 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_EFFECTIVETRANSITIONTIME 20195 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_TRUESTATE 20196 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_FALSESTATE 20197 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_ACKNOWLEDGE 20198 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_ACKNOWLEDGE_INPUTARGUMENTS 20199 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_CONFIRM 20200 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_CONFIRM_INPUTARGUMENTS 20201 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_ACTIVESTATE 20202 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_ACTIVESTATE_ID 20203 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_ACTIVESTATE_NAME 20204 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_ACTIVESTATE_NUMBER 20205 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_ACTIVESTATE_EFFECTIVEDISPLAYNAME 20206 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_ACTIVESTATE_TRANSITIONTIME 20207 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_ACTIVESTATE_EFFECTIVETRANSITIONTIME 20208 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_ACTIVESTATE_TRUESTATE 20209 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_ACTIVESTATE_FALSESTATE 20210 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_INPUTNODE 20211 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE 20212 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_ID 20213 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_NAME 20214 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_NUMBER 20215 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_EFFECTIVEDISPLAYNAME 20216 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_TRANSITIONTIME 20217 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_EFFECTIVETRANSITIONTIME 20218 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_TRUESTATE 20219 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_FALSESTATE 20220 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE 20221 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_ID 20222 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_NAME 20223 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_NUMBER 20224 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_EFFECTIVEDISPLAYNAME 20225 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_TRANSITIONTIME 20226 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_EFFECTIVETRANSITIONTIME 20227 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_TRUESTATE 20228 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_FALSESTATE 20229 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_SHELVINGSTATE 20230 /* Object */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_SHELVINGSTATE_CURRENTSTATE 20231 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_SHELVINGSTATE_CURRENTSTATE_ID 20232 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_SHELVINGSTATE_CURRENTSTATE_NAME 20233 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_SHELVINGSTATE_CURRENTSTATE_NUMBER 20234 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_SHELVINGSTATE_CURRENTSTATE_EFFECTIVEDISPLAYNAME 20235 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION 20236 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION_ID 20237 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION_NAME 20238 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION_NUMBER 20239 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION_TRANSITIONTIME 20240 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION_EFFECTIVETRANSITIONTIME 20241 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_SHELVINGSTATE_AVAILABLESTATES 20242 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_SHELVINGSTATE_AVAILABLETRANSITIONS 20243 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_SHELVINGSTATE_UNSHELVETIME 20244 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_SHELVINGSTATE_TIMEDSHELVE 20245 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_SHELVINGSTATE_TIMEDSHELVE_INPUTARGUMENTS 20246 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_SHELVINGSTATE_UNSHELVE 20247 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_SHELVINGSTATE_ONESHOTSHELVE 20248 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_SUPPRESSEDORSHELVED 20249 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_MAXTIMESHELVED 20250 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_AUDIBLEENABLED 20251 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_AUDIBLESOUND 20252 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_AUDIBLESOUND_LISTID 20253 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_AUDIBLESOUND_AGENCYID 20254 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_AUDIBLESOUND_VERSIONID 20255 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_SILENCESTATE 20256 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_SILENCESTATE_ID 20257 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_SILENCESTATE_NAME 20258 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_SILENCESTATE_NUMBER 20259 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_SILENCESTATE_EFFECTIVEDISPLAYNAME 20260 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_SILENCESTATE_TRANSITIONTIME 20261 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_SILENCESTATE_EFFECTIVETRANSITIONTIME 20262 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_SILENCESTATE_TRUESTATE 20263 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_SILENCESTATE_FALSESTATE 20264 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_ONDELAY 20265 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_OFFDELAY 20266 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_FIRSTINGROUPFLAG 20267 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_FIRSTINGROUP 20268 /* Object */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_LATCHEDSTATE 20269 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_LATCHEDSTATE_ID 20270 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_LATCHEDSTATE_NAME 20271 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_LATCHEDSTATE_NUMBER 20272 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_LATCHEDSTATE_EFFECTIVEDISPLAYNAME 20273 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_LATCHEDSTATE_TRANSITIONTIME 20274 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_LATCHEDSTATE_EFFECTIVETRANSITIONTIME 20275 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_LATCHEDSTATE_TRUESTATE 20276 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_LATCHEDSTATE_FALSESTATE 20277 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_REALARMTIME 20278 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_REALARMREPEATCOUNT 20279 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_SILENCE 20280 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_SUPPRESS 20281 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_UNSUPPRESS 20282 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_REMOVEFROMSERVICE 20283 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_PLACEINSERVICE 20284 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_RESET 20285 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_NORMALSTATE 20286 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_TRUSTLISTID 20287 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_LASTUPDATETIME 20288 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPTYPE_TRUSTLISTOUTOFDATE_UPDATEFREQUENCY 20289 /* Variable */
 #define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLIST_UPDATEFREQUENCY 20290 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED 20291 /* Object */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_EVENTID 20292 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_EVENTTYPE 20293 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SOURCENODE 20294 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SOURCENAME 20295 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_TIME 20296 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_RECEIVETIME 20297 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_LOCALTIME 20298 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_MESSAGE 20299 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SEVERITY 20300 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_CONDITIONCLASSID 20301 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_CONDITIONCLASSNAME 20302 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_CONDITIONSUBCLASSID 20303 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_CONDITIONSUBCLASSNAME 20304 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_CONDITIONNAME 20305 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_BRANCHID 20306 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_RETAIN 20307 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE 20308 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_ID 20309 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_NAME 20310 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_NUMBER 20311 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_EFFECTIVEDISPLAYNAME 20312 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_TRANSITIONTIME 20313 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_EFFECTIVETRANSITIONTIME 20314 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_TRUESTATE 20315 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_FALSESTATE 20316 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_QUALITY 20317 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_QUALITY_SOURCETIMESTAMP 20318 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_LASTSEVERITY 20319 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_LASTSEVERITY_SOURCETIMESTAMP 20320 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_COMMENT 20321 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_COMMENT_SOURCETIMESTAMP 20322 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_CLIENTUSERID 20323 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_DISABLE 20324 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ENABLE 20325 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ADDCOMMENT 20326 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ADDCOMMENT_INPUTARGUMENTS 20327 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ACKEDSTATE 20328 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_ID 20329 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_NAME 20330 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_NUMBER 20331 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_EFFECTIVEDISPLAYNAME 20332 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_TRANSITIONTIME 20333 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_EFFECTIVETRANSITIONTIME 20334 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_TRUESTATE 20335 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_FALSESTATE 20336 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE 20337 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_ID 20338 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_NAME 20339 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_NUMBER 20340 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_EFFECTIVEDISPLAYNAME 20341 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_TRANSITIONTIME 20342 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_EFFECTIVETRANSITIONTIME 20343 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_TRUESTATE 20344 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_FALSESTATE 20345 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ACKNOWLEDGE 20346 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ACKNOWLEDGE_INPUTARGUMENTS 20347 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_CONFIRM 20348 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_CONFIRM_INPUTARGUMENTS 20349 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ACTIVESTATE 20350 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_ID 20351 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_NAME 20352 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_NUMBER 20353 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_EFFECTIVEDISPLAYNAME 20354 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_TRANSITIONTIME 20355 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_EFFECTIVETRANSITIONTIME 20356 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_TRUESTATE 20357 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_FALSESTATE 20358 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_INPUTNODE 20359 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE 20360 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_ID 20361 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_NAME 20362 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_NUMBER 20363 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_EFFECTIVEDISPLAYNAME 20364 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_TRANSITIONTIME 20365 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_EFFECTIVETRANSITIONTIME 20366 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_TRUESTATE 20367 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_FALSESTATE 20368 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE 20369 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_ID 20370 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_NAME 20371 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_NUMBER 20372 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_EFFECTIVEDISPLAYNAME 20373 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_TRANSITIONTIME 20374 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_EFFECTIVETRANSITIONTIME 20375 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_TRUESTATE 20376 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_FALSESTATE 20377 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE 20378 /* Object */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_CURRENTSTATE 20379 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_CURRENTSTATE_ID 20380 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_CURRENTSTATE_NAME 20381 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_CURRENTSTATE_NUMBER 20382 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_CURRENTSTATE_EFFECTIVEDISPLAYNAME 20383 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION 20384 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION_ID 20385 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION_NAME 20386 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION_NUMBER 20387 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION_TRANSITIONTIME 20388 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION_EFFECTIVETRANSITIONTIME 20389 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_AVAILABLESTATES 20390 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_AVAILABLETRANSITIONS 20391 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_UNSHELVETIME 20392 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_TIMEDSHELVE 20393 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_TIMEDSHELVE_INPUTARGUMENTS 20394 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_UNSHELVE 20395 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_ONESHOTSHELVE 20396 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SUPPRESSEDORSHELVED 20397 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_MAXTIMESHELVED 20398 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_AUDIBLEENABLED 20399 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_AUDIBLESOUND 20400 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_AUDIBLESOUND_LISTID 20401 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_AUDIBLESOUND_AGENCYID 20402 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_AUDIBLESOUND_VERSIONID 20403 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SILENCESTATE 20404 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SILENCESTATE_ID 20405 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SILENCESTATE_NAME 20406 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SILENCESTATE_NUMBER 20407 /* Variable */
 #define UA_NS0ID_DATASETORDERINGTYPE 20408 /* DataType */
 #define UA_NS0ID_READERGROUPTYPE_DATASETREADERNAME_PLACEHOLDER_DIAGNOSTICS_LIVEVALUES_SECURITYTOKENID 20409 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SILENCESTATE_EFFECTIVEDISPLAYNAME 20410 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SILENCESTATE_TRANSITIONTIME 20411 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SILENCESTATE_EFFECTIVETRANSITIONTIME 20412 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SILENCESTATE_TRUESTATE 20413 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SILENCESTATE_FALSESTATE 20414 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ONDELAY 20415 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_OFFDELAY 20416 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_FIRSTINGROUPFLAG 20417 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_FIRSTINGROUP 20418 /* Object */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE 20419 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_ID 20420 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_NAME 20421 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_NUMBER 20422 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_EFFECTIVEDISPLAYNAME 20423 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_TRANSITIONTIME 20424 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_EFFECTIVETRANSITIONTIME 20425 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_TRUESTATE 20426 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_FALSESTATE 20427 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_REALARMTIME 20428 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_REALARMREPEATCOUNT 20429 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SILENCE 20430 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SUPPRESS 20431 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_UNSUPPRESS 20432 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_REMOVEFROMSERVICE 20433 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_PLACEINSERVICE 20434 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_RESET 20435 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_NORMALSTATE 20436 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_EXPIRATIONDATE 20437 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_EXPIRATIONLIMIT 20438 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_CERTIFICATETYPE 20439 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_CERTIFICATE 20440 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE 20441 /* Object */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_EVENTID 20442 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_EVENTTYPE 20443 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SOURCENODE 20444 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SOURCENAME 20445 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_TIME 20446 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_RECEIVETIME 20447 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_LOCALTIME 20448 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_MESSAGE 20449 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SEVERITY 20450 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_CONDITIONCLASSID 20451 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_CONDITIONCLASSNAME 20452 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_CONDITIONSUBCLASSID 20453 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_CONDITIONSUBCLASSNAME 20454 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_CONDITIONNAME 20455 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_BRANCHID 20456 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_RETAIN 20457 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE 20458 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_ID 20459 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_NAME 20460 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_NUMBER 20461 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_EFFECTIVEDISPLAYNAME 20462 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_TRANSITIONTIME 20463 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_EFFECTIVETRANSITIONTIME 20464 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_TRUESTATE 20465 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_FALSESTATE 20466 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_QUALITY 20467 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_QUALITY_SOURCETIMESTAMP 20468 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_LASTSEVERITY 20469 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_LASTSEVERITY_SOURCETIMESTAMP 20470 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_COMMENT 20471 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_COMMENT_SOURCETIMESTAMP 20472 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_CLIENTUSERID 20473 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_DISABLE 20474 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ENABLE 20475 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ADDCOMMENT 20476 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ADDCOMMENT_INPUTARGUMENTS 20477 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE 20478 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_ID 20479 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_NAME 20480 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_NUMBER 20481 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_EFFECTIVEDISPLAYNAME 20482 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_TRANSITIONTIME 20483 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_EFFECTIVETRANSITIONTIME 20484 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_TRUESTATE 20485 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_FALSESTATE 20486 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE 20487 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_ID 20488 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_NAME 20489 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_NUMBER 20490 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_EFFECTIVEDISPLAYNAME 20491 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_TRANSITIONTIME 20492 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_EFFECTIVETRANSITIONTIME 20493 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_TRUESTATE 20494 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_FALSESTATE 20495 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ACKNOWLEDGE 20496 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ACKNOWLEDGE_INPUTARGUMENTS 20497 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_CONFIRM 20498 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_CONFIRM_INPUTARGUMENTS 20499 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE 20500 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_ID 20501 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_NAME 20502 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_NUMBER 20503 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_EFFECTIVEDISPLAYNAME 20504 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_TRANSITIONTIME 20505 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_EFFECTIVETRANSITIONTIME 20506 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_TRUESTATE 20507 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_FALSESTATE 20508 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_INPUTNODE 20509 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE 20510 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_ID 20511 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_NAME 20512 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_NUMBER 20513 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_EFFECTIVEDISPLAYNAME 20514 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_TRANSITIONTIME 20515 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_EFFECTIVETRANSITIONTIME 20516 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_TRUESTATE 20517 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_FALSESTATE 20518 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE 20519 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_ID 20520 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_NAME 20521 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_NUMBER 20522 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_EFFECTIVEDISPLAYNAME 20523 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_TRANSITIONTIME 20524 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_EFFECTIVETRANSITIONTIME 20525 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_TRUESTATE 20526 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_FALSESTATE 20527 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE 20528 /* Object */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_CURRENTSTATE 20529 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_CURRENTSTATE_ID 20530 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_CURRENTSTATE_NAME 20531 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_CURRENTSTATE_NUMBER 20532 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_CURRENTSTATE_EFFECTIVEDISPLAYNAME 20533 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION 20534 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION_ID 20535 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION_NAME 20536 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION_NUMBER 20537 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION_TRANSITIONTIME 20538 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION_EFFECTIVETRANSITIONTIME 20539 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_AVAILABLESTATES 20540 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_AVAILABLETRANSITIONS 20541 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_UNSHELVETIME 20542 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_TIMEDSHELVE 20543 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_TIMEDSHELVE_INPUTARGUMENTS 20544 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_UNSHELVE 20545 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_ONESHOTSHELVE 20546 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDORSHELVED 20547 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_MAXTIMESHELVED 20548 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_AUDIBLEENABLED 20549 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_AUDIBLESOUND 20550 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_AUDIBLESOUND_LISTID 20551 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_AUDIBLESOUND_AGENCYID 20552 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_AUDIBLESOUND_VERSIONID 20553 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE 20554 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_ID 20555 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_NAME 20556 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_NUMBER 20557 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_EFFECTIVEDISPLAYNAME 20558 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_TRANSITIONTIME 20559 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_EFFECTIVETRANSITIONTIME 20560 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_TRUESTATE 20561 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_FALSESTATE 20562 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ONDELAY 20563 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_OFFDELAY 20564 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_FIRSTINGROUPFLAG 20565 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_FIRSTINGROUP 20566 /* Object */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE 20567 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_ID 20568 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_NAME 20569 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_NUMBER 20570 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_EFFECTIVEDISPLAYNAME 20571 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_TRANSITIONTIME 20572 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_EFFECTIVETRANSITIONTIME 20573 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_TRUESTATE 20574 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_FALSESTATE 20575 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_REALARMTIME 20576 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_REALARMREPEATCOUNT 20577 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SILENCE 20578 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SUPPRESS 20579 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_UNSUPPRESS 20580 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_REMOVEFROMSERVICE 20581 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_PLACEINSERVICE 20582 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_RESET 20583 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_NORMALSTATE 20584 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_TRUSTLISTID 20585 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_LASTUPDATETIME 20586 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_UPDATEFREQUENCY 20587 /* Variable */
 #define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLIST_UPDATEFREQUENCY 20588 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED 20589 /* Object */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_EVENTID 20590 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_EVENTTYPE 20591 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SOURCENODE 20592 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SOURCENAME 20593 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_TIME 20594 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_RECEIVETIME 20595 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_LOCALTIME 20596 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_MESSAGE 20597 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SEVERITY 20598 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_CONDITIONCLASSID 20599 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_CONDITIONCLASSNAME 20600 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_CONDITIONSUBCLASSID 20601 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_CONDITIONSUBCLASSNAME 20602 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_CONDITIONNAME 20603 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_BRANCHID 20604 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_RETAIN 20605 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE 20606 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_ID 20607 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_NAME 20608 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_NUMBER 20609 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_EFFECTIVEDISPLAYNAME 20610 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_TRANSITIONTIME 20611 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_EFFECTIVETRANSITIONTIME 20612 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_TRUESTATE 20613 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_FALSESTATE 20614 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_QUALITY 20615 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_QUALITY_SOURCETIMESTAMP 20616 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_LASTSEVERITY 20617 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_LASTSEVERITY_SOURCETIMESTAMP 20618 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_COMMENT 20619 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_COMMENT_SOURCETIMESTAMP 20620 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_CLIENTUSERID 20621 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_DISABLE 20622 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ENABLE 20623 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ADDCOMMENT 20624 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ADDCOMMENT_INPUTARGUMENTS 20625 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ACKEDSTATE 20626 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_ID 20627 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_NAME 20628 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_NUMBER 20629 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_EFFECTIVEDISPLAYNAME 20630 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_TRANSITIONTIME 20631 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_EFFECTIVETRANSITIONTIME 20632 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_TRUESTATE 20633 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_FALSESTATE 20634 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE 20635 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_ID 20636 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_NAME 20637 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_NUMBER 20638 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_EFFECTIVEDISPLAYNAME 20639 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_TRANSITIONTIME 20640 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_EFFECTIVETRANSITIONTIME 20641 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_TRUESTATE 20642 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_FALSESTATE 20643 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ACKNOWLEDGE 20644 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ACKNOWLEDGE_INPUTARGUMENTS 20645 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_CONFIRM 20646 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_CONFIRM_INPUTARGUMENTS 20647 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ACTIVESTATE 20648 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_ID 20649 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_NAME 20650 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_NUMBER 20651 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_EFFECTIVEDISPLAYNAME 20652 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_TRANSITIONTIME 20653 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_EFFECTIVETRANSITIONTIME 20654 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_TRUESTATE 20655 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_FALSESTATE 20656 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_INPUTNODE 20657 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE 20658 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_ID 20659 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_NAME 20660 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_NUMBER 20661 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_EFFECTIVEDISPLAYNAME 20662 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_TRANSITIONTIME 20663 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_EFFECTIVETRANSITIONTIME 20664 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_TRUESTATE 20665 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_FALSESTATE 20666 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE 20667 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_ID 20668 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_NAME 20669 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_NUMBER 20670 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_EFFECTIVEDISPLAYNAME 20671 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_TRANSITIONTIME 20672 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_EFFECTIVETRANSITIONTIME 20673 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_TRUESTATE 20674 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_FALSESTATE 20675 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE 20676 /* Object */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_CURRENTSTATE 20677 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_CURRENTSTATE_ID 20678 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_CURRENTSTATE_NAME 20679 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_CURRENTSTATE_NUMBER 20680 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_CURRENTSTATE_EFFECTIVEDISPLAYNAME 20681 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION 20682 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION_ID 20683 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION_NAME 20684 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION_NUMBER 20685 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION_TRANSITIONTIME 20686 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION_EFFECTIVETRANSITIONTIME 20687 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_AVAILABLESTATES 20688 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_AVAILABLETRANSITIONS 20689 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_UNSHELVETIME 20690 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_TIMEDSHELVE 20691 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_TIMEDSHELVE_INPUTARGUMENTS 20692 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_UNSHELVE 20693 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_ONESHOTSHELVE 20694 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SUPPRESSEDORSHELVED 20695 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_MAXTIMESHELVED 20696 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_AUDIBLEENABLED 20697 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_AUDIBLESOUND 20698 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_AUDIBLESOUND_LISTID 20699 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_AUDIBLESOUND_AGENCYID 20700 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_AUDIBLESOUND_VERSIONID 20701 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SILENCESTATE 20702 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SILENCESTATE_ID 20703 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SILENCESTATE_NAME 20704 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SILENCESTATE_NUMBER 20705 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SILENCESTATE_EFFECTIVEDISPLAYNAME 20706 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SILENCESTATE_TRANSITIONTIME 20707 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SILENCESTATE_EFFECTIVETRANSITIONTIME 20708 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SILENCESTATE_TRUESTATE 20709 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SILENCESTATE_FALSESTATE 20710 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ONDELAY 20711 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_OFFDELAY 20712 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_FIRSTINGROUPFLAG 20713 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_FIRSTINGROUP 20714 /* Object */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE 20715 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_ID 20716 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_NAME 20717 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_NUMBER 20718 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_EFFECTIVEDISPLAYNAME 20719 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_TRANSITIONTIME 20720 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_EFFECTIVETRANSITIONTIME 20721 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_TRUESTATE 20722 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_FALSESTATE 20723 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_REALARMTIME 20724 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_REALARMREPEATCOUNT 20725 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SILENCE 20726 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SUPPRESS 20727 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_UNSUPPRESS 20728 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_REMOVEFROMSERVICE 20729 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_PLACEINSERVICE 20730 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_RESET 20731 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_NORMALSTATE 20732 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_EXPIRATIONDATE 20733 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_EXPIRATIONLIMIT 20734 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_CERTIFICATETYPE 20735 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_CERTIFICATE 20736 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE 20737 /* Object */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_EVENTID 20738 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_EVENTTYPE 20739 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SOURCENODE 20740 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SOURCENAME 20741 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_TIME 20742 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_RECEIVETIME 20743 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_LOCALTIME 20744 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_MESSAGE 20745 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SEVERITY 20746 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_CONDITIONCLASSID 20747 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_CONDITIONCLASSNAME 20748 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_CONDITIONSUBCLASSID 20749 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_CONDITIONSUBCLASSNAME 20750 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_CONDITIONNAME 20751 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_BRANCHID 20752 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_RETAIN 20753 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE 20754 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_ID 20755 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_NAME 20756 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_NUMBER 20757 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_EFFECTIVEDISPLAYNAME 20758 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_TRANSITIONTIME 20759 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_EFFECTIVETRANSITIONTIME 20760 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_TRUESTATE 20761 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_FALSESTATE 20762 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_QUALITY 20763 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_QUALITY_SOURCETIMESTAMP 20764 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_LASTSEVERITY 20765 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_LASTSEVERITY_SOURCETIMESTAMP 20766 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_COMMENT 20767 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_COMMENT_SOURCETIMESTAMP 20768 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_CLIENTUSERID 20769 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_DISABLE 20770 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ENABLE 20771 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ADDCOMMENT 20772 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ADDCOMMENT_INPUTARGUMENTS 20773 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE 20774 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_ID 20775 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_NAME 20776 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_NUMBER 20777 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_EFFECTIVEDISPLAYNAME 20778 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_TRANSITIONTIME 20779 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_EFFECTIVETRANSITIONTIME 20780 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_TRUESTATE 20781 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_FALSESTATE 20782 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE 20783 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_ID 20784 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_NAME 20785 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_NUMBER 20786 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_EFFECTIVEDISPLAYNAME 20787 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_TRANSITIONTIME 20788 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_EFFECTIVETRANSITIONTIME 20789 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_TRUESTATE 20790 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_FALSESTATE 20791 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ACKNOWLEDGE 20792 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ACKNOWLEDGE_INPUTARGUMENTS 20793 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_CONFIRM 20794 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_CONFIRM_INPUTARGUMENTS 20795 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE 20796 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_ID 20797 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_NAME 20798 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_NUMBER 20799 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_EFFECTIVEDISPLAYNAME 20800 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_TRANSITIONTIME 20801 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_EFFECTIVETRANSITIONTIME 20802 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_TRUESTATE 20803 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_FALSESTATE 20804 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_INPUTNODE 20805 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE 20806 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_ID 20807 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_NAME 20808 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_NUMBER 20809 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_EFFECTIVEDISPLAYNAME 20810 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_TRANSITIONTIME 20811 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_EFFECTIVETRANSITIONTIME 20812 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_TRUESTATE 20813 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_FALSESTATE 20814 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE 20815 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_ID 20816 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_NAME 20817 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_NUMBER 20818 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_EFFECTIVEDISPLAYNAME 20819 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_TRANSITIONTIME 20820 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_EFFECTIVETRANSITIONTIME 20821 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_TRUESTATE 20822 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_FALSESTATE 20823 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE 20824 /* Object */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_CURRENTSTATE 20825 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_CURRENTSTATE_ID 20826 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_CURRENTSTATE_NAME 20827 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_CURRENTSTATE_NUMBER 20828 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_CURRENTSTATE_EFFECTIVEDISPLAYNAME 20829 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION 20830 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION_ID 20831 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION_NAME 20832 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION_NUMBER 20833 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION_TRANSITIONTIME 20834 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION_EFFECTIVETRANSITIONTIME 20835 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_AVAILABLESTATES 20836 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_AVAILABLETRANSITIONS 20837 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_UNSHELVETIME 20838 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_TIMEDSHELVE 20839 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_TIMEDSHELVE_INPUTARGUMENTS 20840 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_UNSHELVE 20841 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_ONESHOTSHELVE 20842 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDORSHELVED 20843 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_MAXTIMESHELVED 20844 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_AUDIBLEENABLED 20845 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_AUDIBLESOUND 20846 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_AUDIBLESOUND_LISTID 20847 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_AUDIBLESOUND_AGENCYID 20848 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_AUDIBLESOUND_VERSIONID 20849 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE 20850 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_ID 20851 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_NAME 20852 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_NUMBER 20853 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_EFFECTIVEDISPLAYNAME 20854 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_TRANSITIONTIME 20855 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_EFFECTIVETRANSITIONTIME 20856 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_TRUESTATE 20857 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_FALSESTATE 20858 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ONDELAY 20859 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_OFFDELAY 20860 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_FIRSTINGROUPFLAG 20861 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_FIRSTINGROUP 20862 /* Object */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE 20863 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_ID 20864 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_NAME 20865 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_NUMBER 20866 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_EFFECTIVEDISPLAYNAME 20867 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_TRANSITIONTIME 20868 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_EFFECTIVETRANSITIONTIME 20869 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_TRUESTATE 20870 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_FALSESTATE 20871 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_REALARMTIME 20872 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_REALARMREPEATCOUNT 20873 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SILENCE 20874 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SUPPRESS 20875 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_UNSUPPRESS 20876 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_REMOVEFROMSERVICE 20877 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_PLACEINSERVICE 20878 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_RESET 20879 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_NORMALSTATE 20880 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_TRUSTLISTID 20881 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_LASTUPDATETIME 20882 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_UPDATEFREQUENCY 20883 /* Variable */
 #define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLIST_UPDATEFREQUENCY 20884 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED 20885 /* Object */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_EVENTID 20886 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_EVENTTYPE 20887 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SOURCENODE 20888 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SOURCENAME 20889 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_TIME 20890 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_RECEIVETIME 20891 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_LOCALTIME 20892 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_MESSAGE 20893 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SEVERITY 20894 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_CONDITIONCLASSID 20895 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_CONDITIONCLASSNAME 20896 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_CONDITIONSUBCLASSID 20897 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_CONDITIONSUBCLASSNAME 20898 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_CONDITIONNAME 20899 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_BRANCHID 20900 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_RETAIN 20901 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE 20902 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_ID 20903 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_NAME 20904 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_NUMBER 20905 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_EFFECTIVEDISPLAYNAME 20906 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_TRANSITIONTIME 20907 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_EFFECTIVETRANSITIONTIME 20908 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_TRUESTATE 20909 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_FALSESTATE 20910 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_QUALITY 20911 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_QUALITY_SOURCETIMESTAMP 20912 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_LASTSEVERITY 20913 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_LASTSEVERITY_SOURCETIMESTAMP 20914 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_COMMENT 20915 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_COMMENT_SOURCETIMESTAMP 20916 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_CLIENTUSERID 20917 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_DISABLE 20918 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ENABLE 20919 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ADDCOMMENT 20920 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ADDCOMMENT_INPUTARGUMENTS 20921 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ACKEDSTATE 20922 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_ID 20923 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_NAME 20924 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_NUMBER 20925 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_EFFECTIVEDISPLAYNAME 20926 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_TRANSITIONTIME 20927 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_EFFECTIVETRANSITIONTIME 20928 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_TRUESTATE 20929 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_FALSESTATE 20930 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE 20931 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_ID 20932 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_NAME 20933 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_NUMBER 20934 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_EFFECTIVEDISPLAYNAME 20935 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_TRANSITIONTIME 20936 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_EFFECTIVETRANSITIONTIME 20937 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_TRUESTATE 20938 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_FALSESTATE 20939 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ACKNOWLEDGE 20940 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ACKNOWLEDGE_INPUTARGUMENTS 20941 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_CONFIRM 20942 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_CONFIRM_INPUTARGUMENTS 20943 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ACTIVESTATE 20944 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_ID 20945 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_NAME 20946 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_NUMBER 20947 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_EFFECTIVEDISPLAYNAME 20948 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_TRANSITIONTIME 20949 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_EFFECTIVETRANSITIONTIME 20950 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_TRUESTATE 20951 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_FALSESTATE 20952 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_INPUTNODE 20953 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE 20954 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_ID 20955 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_NAME 20956 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_NUMBER 20957 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_EFFECTIVEDISPLAYNAME 20958 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_TRANSITIONTIME 20959 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_EFFECTIVETRANSITIONTIME 20960 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_TRUESTATE 20961 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_FALSESTATE 20962 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE 20963 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_ID 20964 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_NAME 20965 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_NUMBER 20966 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_EFFECTIVEDISPLAYNAME 20967 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_TRANSITIONTIME 20968 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_EFFECTIVETRANSITIONTIME 20969 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_TRUESTATE 20970 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_FALSESTATE 20971 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE 20972 /* Object */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_CURRENTSTATE 20973 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_CURRENTSTATE_ID 20974 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_CURRENTSTATE_NAME 20975 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_CURRENTSTATE_NUMBER 20976 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_CURRENTSTATE_EFFECTIVEDISPLAYNAME 20977 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION 20978 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION_ID 20979 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION_NAME 20980 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION_NUMBER 20981 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION_TRANSITIONTIME 20982 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION_EFFECTIVETRANSITIONTIME 20983 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_AVAILABLESTATES 20984 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_AVAILABLETRANSITIONS 20985 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_UNSHELVETIME 20986 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_TIMEDSHELVE 20987 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_TIMEDSHELVE_INPUTARGUMENTS 20988 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_UNSHELVE 20989 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_ONESHOTSHELVE 20990 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SUPPRESSEDORSHELVED 20991 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_MAXTIMESHELVED 20992 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_AUDIBLEENABLED 20993 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_AUDIBLESOUND 20994 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_AUDIBLESOUND_LISTID 20995 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_AUDIBLESOUND_AGENCYID 20996 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_AUDIBLESOUND_VERSIONID 20997 /* Variable */
 #define UA_NS0ID_VERSIONTIME 20998 /* DataType */
 #define UA_NS0ID_SESSIONLESSINVOKERESPONSETYPE 20999 /* DataType */
 #define UA_NS0ID_SESSIONLESSINVOKERESPONSETYPE_ENCODING_DEFAULTXML 21000 /* Object */
@@ -13630,8 +12723,6 @@ UA_atomic_subSize(volatile size_t *addr, size_t decrease) {
 #define UA_NS0ID_READERGROUPTYPE_DATASETREADERNAME_PLACEHOLDER_DIAGNOSTICS_LIVEVALUES_TIMETONEXTTOKENID 21004 /* Variable */
 #define UA_NS0ID_READERGROUPTYPE_DATASETREADERNAME_PLACEHOLDER_DIAGNOSTICS_LIVEVALUES_TIMETONEXTTOKENID_DIAGNOSTICSLEVEL 21005 /* Variable */
 #define UA_NS0ID_READERGROUPTYPE_DATASETREADERNAME_PLACEHOLDER_SUBSCRIBEDDATASET 21006 /* Object */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SILENCESTATE 21007 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SILENCESTATE_ID 21008 /* Variable */
 #define UA_NS0ID_READERGROUPTYPE_DATASETREADERNAME_PLACEHOLDER_CREATETARGETVARIABLES 21009 /* Method */
 #define UA_NS0ID_READERGROUPTYPE_DATASETREADERNAME_PLACEHOLDER_CREATETARGETVARIABLES_INPUTARGUMENTS 21010 /* Variable */
 #define UA_NS0ID_READERGROUPTYPE_DATASETREADERNAME_PLACEHOLDER_CREATETARGETVARIABLES_OUTPUTARGUMENTS 21011 /* Variable */
@@ -13741,7 +12832,6 @@ UA_atomic_subSize(volatile size_t *addr, size_t decrease) {
 #define UA_NS0ID_UADPDATASETWRITERMESSAGETYPE_DATASETOFFSET 21115 /* Variable */
 #define UA_NS0ID_UADPDATASETREADERMESSAGETYPE 21116 /* ObjectType */
 #define UA_NS0ID_UADPDATASETREADERMESSAGETYPE_GROUPVERSION 21117 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SILENCESTATE_NAME 21118 /* Variable */
 #define UA_NS0ID_UADPDATASETREADERMESSAGETYPE_NETWORKMESSAGENUMBER 21119 /* Variable */
 #define UA_NS0ID_UADPDATASETREADERMESSAGETYPE_DATASETCLASSID 21120 /* Variable */
 #define UA_NS0ID_UADPDATASETREADERMESSAGETYPE_NETWORKMESSAGECONTENTMASK 21121 /* Variable */
@@ -13827,2257 +12917,13 @@ UA_atomic_subSize(volatile size_t *addr, size_t decrease) {
 #define UA_NS0ID_READERGROUPDATATYPE_ENCODING_DEFAULTJSON 21201 /* Object */
 #define UA_NS0ID_PUBSUBCONFIGURATIONDATATYPE_ENCODING_DEFAULTJSON 21202 /* Object */
 #define UA_NS0ID_DATAGRAMWRITERGROUPTRANSPORTDATATYPE_ENCODING_DEFAULTJSON 21203 /* Object */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SILENCESTATE_NUMBER 21204 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SILENCESTATE_EFFECTIVEDISPLAYNAME 21205 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SILENCESTATE_TRANSITIONTIME 21206 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SILENCESTATE_EFFECTIVETRANSITIONTIME 21207 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SILENCESTATE_TRUESTATE 21208 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SILENCESTATE_FALSESTATE 21209 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ONDELAY 21210 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_OFFDELAY 21211 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_FIRSTINGROUPFLAG 21212 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_FIRSTINGROUP 21213 /* Object */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE 21214 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_ID 21215 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_NAME 21216 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_NUMBER 21217 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_EFFECTIVEDISPLAYNAME 21218 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_TRANSITIONTIME 21219 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_EFFECTIVETRANSITIONTIME 21220 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_TRUESTATE 21221 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_FALSESTATE 21222 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_REALARMTIME 21223 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_REALARMREPEATCOUNT 21224 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SILENCE 21225 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SUPPRESS 21226 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_UNSUPPRESS 21227 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_REMOVEFROMSERVICE 21228 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_PLACEINSERVICE 21229 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_RESET 21230 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_NORMALSTATE 21231 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_EXPIRATIONDATE 21232 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_EXPIRATIONLIMIT 21233 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_CERTIFICATETYPE 21234 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_CERTIFICATE 21235 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE 21236 /* Object */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_EVENTID 21237 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_EVENTTYPE 21238 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SOURCENODE 21239 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SOURCENAME 21240 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_TIME 21241 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_RECEIVETIME 21242 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_LOCALTIME 21243 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_MESSAGE 21244 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SEVERITY 21245 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_CONDITIONCLASSID 21246 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_CONDITIONCLASSNAME 21247 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_CONDITIONSUBCLASSID 21248 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_CONDITIONSUBCLASSNAME 21249 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_CONDITIONNAME 21250 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_BRANCHID 21251 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_RETAIN 21252 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE 21253 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_ID 21254 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_NAME 21255 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_NUMBER 21256 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_EFFECTIVEDISPLAYNAME 21257 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_TRANSITIONTIME 21258 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_EFFECTIVETRANSITIONTIME 21259 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_TRUESTATE 21260 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_FALSESTATE 21261 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_QUALITY 21262 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_QUALITY_SOURCETIMESTAMP 21263 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_LASTSEVERITY 21264 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_LASTSEVERITY_SOURCETIMESTAMP 21265 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_COMMENT 21266 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_COMMENT_SOURCETIMESTAMP 21267 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_CLIENTUSERID 21268 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_DISABLE 21269 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ENABLE 21270 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ADDCOMMENT 21271 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ADDCOMMENT_INPUTARGUMENTS 21272 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE 21273 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_ID 21274 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_NAME 21275 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_NUMBER 21276 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_EFFECTIVEDISPLAYNAME 21277 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_TRANSITIONTIME 21278 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_EFFECTIVETRANSITIONTIME 21279 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_TRUESTATE 21280 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_FALSESTATE 21281 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE 21282 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_ID 21283 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_NAME 21284 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_NUMBER 21285 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_EFFECTIVEDISPLAYNAME 21286 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_TRANSITIONTIME 21287 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_EFFECTIVETRANSITIONTIME 21288 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_TRUESTATE 21289 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_FALSESTATE 21290 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ACKNOWLEDGE 21291 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ACKNOWLEDGE_INPUTARGUMENTS 21292 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_CONFIRM 21293 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_CONFIRM_INPUTARGUMENTS 21294 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE 21295 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_ID 21296 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_NAME 21297 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_NUMBER 21298 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_EFFECTIVEDISPLAYNAME 21299 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_TRANSITIONTIME 21300 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_EFFECTIVETRANSITIONTIME 21301 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_TRUESTATE 21302 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_FALSESTATE 21303 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_INPUTNODE 21304 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE 21305 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_ID 21306 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_NAME 21307 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_NUMBER 21308 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_EFFECTIVEDISPLAYNAME 21309 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_TRANSITIONTIME 21310 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_EFFECTIVETRANSITIONTIME 21311 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_TRUESTATE 21312 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_FALSESTATE 21313 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE 21314 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_ID 21315 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_NAME 21316 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_NUMBER 21317 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_EFFECTIVEDISPLAYNAME 21318 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_TRANSITIONTIME 21319 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_EFFECTIVETRANSITIONTIME 21320 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_TRUESTATE 21321 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_FALSESTATE 21322 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE 21323 /* Object */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_CURRENTSTATE 21324 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_CURRENTSTATE_ID 21325 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_CURRENTSTATE_NAME 21326 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_CURRENTSTATE_NUMBER 21327 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_CURRENTSTATE_EFFECTIVEDISPLAYNAME 21328 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION 21329 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION_ID 21330 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION_NAME 21331 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION_NUMBER 21332 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION_TRANSITIONTIME 21333 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION_EFFECTIVETRANSITIONTIME 21334 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_AVAILABLESTATES 21335 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_AVAILABLETRANSITIONS 21336 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_UNSHELVETIME 21337 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_TIMEDSHELVE 21338 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_TIMEDSHELVE_INPUTARGUMENTS 21339 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_UNSHELVE 21340 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_ONESHOTSHELVE 21341 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDORSHELVED 21342 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_MAXTIMESHELVED 21343 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_AUDIBLEENABLED 21344 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_AUDIBLESOUND 21345 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_AUDIBLESOUND_LISTID 21346 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_AUDIBLESOUND_AGENCYID 21347 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_AUDIBLESOUND_VERSIONID 21348 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE 21349 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_ID 21350 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_NAME 21351 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_NUMBER 21352 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_EFFECTIVEDISPLAYNAME 21353 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_TRANSITIONTIME 21354 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_EFFECTIVETRANSITIONTIME 21355 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_TRUESTATE 21356 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_FALSESTATE 21357 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ONDELAY 21358 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_OFFDELAY 21359 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_FIRSTINGROUPFLAG 21360 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_FIRSTINGROUP 21361 /* Object */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE 21362 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_ID 21363 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_NAME 21364 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_NUMBER 21365 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_EFFECTIVEDISPLAYNAME 21366 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_TRANSITIONTIME 21367 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_EFFECTIVETRANSITIONTIME 21368 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_TRUESTATE 21369 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_FALSESTATE 21370 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_REALARMTIME 21371 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_REALARMREPEATCOUNT 21372 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SILENCE 21373 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SUPPRESS 21374 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_UNSUPPRESS 21375 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_REMOVEFROMSERVICE 21376 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_PLACEINSERVICE 21377 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_RESET 21378 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_NORMALSTATE 21379 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_TRUSTLISTID 21380 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_LASTUPDATETIME 21381 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_UPDATEFREQUENCY 21382 /* Variable */
 #define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLIST_UPDATEFREQUENCY 21383 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED 21384 /* Object */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_EVENTID 21385 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_EVENTTYPE 21386 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_SOURCENODE 21387 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_SOURCENAME 21388 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_TIME 21389 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_RECEIVETIME 21390 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_LOCALTIME 21391 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_MESSAGE 21392 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_SEVERITY 21393 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_CONDITIONCLASSID 21394 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_CONDITIONCLASSNAME 21395 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_CONDITIONSUBCLASSID 21396 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_CONDITIONSUBCLASSNAME 21397 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_CONDITIONNAME 21398 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_BRANCHID 21399 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_RETAIN 21400 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_ENABLEDSTATE 21401 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_ENABLEDSTATE_ID 21402 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_ENABLEDSTATE_NAME 21403 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_ENABLEDSTATE_NUMBER 21404 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_ENABLEDSTATE_EFFECTIVEDISPLAYNAME 21405 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_ENABLEDSTATE_TRANSITIONTIME 21406 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_ENABLEDSTATE_EFFECTIVETRANSITIONTIME 21407 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_ENABLEDSTATE_TRUESTATE 21408 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_ENABLEDSTATE_FALSESTATE 21409 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_QUALITY 21410 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_QUALITY_SOURCETIMESTAMP 21411 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_LASTSEVERITY 21412 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_LASTSEVERITY_SOURCETIMESTAMP 21413 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_COMMENT 21414 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_COMMENT_SOURCETIMESTAMP 21415 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_CLIENTUSERID 21416 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_DISABLE 21417 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_ENABLE 21418 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_ADDCOMMENT 21419 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_ADDCOMMENT_INPUTARGUMENTS 21420 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_ACKEDSTATE 21421 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_ACKEDSTATE_ID 21422 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_ACKEDSTATE_NAME 21423 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_ACKEDSTATE_NUMBER 21424 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_ACKEDSTATE_EFFECTIVEDISPLAYNAME 21425 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_ACKEDSTATE_TRANSITIONTIME 21426 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_ACKEDSTATE_EFFECTIVETRANSITIONTIME 21427 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_ACKEDSTATE_TRUESTATE 21428 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_ACKEDSTATE_FALSESTATE 21429 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_CONFIRMEDSTATE 21430 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_CONFIRMEDSTATE_ID 21431 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_CONFIRMEDSTATE_NAME 21432 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_CONFIRMEDSTATE_NUMBER 21433 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_CONFIRMEDSTATE_EFFECTIVEDISPLAYNAME 21434 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_CONFIRMEDSTATE_TRANSITIONTIME 21435 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_CONFIRMEDSTATE_EFFECTIVETRANSITIONTIME 21436 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_CONFIRMEDSTATE_TRUESTATE 21437 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_CONFIRMEDSTATE_FALSESTATE 21438 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_ACKNOWLEDGE 21439 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_ACKNOWLEDGE_INPUTARGUMENTS 21440 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_CONFIRM 21441 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_CONFIRM_INPUTARGUMENTS 21442 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_ACTIVESTATE 21443 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_ACTIVESTATE_ID 21444 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_ACTIVESTATE_NAME 21445 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_ACTIVESTATE_NUMBER 21446 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_ACTIVESTATE_EFFECTIVEDISPLAYNAME 21447 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_ACTIVESTATE_TRANSITIONTIME 21448 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_ACTIVESTATE_EFFECTIVETRANSITIONTIME 21449 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_ACTIVESTATE_TRUESTATE 21450 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_ACTIVESTATE_FALSESTATE 21451 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_INPUTNODE 21452 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_SUPPRESSEDSTATE 21453 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_ID 21454 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_NAME 21455 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_NUMBER 21456 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_EFFECTIVEDISPLAYNAME 21457 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_TRANSITIONTIME 21458 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_EFFECTIVETRANSITIONTIME 21459 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_TRUESTATE 21460 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_FALSESTATE 21461 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_OUTOFSERVICESTATE 21462 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_ID 21463 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_NAME 21464 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_NUMBER 21465 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_EFFECTIVEDISPLAYNAME 21466 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_TRANSITIONTIME 21467 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_EFFECTIVETRANSITIONTIME 21468 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_TRUESTATE 21469 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_FALSESTATE 21470 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_SHELVINGSTATE 21471 /* Object */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_SHELVINGSTATE_CURRENTSTATE 21472 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_SHELVINGSTATE_CURRENTSTATE_ID 21473 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_SHELVINGSTATE_CURRENTSTATE_NAME 21474 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_SHELVINGSTATE_CURRENTSTATE_NUMBER 21475 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_SHELVINGSTATE_CURRENTSTATE_EFFECTIVEDISPLAYNAME 21476 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION 21477 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION_ID 21478 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION_NAME 21479 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION_NUMBER 21480 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION_TRANSITIONTIME 21481 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION_EFFECTIVETRANSITIONTIME 21482 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_SHELVINGSTATE_AVAILABLESTATES 21483 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_SHELVINGSTATE_AVAILABLETRANSITIONS 21484 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_SHELVINGSTATE_UNSHELVETIME 21485 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_SHELVINGSTATE_TIMEDSHELVE 21486 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_SHELVINGSTATE_TIMEDSHELVE_INPUTARGUMENTS 21487 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_SHELVINGSTATE_UNSHELVE 21488 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_SHELVINGSTATE_ONESHOTSHELVE 21489 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_SUPPRESSEDORSHELVED 21490 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_MAXTIMESHELVED 21491 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_AUDIBLEENABLED 21492 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_AUDIBLESOUND 21493 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_AUDIBLESOUND_LISTID 21494 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_AUDIBLESOUND_AGENCYID 21495 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_AUDIBLESOUND_VERSIONID 21496 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_SILENCESTATE 21497 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_SILENCESTATE_ID 21498 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_SILENCESTATE_NAME 21499 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_SILENCESTATE_NUMBER 21500 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_SILENCESTATE_EFFECTIVEDISPLAYNAME 21501 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_SILENCESTATE_TRANSITIONTIME 21502 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_SILENCESTATE_EFFECTIVETRANSITIONTIME 21503 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_SILENCESTATE_TRUESTATE 21504 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_SILENCESTATE_FALSESTATE 21505 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_ONDELAY 21506 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_OFFDELAY 21507 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_FIRSTINGROUPFLAG 21508 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_FIRSTINGROUP 21509 /* Object */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_LATCHEDSTATE 21510 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_LATCHEDSTATE_ID 21511 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_LATCHEDSTATE_NAME 21512 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_LATCHEDSTATE_NUMBER 21513 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_LATCHEDSTATE_EFFECTIVEDISPLAYNAME 21514 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_LATCHEDSTATE_TRANSITIONTIME 21515 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_LATCHEDSTATE_EFFECTIVETRANSITIONTIME 21516 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_LATCHEDSTATE_TRUESTATE 21517 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_LATCHEDSTATE_FALSESTATE 21518 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_REALARMTIME 21519 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_REALARMREPEATCOUNT 21520 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_SILENCE 21521 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_SUPPRESS 21522 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_UNSUPPRESS 21523 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_REMOVEFROMSERVICE 21524 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_PLACEINSERVICE 21525 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_RESET 21526 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_NORMALSTATE 21527 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_EXPIRATIONDATE 21528 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_EXPIRATIONLIMIT 21529 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_CERTIFICATETYPE 21530 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_CERTIFICATEEXPIRED_CERTIFICATE 21531 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE 21532 /* Object */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_EVENTID 21533 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_EVENTTYPE 21534 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_SOURCENODE 21535 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_SOURCENAME 21536 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_TIME 21537 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_RECEIVETIME 21538 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_LOCALTIME 21539 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_MESSAGE 21540 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_SEVERITY 21541 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_CONDITIONCLASSID 21542 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_CONDITIONCLASSNAME 21543 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_CONDITIONSUBCLASSID 21544 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_CONDITIONSUBCLASSNAME 21545 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_CONDITIONNAME 21546 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_BRANCHID 21547 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_RETAIN 21548 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_ENABLEDSTATE 21549 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_ENABLEDSTATE_ID 21550 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_ENABLEDSTATE_NAME 21551 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_ENABLEDSTATE_NUMBER 21552 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_ENABLEDSTATE_EFFECTIVEDISPLAYNAME 21553 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_ENABLEDSTATE_TRANSITIONTIME 21554 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_ENABLEDSTATE_EFFECTIVETRANSITIONTIME 21555 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_ENABLEDSTATE_TRUESTATE 21556 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_ENABLEDSTATE_FALSESTATE 21557 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_QUALITY 21558 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_QUALITY_SOURCETIMESTAMP 21559 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_LASTSEVERITY 21560 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_LASTSEVERITY_SOURCETIMESTAMP 21561 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_COMMENT 21562 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_COMMENT_SOURCETIMESTAMP 21563 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_CLIENTUSERID 21564 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_DISABLE 21565 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_ENABLE 21566 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_ADDCOMMENT 21567 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_ADDCOMMENT_INPUTARGUMENTS 21568 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_ACKEDSTATE 21569 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_ACKEDSTATE_ID 21570 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_ACKEDSTATE_NAME 21571 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_ACKEDSTATE_NUMBER 21572 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_ACKEDSTATE_EFFECTIVEDISPLAYNAME 21573 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_ACKEDSTATE_TRANSITIONTIME 21574 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_ACKEDSTATE_EFFECTIVETRANSITIONTIME 21575 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_ACKEDSTATE_TRUESTATE 21576 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_ACKEDSTATE_FALSESTATE 21577 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE 21578 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_ID 21579 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_NAME 21580 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_NUMBER 21581 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_EFFECTIVEDISPLAYNAME 21582 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_TRANSITIONTIME 21583 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_EFFECTIVETRANSITIONTIME 21584 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_TRUESTATE 21585 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_FALSESTATE 21586 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_ACKNOWLEDGE 21587 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_ACKNOWLEDGE_INPUTARGUMENTS 21588 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_CONFIRM 21589 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_CONFIRM_INPUTARGUMENTS 21590 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_ACTIVESTATE 21591 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_ACTIVESTATE_ID 21592 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_ACTIVESTATE_NAME 21593 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_ACTIVESTATE_NUMBER 21594 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_ACTIVESTATE_EFFECTIVEDISPLAYNAME 21595 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_ACTIVESTATE_TRANSITIONTIME 21596 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_ACTIVESTATE_EFFECTIVETRANSITIONTIME 21597 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_ACTIVESTATE_TRUESTATE 21598 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_ACTIVESTATE_FALSESTATE 21599 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_INPUTNODE 21600 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE 21601 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_ID 21602 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_NAME 21603 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_NUMBER 21604 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_EFFECTIVEDISPLAYNAME 21605 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_TRANSITIONTIME 21606 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_EFFECTIVETRANSITIONTIME 21607 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_TRUESTATE 21608 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_FALSESTATE 21609 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE 21610 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_ID 21611 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_NAME 21612 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_NUMBER 21613 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_EFFECTIVEDISPLAYNAME 21614 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_TRANSITIONTIME 21615 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_EFFECTIVETRANSITIONTIME 21616 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_TRUESTATE 21617 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_FALSESTATE 21618 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_SHELVINGSTATE 21619 /* Object */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_SHELVINGSTATE_CURRENTSTATE 21620 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_SHELVINGSTATE_CURRENTSTATE_ID 21621 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_SHELVINGSTATE_CURRENTSTATE_NAME 21622 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_SHELVINGSTATE_CURRENTSTATE_NUMBER 21623 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_SHELVINGSTATE_CURRENTSTATE_EFFECTIVEDISPLAYNAME 21624 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION 21625 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION_ID 21626 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION_NAME 21627 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION_NUMBER 21628 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION_TRANSITIONTIME 21629 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION_EFFECTIVETRANSITIONTIME 21630 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_SHELVINGSTATE_AVAILABLESTATES 21631 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_SHELVINGSTATE_AVAILABLETRANSITIONS 21632 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_SHELVINGSTATE_UNSHELVETIME 21633 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_SHELVINGSTATE_TIMEDSHELVE 21634 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_SHELVINGSTATE_TIMEDSHELVE_INPUTARGUMENTS 21635 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_SHELVINGSTATE_UNSHELVE 21636 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_SHELVINGSTATE_ONESHOTSHELVE 21637 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_SUPPRESSEDORSHELVED 21638 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_MAXTIMESHELVED 21639 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_AUDIBLEENABLED 21640 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_AUDIBLESOUND 21641 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_AUDIBLESOUND_LISTID 21642 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_AUDIBLESOUND_AGENCYID 21643 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_AUDIBLESOUND_VERSIONID 21644 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_SILENCESTATE 21645 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_SILENCESTATE_ID 21646 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_SILENCESTATE_NAME 21647 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_SILENCESTATE_NUMBER 21648 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_SILENCESTATE_EFFECTIVEDISPLAYNAME 21649 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_SILENCESTATE_TRANSITIONTIME 21650 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_SILENCESTATE_EFFECTIVETRANSITIONTIME 21651 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_SILENCESTATE_TRUESTATE 21652 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_SILENCESTATE_FALSESTATE 21653 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_ONDELAY 21654 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_OFFDELAY 21655 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_FIRSTINGROUPFLAG 21656 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_FIRSTINGROUP 21657 /* Object */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_LATCHEDSTATE 21658 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_LATCHEDSTATE_ID 21659 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_LATCHEDSTATE_NAME 21660 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_LATCHEDSTATE_NUMBER 21661 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_LATCHEDSTATE_EFFECTIVEDISPLAYNAME 21662 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_LATCHEDSTATE_TRANSITIONTIME 21663 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_LATCHEDSTATE_EFFECTIVETRANSITIONTIME 21664 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_LATCHEDSTATE_TRUESTATE 21665 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_LATCHEDSTATE_FALSESTATE 21666 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_REALARMTIME 21667 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_REALARMREPEATCOUNT 21668 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_SILENCE 21669 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_SUPPRESS 21670 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_UNSUPPRESS 21671 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_REMOVEFROMSERVICE 21672 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_PLACEINSERVICE 21673 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_RESET 21674 /* Method */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_NORMALSTATE 21675 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_TRUSTLISTID 21676 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_LASTUPDATETIME 21677 /* Variable */
-#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_TRUSTLISTOUTOFDATE_UPDATEFREQUENCY 21678 /* Variable */
 #define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLIST_UPDATEFREQUENCY 21679 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED 21680 /* Object */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_EVENTID 21681 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_EVENTTYPE 21682 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SOURCENODE 21683 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SOURCENAME 21684 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_TIME 21685 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_RECEIVETIME 21686 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_LOCALTIME 21687 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_MESSAGE 21688 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SEVERITY 21689 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_CONDITIONCLASSID 21690 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_CONDITIONCLASSNAME 21691 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_CONDITIONSUBCLASSID 21692 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_CONDITIONSUBCLASSNAME 21693 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_CONDITIONNAME 21694 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_BRANCHID 21695 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_RETAIN 21696 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE 21697 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_ID 21698 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_NAME 21699 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_NUMBER 21700 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_EFFECTIVEDISPLAYNAME 21701 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_TRANSITIONTIME 21702 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_EFFECTIVETRANSITIONTIME 21703 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_TRUESTATE 21704 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_FALSESTATE 21705 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_QUALITY 21706 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_QUALITY_SOURCETIMESTAMP 21707 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_LASTSEVERITY 21708 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_LASTSEVERITY_SOURCETIMESTAMP 21709 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_COMMENT 21710 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_COMMENT_SOURCETIMESTAMP 21711 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_CLIENTUSERID 21712 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_DISABLE 21713 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ENABLE 21714 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ADDCOMMENT 21715 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ADDCOMMENT_INPUTARGUMENTS 21716 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ACKEDSTATE 21717 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_ID 21718 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_NAME 21719 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_NUMBER 21720 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_EFFECTIVEDISPLAYNAME 21721 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_TRANSITIONTIME 21722 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_EFFECTIVETRANSITIONTIME 21723 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_TRUESTATE 21724 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_FALSESTATE 21725 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE 21726 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_ID 21727 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_NAME 21728 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_NUMBER 21729 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_EFFECTIVEDISPLAYNAME 21730 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_TRANSITIONTIME 21731 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_EFFECTIVETRANSITIONTIME 21732 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_TRUESTATE 21733 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_FALSESTATE 21734 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ACKNOWLEDGE 21735 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ACKNOWLEDGE_INPUTARGUMENTS 21736 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_CONFIRM 21737 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_CONFIRM_INPUTARGUMENTS 21738 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ACTIVESTATE 21739 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_ID 21740 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_NAME 21741 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_NUMBER 21742 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_EFFECTIVEDISPLAYNAME 21743 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_TRANSITIONTIME 21744 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_EFFECTIVETRANSITIONTIME 21745 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_TRUESTATE 21746 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_FALSESTATE 21747 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_INPUTNODE 21748 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE 21749 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_ID 21750 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_NAME 21751 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_NUMBER 21752 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_EFFECTIVEDISPLAYNAME 21753 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_TRANSITIONTIME 21754 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_EFFECTIVETRANSITIONTIME 21755 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_TRUESTATE 21756 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_FALSESTATE 21757 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE 21758 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_ID 21759 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_NAME 21760 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_NUMBER 21761 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_EFFECTIVEDISPLAYNAME 21762 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_TRANSITIONTIME 21763 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_EFFECTIVETRANSITIONTIME 21764 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_TRUESTATE 21765 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_FALSESTATE 21766 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE 21767 /* Object */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_CURRENTSTATE 21768 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_CURRENTSTATE_ID 21769 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_CURRENTSTATE_NAME 21770 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_CURRENTSTATE_NUMBER 21771 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_CURRENTSTATE_EFFECTIVEDISPLAYNAME 21772 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION 21773 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION_ID 21774 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION_NAME 21775 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION_NUMBER 21776 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION_TRANSITIONTIME 21777 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION_EFFECTIVETRANSITIONTIME 21778 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_AVAILABLESTATES 21779 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_AVAILABLETRANSITIONS 21780 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_UNSHELVETIME 21781 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_TIMEDSHELVE 21782 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_TIMEDSHELVE_INPUTARGUMENTS 21783 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_UNSHELVE 21784 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_ONESHOTSHELVE 21785 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SUPPRESSEDORSHELVED 21786 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_MAXTIMESHELVED 21787 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_AUDIBLEENABLED 21788 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_AUDIBLESOUND 21789 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_AUDIBLESOUND_LISTID 21790 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_AUDIBLESOUND_AGENCYID 21791 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_AUDIBLESOUND_VERSIONID 21792 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SILENCESTATE 21793 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SILENCESTATE_ID 21794 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SILENCESTATE_NAME 21795 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SILENCESTATE_NUMBER 21796 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SILENCESTATE_EFFECTIVEDISPLAYNAME 21797 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SILENCESTATE_TRANSITIONTIME 21798 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SILENCESTATE_EFFECTIVETRANSITIONTIME 21799 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SILENCESTATE_TRUESTATE 21800 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SILENCESTATE_FALSESTATE 21801 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ONDELAY 21802 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_OFFDELAY 21803 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_FIRSTINGROUPFLAG 21804 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_FIRSTINGROUP 21805 /* Object */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE 21806 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_ID 21807 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_NAME 21808 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_NUMBER 21809 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_EFFECTIVEDISPLAYNAME 21810 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_TRANSITIONTIME 21811 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_EFFECTIVETRANSITIONTIME 21812 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_TRUESTATE 21813 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_FALSESTATE 21814 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_REALARMTIME 21815 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_REALARMREPEATCOUNT 21816 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SILENCE 21817 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SUPPRESS 21818 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_UNSUPPRESS 21819 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_REMOVEFROMSERVICE 21820 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_PLACEINSERVICE 21821 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_RESET 21822 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_NORMALSTATE 21823 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_EXPIRATIONDATE 21824 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_EXPIRATIONLIMIT 21825 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_CERTIFICATETYPE 21826 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_CERTIFICATE 21827 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE 21828 /* Object */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_EVENTID 21829 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_EVENTTYPE 21830 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SOURCENODE 21831 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SOURCENAME 21832 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_TIME 21833 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_RECEIVETIME 21834 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_LOCALTIME 21835 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_MESSAGE 21836 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SEVERITY 21837 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_CONDITIONCLASSID 21838 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_CONDITIONCLASSNAME 21839 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_CONDITIONSUBCLASSID 21840 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_CONDITIONSUBCLASSNAME 21841 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_CONDITIONNAME 21842 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_BRANCHID 21843 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_RETAIN 21844 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE 21845 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_ID 21846 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_NAME 21847 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_NUMBER 21848 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_EFFECTIVEDISPLAYNAME 21849 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_TRANSITIONTIME 21850 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_EFFECTIVETRANSITIONTIME 21851 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_TRUESTATE 21852 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_FALSESTATE 21853 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_QUALITY 21854 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_QUALITY_SOURCETIMESTAMP 21855 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_LASTSEVERITY 21856 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_LASTSEVERITY_SOURCETIMESTAMP 21857 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_COMMENT 21858 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_COMMENT_SOURCETIMESTAMP 21859 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_CLIENTUSERID 21860 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_DISABLE 21861 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ENABLE 21862 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ADDCOMMENT 21863 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ADDCOMMENT_INPUTARGUMENTS 21864 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE 21865 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_ID 21866 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_NAME 21867 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_NUMBER 21868 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_EFFECTIVEDISPLAYNAME 21869 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_TRANSITIONTIME 21870 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_EFFECTIVETRANSITIONTIME 21871 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_TRUESTATE 21872 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_FALSESTATE 21873 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE 21874 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_ID 21875 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_NAME 21876 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_NUMBER 21877 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_EFFECTIVEDISPLAYNAME 21878 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_TRANSITIONTIME 21879 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_EFFECTIVETRANSITIONTIME 21880 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_TRUESTATE 21881 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_FALSESTATE 21882 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ACKNOWLEDGE 21883 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ACKNOWLEDGE_INPUTARGUMENTS 21884 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_CONFIRM 21885 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_CONFIRM_INPUTARGUMENTS 21886 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE 21887 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_ID 21888 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_NAME 21889 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_NUMBER 21890 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_EFFECTIVEDISPLAYNAME 21891 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_TRANSITIONTIME 21892 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_EFFECTIVETRANSITIONTIME 21893 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_TRUESTATE 21894 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_FALSESTATE 21895 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_INPUTNODE 21896 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE 21897 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_ID 21898 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_NAME 21899 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_NUMBER 21900 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_EFFECTIVEDISPLAYNAME 21901 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_TRANSITIONTIME 21902 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_EFFECTIVETRANSITIONTIME 21903 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_TRUESTATE 21904 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_FALSESTATE 21905 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE 21906 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_ID 21907 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_NAME 21908 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_NUMBER 21909 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_EFFECTIVEDISPLAYNAME 21910 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_TRANSITIONTIME 21911 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_EFFECTIVETRANSITIONTIME 21912 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_TRUESTATE 21913 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_FALSESTATE 21914 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE 21915 /* Object */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_CURRENTSTATE 21916 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_CURRENTSTATE_ID 21917 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_CURRENTSTATE_NAME 21918 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_CURRENTSTATE_NUMBER 21919 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_CURRENTSTATE_EFFECTIVEDISPLAYNAME 21920 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION 21921 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION_ID 21922 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION_NAME 21923 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION_NUMBER 21924 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION_TRANSITIONTIME 21925 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION_EFFECTIVETRANSITIONTIME 21926 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_AVAILABLESTATES 21927 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_AVAILABLETRANSITIONS 21928 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_UNSHELVETIME 21929 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_TIMEDSHELVE 21930 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_TIMEDSHELVE_INPUTARGUMENTS 21931 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_UNSHELVE 21932 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_ONESHOTSHELVE 21933 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDORSHELVED 21934 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_MAXTIMESHELVED 21935 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_AUDIBLEENABLED 21936 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_AUDIBLESOUND 21937 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_AUDIBLESOUND_LISTID 21938 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_AUDIBLESOUND_AGENCYID 21939 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_AUDIBLESOUND_VERSIONID 21940 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE 21941 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_ID 21942 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_NAME 21943 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_NUMBER 21944 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_EFFECTIVEDISPLAYNAME 21945 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_TRANSITIONTIME 21946 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_EFFECTIVETRANSITIONTIME 21947 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_TRUESTATE 21948 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_FALSESTATE 21949 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ONDELAY 21950 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_OFFDELAY 21951 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_FIRSTINGROUPFLAG 21952 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_FIRSTINGROUP 21953 /* Object */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE 21954 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_ID 21955 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_NAME 21956 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_NUMBER 21957 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_EFFECTIVEDISPLAYNAME 21958 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_TRANSITIONTIME 21959 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_EFFECTIVETRANSITIONTIME 21960 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_TRUESTATE 21961 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_FALSESTATE 21962 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_REALARMTIME 21963 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_REALARMREPEATCOUNT 21964 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SILENCE 21965 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SUPPRESS 21966 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_UNSUPPRESS 21967 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_REMOVEFROMSERVICE 21968 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_PLACEINSERVICE 21969 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_RESET 21970 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_NORMALSTATE 21971 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_TRUSTLISTID 21972 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_LASTUPDATETIME 21973 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_UPDATEFREQUENCY 21974 /* Variable */
 #define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLIST_UPDATEFREQUENCY 21975 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED 21976 /* Object */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_EVENTID 21977 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_EVENTTYPE 21978 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SOURCENODE 21979 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SOURCENAME 21980 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_TIME 21981 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_RECEIVETIME 21982 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_LOCALTIME 21983 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_MESSAGE 21984 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SEVERITY 21985 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_CONDITIONCLASSID 21986 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_CONDITIONCLASSNAME 21987 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_CONDITIONSUBCLASSID 21988 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_CONDITIONSUBCLASSNAME 21989 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_CONDITIONNAME 21990 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_BRANCHID 21991 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_RETAIN 21992 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE 21993 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_ID 21994 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_NAME 21995 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_NUMBER 21996 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_EFFECTIVEDISPLAYNAME 21997 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_TRANSITIONTIME 21998 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_EFFECTIVETRANSITIONTIME 21999 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_TRUESTATE 22000 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_FALSESTATE 22001 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_QUALITY 22002 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_QUALITY_SOURCETIMESTAMP 22003 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_LASTSEVERITY 22004 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_LASTSEVERITY_SOURCETIMESTAMP 22005 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_COMMENT 22006 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_COMMENT_SOURCETIMESTAMP 22007 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_CLIENTUSERID 22008 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_DISABLE 22009 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ENABLE 22010 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ADDCOMMENT 22011 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ADDCOMMENT_INPUTARGUMENTS 22012 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ACKEDSTATE 22013 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_ID 22014 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_NAME 22015 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_NUMBER 22016 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_EFFECTIVEDISPLAYNAME 22017 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_TRANSITIONTIME 22018 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_EFFECTIVETRANSITIONTIME 22019 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_TRUESTATE 22020 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_FALSESTATE 22021 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE 22022 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_ID 22023 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_NAME 22024 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_NUMBER 22025 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_EFFECTIVEDISPLAYNAME 22026 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_TRANSITIONTIME 22027 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_EFFECTIVETRANSITIONTIME 22028 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_TRUESTATE 22029 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_FALSESTATE 22030 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ACKNOWLEDGE 22031 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ACKNOWLEDGE_INPUTARGUMENTS 22032 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_CONFIRM 22033 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_CONFIRM_INPUTARGUMENTS 22034 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ACTIVESTATE 22035 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_ID 22036 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_NAME 22037 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_NUMBER 22038 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_EFFECTIVEDISPLAYNAME 22039 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_TRANSITIONTIME 22040 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_EFFECTIVETRANSITIONTIME 22041 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_TRUESTATE 22042 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_FALSESTATE 22043 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_INPUTNODE 22044 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE 22045 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_ID 22046 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_NAME 22047 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_NUMBER 22048 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_EFFECTIVEDISPLAYNAME 22049 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_TRANSITIONTIME 22050 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_EFFECTIVETRANSITIONTIME 22051 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_TRUESTATE 22052 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_FALSESTATE 22053 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE 22054 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_ID 22055 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_NAME 22056 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_NUMBER 22057 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_EFFECTIVEDISPLAYNAME 22058 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_TRANSITIONTIME 22059 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_EFFECTIVETRANSITIONTIME 22060 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_TRUESTATE 22061 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_FALSESTATE 22062 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE 22063 /* Object */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_CURRENTSTATE 22064 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_CURRENTSTATE_ID 22065 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_CURRENTSTATE_NAME 22066 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_CURRENTSTATE_NUMBER 22067 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_CURRENTSTATE_EFFECTIVEDISPLAYNAME 22068 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION 22069 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION_ID 22070 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION_NAME 22071 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION_NUMBER 22072 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION_TRANSITIONTIME 22073 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION_EFFECTIVETRANSITIONTIME 22074 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_AVAILABLESTATES 22075 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_AVAILABLETRANSITIONS 22076 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_UNSHELVETIME 22077 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_TIMEDSHELVE 22078 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_TIMEDSHELVE_INPUTARGUMENTS 22079 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_UNSHELVE 22080 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_ONESHOTSHELVE 22081 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SUPPRESSEDORSHELVED 22082 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_MAXTIMESHELVED 22083 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_AUDIBLEENABLED 22084 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_AUDIBLESOUND 22085 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_AUDIBLESOUND_LISTID 22086 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_AUDIBLESOUND_AGENCYID 22087 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_AUDIBLESOUND_VERSIONID 22088 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SILENCESTATE 22089 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SILENCESTATE_ID 22090 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SILENCESTATE_NAME 22091 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SILENCESTATE_NUMBER 22092 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SILENCESTATE_EFFECTIVEDISPLAYNAME 22093 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SILENCESTATE_TRANSITIONTIME 22094 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SILENCESTATE_EFFECTIVETRANSITIONTIME 22095 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SILENCESTATE_TRUESTATE 22096 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SILENCESTATE_FALSESTATE 22097 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ONDELAY 22098 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_OFFDELAY 22099 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_FIRSTINGROUPFLAG 22100 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_FIRSTINGROUP 22101 /* Object */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE 22102 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_ID 22103 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_NAME 22104 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_NUMBER 22105 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_EFFECTIVEDISPLAYNAME 22106 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_TRANSITIONTIME 22107 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_EFFECTIVETRANSITIONTIME 22108 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_TRUESTATE 22109 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_FALSESTATE 22110 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_REALARMTIME 22111 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_REALARMREPEATCOUNT 22112 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SILENCE 22113 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SUPPRESS 22114 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_UNSUPPRESS 22115 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_REMOVEFROMSERVICE 22116 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_PLACEINSERVICE 22117 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_RESET 22118 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_NORMALSTATE 22119 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_EXPIRATIONDATE 22120 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_EXPIRATIONLIMIT 22121 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_CERTIFICATETYPE 22122 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_CERTIFICATE 22123 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE 22124 /* Object */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_EVENTID 22125 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_EVENTTYPE 22126 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SOURCENODE 22127 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SOURCENAME 22128 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_TIME 22129 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_RECEIVETIME 22130 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_LOCALTIME 22131 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_MESSAGE 22132 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SEVERITY 22133 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_CONDITIONCLASSID 22134 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_CONDITIONCLASSNAME 22135 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_CONDITIONSUBCLASSID 22136 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_CONDITIONSUBCLASSNAME 22137 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_CONDITIONNAME 22138 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_BRANCHID 22139 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_RETAIN 22140 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE 22141 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_ID 22142 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_NAME 22143 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_NUMBER 22144 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_EFFECTIVEDISPLAYNAME 22145 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_TRANSITIONTIME 22146 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_EFFECTIVETRANSITIONTIME 22147 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_TRUESTATE 22148 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_FALSESTATE 22149 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_QUALITY 22150 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_QUALITY_SOURCETIMESTAMP 22151 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_LASTSEVERITY 22152 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_LASTSEVERITY_SOURCETIMESTAMP 22153 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_COMMENT 22154 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_COMMENT_SOURCETIMESTAMP 22155 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_CLIENTUSERID 22156 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_DISABLE 22157 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ENABLE 22158 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ADDCOMMENT 22159 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ADDCOMMENT_INPUTARGUMENTS 22160 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE 22161 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_ID 22162 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_NAME 22163 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_NUMBER 22164 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_EFFECTIVEDISPLAYNAME 22165 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_TRANSITIONTIME 22166 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_EFFECTIVETRANSITIONTIME 22167 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_TRUESTATE 22168 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_FALSESTATE 22169 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE 22170 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_ID 22171 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_NAME 22172 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_NUMBER 22173 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_EFFECTIVEDISPLAYNAME 22174 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_TRANSITIONTIME 22175 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_EFFECTIVETRANSITIONTIME 22176 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_TRUESTATE 22177 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_FALSESTATE 22178 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ACKNOWLEDGE 22179 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ACKNOWLEDGE_INPUTARGUMENTS 22180 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_CONFIRM 22181 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_CONFIRM_INPUTARGUMENTS 22182 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE 22183 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_ID 22184 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_NAME 22185 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_NUMBER 22186 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_EFFECTIVEDISPLAYNAME 22187 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_TRANSITIONTIME 22188 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_EFFECTIVETRANSITIONTIME 22189 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_TRUESTATE 22190 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_FALSESTATE 22191 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_INPUTNODE 22192 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE 22193 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_ID 22194 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_NAME 22195 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_NUMBER 22196 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_EFFECTIVEDISPLAYNAME 22197 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_TRANSITIONTIME 22198 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_EFFECTIVETRANSITIONTIME 22199 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_TRUESTATE 22200 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_FALSESTATE 22201 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE 22202 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_ID 22203 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_NAME 22204 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_NUMBER 22205 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_EFFECTIVEDISPLAYNAME 22206 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_TRANSITIONTIME 22207 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_EFFECTIVETRANSITIONTIME 22208 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_TRUESTATE 22209 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_FALSESTATE 22210 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE 22211 /* Object */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_CURRENTSTATE 22212 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_CURRENTSTATE_ID 22213 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_CURRENTSTATE_NAME 22214 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_CURRENTSTATE_NUMBER 22215 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_CURRENTSTATE_EFFECTIVEDISPLAYNAME 22216 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION 22217 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION_ID 22218 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION_NAME 22219 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION_NUMBER 22220 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION_TRANSITIONTIME 22221 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION_EFFECTIVETRANSITIONTIME 22222 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_AVAILABLESTATES 22223 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_AVAILABLETRANSITIONS 22224 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_UNSHELVETIME 22225 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_TIMEDSHELVE 22226 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_TIMEDSHELVE_INPUTARGUMENTS 22227 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_UNSHELVE 22228 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_ONESHOTSHELVE 22229 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDORSHELVED 22230 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_MAXTIMESHELVED 22231 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_AUDIBLEENABLED 22232 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_AUDIBLESOUND 22233 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_AUDIBLESOUND_LISTID 22234 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_AUDIBLESOUND_AGENCYID 22235 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_AUDIBLESOUND_VERSIONID 22236 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE 22237 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_ID 22238 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_NAME 22239 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_NUMBER 22240 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_EFFECTIVEDISPLAYNAME 22241 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_TRANSITIONTIME 22242 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_EFFECTIVETRANSITIONTIME 22243 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_TRUESTATE 22244 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_FALSESTATE 22245 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ONDELAY 22246 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_OFFDELAY 22247 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_FIRSTINGROUPFLAG 22248 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_FIRSTINGROUP 22249 /* Object */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE 22250 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_ID 22251 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_NAME 22252 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_NUMBER 22253 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_EFFECTIVEDISPLAYNAME 22254 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_TRANSITIONTIME 22255 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_EFFECTIVETRANSITIONTIME 22256 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_TRUESTATE 22257 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_FALSESTATE 22258 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_REALARMTIME 22259 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_REALARMREPEATCOUNT 22260 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SILENCE 22261 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SUPPRESS 22262 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_UNSUPPRESS 22263 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_REMOVEFROMSERVICE 22264 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_PLACEINSERVICE 22265 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_RESET 22266 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_NORMALSTATE 22267 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_TRUSTLISTID 22268 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_LASTUPDATETIME 22269 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_UPDATEFREQUENCY 22270 /* Variable */
 #define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLIST_UPDATEFREQUENCY 22271 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED 22272 /* Object */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_EVENTID 22273 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_EVENTTYPE 22274 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SOURCENODE 22275 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SOURCENAME 22276 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_TIME 22277 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_RECEIVETIME 22278 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_LOCALTIME 22279 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_MESSAGE 22280 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SEVERITY 22281 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_CONDITIONCLASSID 22282 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_CONDITIONCLASSNAME 22283 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_CONDITIONSUBCLASSID 22284 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_CONDITIONSUBCLASSNAME 22285 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_CONDITIONNAME 22286 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_BRANCHID 22287 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_RETAIN 22288 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE 22289 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_ID 22290 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_NAME 22291 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_NUMBER 22292 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_EFFECTIVEDISPLAYNAME 22293 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_TRANSITIONTIME 22294 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_EFFECTIVETRANSITIONTIME 22295 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_TRUESTATE 22296 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_FALSESTATE 22297 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_QUALITY 22298 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_QUALITY_SOURCETIMESTAMP 22299 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_LASTSEVERITY 22300 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_LASTSEVERITY_SOURCETIMESTAMP 22301 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_COMMENT 22302 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_COMMENT_SOURCETIMESTAMP 22303 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_CLIENTUSERID 22304 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_DISABLE 22305 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ENABLE 22306 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ADDCOMMENT 22307 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ADDCOMMENT_INPUTARGUMENTS 22308 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ACKEDSTATE 22309 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_ID 22310 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_NAME 22311 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_NUMBER 22312 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_EFFECTIVEDISPLAYNAME 22313 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_TRANSITIONTIME 22314 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_EFFECTIVETRANSITIONTIME 22315 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_TRUESTATE 22316 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_FALSESTATE 22317 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE 22318 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_ID 22319 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_NAME 22320 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_NUMBER 22321 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_EFFECTIVEDISPLAYNAME 22322 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_TRANSITIONTIME 22323 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_EFFECTIVETRANSITIONTIME 22324 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_TRUESTATE 22325 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_FALSESTATE 22326 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ACKNOWLEDGE 22327 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ACKNOWLEDGE_INPUTARGUMENTS 22328 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_CONFIRM 22329 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_CONFIRM_INPUTARGUMENTS 22330 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ACTIVESTATE 22331 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_ID 22332 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_NAME 22333 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_NUMBER 22334 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_EFFECTIVEDISPLAYNAME 22335 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_TRANSITIONTIME 22336 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_EFFECTIVETRANSITIONTIME 22337 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_TRUESTATE 22338 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_FALSESTATE 22339 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_INPUTNODE 22340 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE 22341 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_ID 22342 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_NAME 22343 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_NUMBER 22344 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_EFFECTIVEDISPLAYNAME 22345 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_TRANSITIONTIME 22346 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_EFFECTIVETRANSITIONTIME 22347 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_TRUESTATE 22348 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_FALSESTATE 22349 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE 22350 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_ID 22351 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_NAME 22352 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_NUMBER 22353 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_EFFECTIVEDISPLAYNAME 22354 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_TRANSITIONTIME 22355 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_EFFECTIVETRANSITIONTIME 22356 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_TRUESTATE 22357 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_FALSESTATE 22358 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE 22359 /* Object */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_CURRENTSTATE 22360 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_CURRENTSTATE_ID 22361 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_CURRENTSTATE_NAME 22362 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_CURRENTSTATE_NUMBER 22363 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_CURRENTSTATE_EFFECTIVEDISPLAYNAME 22364 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION 22365 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION_ID 22366 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION_NAME 22367 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION_NUMBER 22368 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION_TRANSITIONTIME 22369 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION_EFFECTIVETRANSITIONTIME 22370 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_AVAILABLESTATES 22371 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_AVAILABLETRANSITIONS 22372 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_UNSHELVETIME 22373 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_TIMEDSHELVE 22374 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_TIMEDSHELVE_INPUTARGUMENTS 22375 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_UNSHELVE 22376 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_ONESHOTSHELVE 22377 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SUPPRESSEDORSHELVED 22378 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_MAXTIMESHELVED 22379 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_AUDIBLEENABLED 22380 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_AUDIBLESOUND 22381 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_AUDIBLESOUND_LISTID 22382 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_AUDIBLESOUND_AGENCYID 22383 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_AUDIBLESOUND_VERSIONID 22384 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SILENCESTATE 22385 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SILENCESTATE_ID 22386 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SILENCESTATE_NAME 22387 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SILENCESTATE_NUMBER 22388 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SILENCESTATE_EFFECTIVEDISPLAYNAME 22389 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SILENCESTATE_TRANSITIONTIME 22390 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SILENCESTATE_EFFECTIVETRANSITIONTIME 22391 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SILENCESTATE_TRUESTATE 22392 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SILENCESTATE_FALSESTATE 22393 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ONDELAY 22394 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_OFFDELAY 22395 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_FIRSTINGROUPFLAG 22396 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_FIRSTINGROUP 22397 /* Object */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE 22398 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_ID 22399 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_NAME 22400 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_NUMBER 22401 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_EFFECTIVEDISPLAYNAME 22402 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_TRANSITIONTIME 22403 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_EFFECTIVETRANSITIONTIME 22404 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_TRUESTATE 22405 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_FALSESTATE 22406 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_REALARMTIME 22407 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_REALARMREPEATCOUNT 22408 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SILENCE 22409 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SUPPRESS 22410 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_UNSUPPRESS 22411 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_REMOVEFROMSERVICE 22412 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_PLACEINSERVICE 22413 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_RESET 22414 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_NORMALSTATE 22415 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_EXPIRATIONDATE 22416 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_EXPIRATIONLIMIT 22417 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_CERTIFICATETYPE 22418 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_CERTIFICATE 22419 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE 22420 /* Object */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_EVENTID 22421 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_EVENTTYPE 22422 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SOURCENODE 22423 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SOURCENAME 22424 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_TIME 22425 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_RECEIVETIME 22426 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_LOCALTIME 22427 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_MESSAGE 22428 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SEVERITY 22429 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_CONDITIONCLASSID 22430 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_CONDITIONCLASSNAME 22431 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_CONDITIONSUBCLASSID 22432 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_CONDITIONSUBCLASSNAME 22433 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_CONDITIONNAME 22434 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_BRANCHID 22435 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_RETAIN 22436 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE 22437 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_ID 22438 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_NAME 22439 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_NUMBER 22440 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_EFFECTIVEDISPLAYNAME 22441 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_TRANSITIONTIME 22442 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_EFFECTIVETRANSITIONTIME 22443 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_TRUESTATE 22444 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_FALSESTATE 22445 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_QUALITY 22446 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_QUALITY_SOURCETIMESTAMP 22447 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_LASTSEVERITY 22448 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_LASTSEVERITY_SOURCETIMESTAMP 22449 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_COMMENT 22450 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_COMMENT_SOURCETIMESTAMP 22451 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_CLIENTUSERID 22452 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_DISABLE 22453 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ENABLE 22454 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ADDCOMMENT 22455 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ADDCOMMENT_INPUTARGUMENTS 22456 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE 22457 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_ID 22458 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_NAME 22459 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_NUMBER 22460 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_EFFECTIVEDISPLAYNAME 22461 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_TRANSITIONTIME 22462 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_EFFECTIVETRANSITIONTIME 22463 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_TRUESTATE 22464 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_FALSESTATE 22465 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE 22466 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_ID 22467 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_NAME 22468 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_NUMBER 22469 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_EFFECTIVEDISPLAYNAME 22470 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_TRANSITIONTIME 22471 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_EFFECTIVETRANSITIONTIME 22472 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_TRUESTATE 22473 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_FALSESTATE 22474 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ACKNOWLEDGE 22475 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ACKNOWLEDGE_INPUTARGUMENTS 22476 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_CONFIRM 22477 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_CONFIRM_INPUTARGUMENTS 22478 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE 22479 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_ID 22480 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_NAME 22481 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_NUMBER 22482 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_EFFECTIVEDISPLAYNAME 22483 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_TRANSITIONTIME 22484 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_EFFECTIVETRANSITIONTIME 22485 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_TRUESTATE 22486 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_FALSESTATE 22487 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_INPUTNODE 22488 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE 22489 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_ID 22490 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_NAME 22491 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_NUMBER 22492 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_EFFECTIVEDISPLAYNAME 22493 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_TRANSITIONTIME 22494 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_EFFECTIVETRANSITIONTIME 22495 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_TRUESTATE 22496 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_FALSESTATE 22497 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE 22498 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_ID 22499 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_NAME 22500 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_NUMBER 22501 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_EFFECTIVEDISPLAYNAME 22502 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_TRANSITIONTIME 22503 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_EFFECTIVETRANSITIONTIME 22504 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_TRUESTATE 22505 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_FALSESTATE 22506 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE 22507 /* Object */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_CURRENTSTATE 22508 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_CURRENTSTATE_ID 22509 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_CURRENTSTATE_NAME 22510 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_CURRENTSTATE_NUMBER 22511 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_CURRENTSTATE_EFFECTIVEDISPLAYNAME 22512 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION 22513 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION_ID 22514 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION_NAME 22515 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION_NUMBER 22516 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION_TRANSITIONTIME 22517 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION_EFFECTIVETRANSITIONTIME 22518 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_AVAILABLESTATES 22519 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_AVAILABLETRANSITIONS 22520 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_UNSHELVETIME 22521 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_TIMEDSHELVE 22522 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_TIMEDSHELVE_INPUTARGUMENTS 22523 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_UNSHELVE 22524 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_ONESHOTSHELVE 22525 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDORSHELVED 22526 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_MAXTIMESHELVED 22527 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_AUDIBLEENABLED 22528 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_AUDIBLESOUND 22529 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_AUDIBLESOUND_LISTID 22530 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_AUDIBLESOUND_AGENCYID 22531 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_AUDIBLESOUND_VERSIONID 22532 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE 22533 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_ID 22534 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_NAME 22535 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_NUMBER 22536 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_EFFECTIVEDISPLAYNAME 22537 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_TRANSITIONTIME 22538 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_EFFECTIVETRANSITIONTIME 22539 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_TRUESTATE 22540 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_FALSESTATE 22541 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ONDELAY 22542 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_OFFDELAY 22543 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_FIRSTINGROUPFLAG 22544 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_FIRSTINGROUP 22545 /* Object */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE 22546 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_ID 22547 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_NAME 22548 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_NUMBER 22549 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_EFFECTIVEDISPLAYNAME 22550 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_TRANSITIONTIME 22551 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_EFFECTIVETRANSITIONTIME 22552 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_TRUESTATE 22553 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_FALSESTATE 22554 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_REALARMTIME 22555 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_REALARMREPEATCOUNT 22556 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SILENCE 22557 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SUPPRESS 22558 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_UNSUPPRESS 22559 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_REMOVEFROMSERVICE 22560 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_PLACEINSERVICE 22561 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_RESET 22562 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_NORMALSTATE 22563 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_TRUSTLISTID 22564 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_LASTUPDATETIME 22565 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_UPDATEFREQUENCY 22566 /* Variable */
 #define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLIST_UPDATEFREQUENCY 22567 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED 22568 /* Object */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_EVENTID 22569 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_EVENTTYPE 22570 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SOURCENODE 22571 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SOURCENAME 22572 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_TIME 22573 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_RECEIVETIME 22574 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_LOCALTIME 22575 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_MESSAGE 22576 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SEVERITY 22577 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_CONDITIONCLASSID 22578 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_CONDITIONCLASSNAME 22579 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_CONDITIONSUBCLASSID 22580 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_CONDITIONSUBCLASSNAME 22581 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_CONDITIONNAME 22582 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_BRANCHID 22583 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_RETAIN 22584 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE 22585 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_ID 22586 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_NAME 22587 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_NUMBER 22588 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_EFFECTIVEDISPLAYNAME 22589 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_TRANSITIONTIME 22590 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_EFFECTIVETRANSITIONTIME 22591 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_TRUESTATE 22592 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_FALSESTATE 22593 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_QUALITY 22594 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_QUALITY_SOURCETIMESTAMP 22595 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_LASTSEVERITY 22596 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_LASTSEVERITY_SOURCETIMESTAMP 22597 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_COMMENT 22598 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_COMMENT_SOURCETIMESTAMP 22599 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_CLIENTUSERID 22600 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_DISABLE 22601 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ENABLE 22602 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ADDCOMMENT 22603 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ADDCOMMENT_INPUTARGUMENTS 22604 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ACKEDSTATE 22605 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_ID 22606 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_NAME 22607 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_NUMBER 22608 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_EFFECTIVEDISPLAYNAME 22609 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_TRANSITIONTIME 22610 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_EFFECTIVETRANSITIONTIME 22611 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_TRUESTATE 22612 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_FALSESTATE 22613 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE 22614 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_ID 22615 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_NAME 22616 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_NUMBER 22617 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_EFFECTIVEDISPLAYNAME 22618 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_TRANSITIONTIME 22619 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_EFFECTIVETRANSITIONTIME 22620 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_TRUESTATE 22621 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_FALSESTATE 22622 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ACKNOWLEDGE 22623 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ACKNOWLEDGE_INPUTARGUMENTS 22624 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_CONFIRM 22625 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_CONFIRM_INPUTARGUMENTS 22626 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ACTIVESTATE 22627 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_ID 22628 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_NAME 22629 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_NUMBER 22630 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_EFFECTIVEDISPLAYNAME 22631 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_TRANSITIONTIME 22632 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_EFFECTIVETRANSITIONTIME 22633 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_TRUESTATE 22634 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_FALSESTATE 22635 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_INPUTNODE 22636 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE 22637 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_ID 22638 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_NAME 22639 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_NUMBER 22640 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_EFFECTIVEDISPLAYNAME 22641 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_TRANSITIONTIME 22642 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_EFFECTIVETRANSITIONTIME 22643 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_TRUESTATE 22644 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_FALSESTATE 22645 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE 22646 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_ID 22647 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_NAME 22648 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_NUMBER 22649 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_EFFECTIVEDISPLAYNAME 22650 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_TRANSITIONTIME 22651 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_EFFECTIVETRANSITIONTIME 22652 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_TRUESTATE 22653 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_FALSESTATE 22654 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE 22655 /* Object */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_CURRENTSTATE 22656 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_CURRENTSTATE_ID 22657 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_CURRENTSTATE_NAME 22658 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_CURRENTSTATE_NUMBER 22659 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_CURRENTSTATE_EFFECTIVEDISPLAYNAME 22660 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION 22661 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION_ID 22662 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION_NAME 22663 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION_NUMBER 22664 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION_TRANSITIONTIME 22665 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION_EFFECTIVETRANSITIONTIME 22666 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_AVAILABLESTATES 22667 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_AVAILABLETRANSITIONS 22668 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_UNSHELVETIME 22669 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_TIMEDSHELVE 22670 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_TIMEDSHELVE_INPUTARGUMENTS 22671 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_UNSHELVE 22672 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_ONESHOTSHELVE 22673 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SUPPRESSEDORSHELVED 22674 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_MAXTIMESHELVED 22675 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_AUDIBLEENABLED 22676 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_AUDIBLESOUND 22677 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_AUDIBLESOUND_LISTID 22678 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_AUDIBLESOUND_AGENCYID 22679 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_AUDIBLESOUND_VERSIONID 22680 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SILENCESTATE 22681 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SILENCESTATE_ID 22682 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SILENCESTATE_NAME 22683 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SILENCESTATE_NUMBER 22684 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SILENCESTATE_EFFECTIVEDISPLAYNAME 22685 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SILENCESTATE_TRANSITIONTIME 22686 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SILENCESTATE_EFFECTIVETRANSITIONTIME 22687 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SILENCESTATE_TRUESTATE 22688 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SILENCESTATE_FALSESTATE 22689 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_ONDELAY 22690 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_OFFDELAY 22691 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_FIRSTINGROUPFLAG 22692 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_FIRSTINGROUP 22693 /* Object */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE 22694 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_ID 22695 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_NAME 22696 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_NUMBER 22697 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_EFFECTIVEDISPLAYNAME 22698 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_TRANSITIONTIME 22699 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_EFFECTIVETRANSITIONTIME 22700 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_TRUESTATE 22701 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_FALSESTATE 22702 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_REALARMTIME 22703 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_REALARMREPEATCOUNT 22704 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SILENCE 22705 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_SUPPRESS 22706 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_UNSUPPRESS 22707 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_REMOVEFROMSERVICE 22708 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_PLACEINSERVICE 22709 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_RESET 22710 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_NORMALSTATE 22711 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_EXPIRATIONDATE 22712 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_EXPIRATIONLIMIT 22713 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_CERTIFICATETYPE 22714 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_CERTIFICATEEXPIRED_CERTIFICATE 22715 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE 22716 /* Object */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_EVENTID 22717 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_EVENTTYPE 22718 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SOURCENODE 22719 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SOURCENAME 22720 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_TIME 22721 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_RECEIVETIME 22722 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_LOCALTIME 22723 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_MESSAGE 22724 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SEVERITY 22725 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_CONDITIONCLASSID 22726 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_CONDITIONCLASSNAME 22727 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_CONDITIONSUBCLASSID 22728 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_CONDITIONSUBCLASSNAME 22729 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_CONDITIONNAME 22730 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_BRANCHID 22731 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_RETAIN 22732 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE 22733 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_ID 22734 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_NAME 22735 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_NUMBER 22736 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_EFFECTIVEDISPLAYNAME 22737 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_TRANSITIONTIME 22738 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_EFFECTIVETRANSITIONTIME 22739 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_TRUESTATE 22740 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_FALSESTATE 22741 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_QUALITY 22742 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_QUALITY_SOURCETIMESTAMP 22743 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_LASTSEVERITY 22744 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_LASTSEVERITY_SOURCETIMESTAMP 22745 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_COMMENT 22746 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_COMMENT_SOURCETIMESTAMP 22747 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_CLIENTUSERID 22748 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_DISABLE 22749 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ENABLE 22750 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ADDCOMMENT 22751 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ADDCOMMENT_INPUTARGUMENTS 22752 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE 22753 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_ID 22754 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_NAME 22755 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_NUMBER 22756 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_EFFECTIVEDISPLAYNAME 22757 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_TRANSITIONTIME 22758 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_EFFECTIVETRANSITIONTIME 22759 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_TRUESTATE 22760 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_FALSESTATE 22761 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE 22762 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_ID 22763 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_NAME 22764 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_NUMBER 22765 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_EFFECTIVEDISPLAYNAME 22766 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_TRANSITIONTIME 22767 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_EFFECTIVETRANSITIONTIME 22768 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_TRUESTATE 22769 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_FALSESTATE 22770 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ACKNOWLEDGE 22771 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ACKNOWLEDGE_INPUTARGUMENTS 22772 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_CONFIRM 22773 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_CONFIRM_INPUTARGUMENTS 22774 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE 22775 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_ID 22776 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_NAME 22777 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_NUMBER 22778 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_EFFECTIVEDISPLAYNAME 22779 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_TRANSITIONTIME 22780 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_EFFECTIVETRANSITIONTIME 22781 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_TRUESTATE 22782 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_FALSESTATE 22783 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_INPUTNODE 22784 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE 22785 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_ID 22786 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_NAME 22787 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_NUMBER 22788 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_EFFECTIVEDISPLAYNAME 22789 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_TRANSITIONTIME 22790 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_EFFECTIVETRANSITIONTIME 22791 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_TRUESTATE 22792 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_FALSESTATE 22793 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE 22794 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_ID 22795 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_NAME 22796 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_NUMBER 22797 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_EFFECTIVEDISPLAYNAME 22798 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_TRANSITIONTIME 22799 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_EFFECTIVETRANSITIONTIME 22800 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_TRUESTATE 22801 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_FALSESTATE 22802 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE 22803 /* Object */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_CURRENTSTATE 22804 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_CURRENTSTATE_ID 22805 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_CURRENTSTATE_NAME 22806 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_CURRENTSTATE_NUMBER 22807 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_CURRENTSTATE_EFFECTIVEDISPLAYNAME 22808 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION 22809 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION_ID 22810 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION_NAME 22811 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION_NUMBER 22812 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION_TRANSITIONTIME 22813 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION_EFFECTIVETRANSITIONTIME 22814 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_AVAILABLESTATES 22815 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_AVAILABLETRANSITIONS 22816 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_UNSHELVETIME 22817 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_TIMEDSHELVE 22818 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_TIMEDSHELVE_INPUTARGUMENTS 22819 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_UNSHELVE 22820 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_ONESHOTSHELVE 22821 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDORSHELVED 22822 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_MAXTIMESHELVED 22823 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_AUDIBLEENABLED 22824 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_AUDIBLESOUND 22825 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_AUDIBLESOUND_LISTID 22826 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_AUDIBLESOUND_AGENCYID 22827 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_AUDIBLESOUND_VERSIONID 22828 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE 22829 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_ID 22830 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_NAME 22831 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_NUMBER 22832 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_EFFECTIVEDISPLAYNAME 22833 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_TRANSITIONTIME 22834 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_EFFECTIVETRANSITIONTIME 22835 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_TRUESTATE 22836 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_FALSESTATE 22837 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_ONDELAY 22838 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_OFFDELAY 22839 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_FIRSTINGROUPFLAG 22840 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_FIRSTINGROUP 22841 /* Object */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE 22842 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_ID 22843 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_NAME 22844 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_NUMBER 22845 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_EFFECTIVEDISPLAYNAME 22846 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_TRANSITIONTIME 22847 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_EFFECTIVETRANSITIONTIME 22848 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_TRUESTATE 22849 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_FALSESTATE 22850 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_REALARMTIME 22851 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_REALARMREPEATCOUNT 22852 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SILENCE 22853 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_SUPPRESS 22854 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_UNSUPPRESS 22855 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_REMOVEFROMSERVICE 22856 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_PLACEINSERVICE 22857 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_RESET 22858 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_NORMALSTATE 22859 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_TRUSTLISTID 22860 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_LASTUPDATETIME 22861 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_TRUSTLISTOUTOFDATE_UPDATEFREQUENCY 22862 /* Variable */
 #define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLIST_UPDATEFREQUENCY 22863 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED 22864 /* Object */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_EVENTID 22865 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_EVENTTYPE 22866 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SOURCENODE 22867 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SOURCENAME 22868 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_TIME 22869 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_RECEIVETIME 22870 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_LOCALTIME 22871 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_MESSAGE 22872 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SEVERITY 22873 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_CONDITIONCLASSID 22874 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_CONDITIONCLASSNAME 22875 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_CONDITIONSUBCLASSID 22876 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_CONDITIONSUBCLASSNAME 22877 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_CONDITIONNAME 22878 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_BRANCHID 22879 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_RETAIN 22880 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE 22881 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_ID 22882 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_NAME 22883 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_NUMBER 22884 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_EFFECTIVEDISPLAYNAME 22885 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_TRANSITIONTIME 22886 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_EFFECTIVETRANSITIONTIME 22887 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_TRUESTATE 22888 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_FALSESTATE 22889 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_QUALITY 22890 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_QUALITY_SOURCETIMESTAMP 22891 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_LASTSEVERITY 22892 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_LASTSEVERITY_SOURCETIMESTAMP 22893 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_COMMENT 22894 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_COMMENT_SOURCETIMESTAMP 22895 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_CLIENTUSERID 22896 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_DISABLE 22897 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ENABLE 22898 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ADDCOMMENT 22899 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ADDCOMMENT_INPUTARGUMENTS 22900 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ACKEDSTATE 22901 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_ID 22902 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_NAME 22903 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_NUMBER 22904 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_EFFECTIVEDISPLAYNAME 22905 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_TRANSITIONTIME 22906 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_EFFECTIVETRANSITIONTIME 22907 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_TRUESTATE 22908 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_FALSESTATE 22909 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE 22910 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_ID 22911 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_NAME 22912 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_NUMBER 22913 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_EFFECTIVEDISPLAYNAME 22914 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_TRANSITIONTIME 22915 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_EFFECTIVETRANSITIONTIME 22916 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_TRUESTATE 22917 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_FALSESTATE 22918 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ACKNOWLEDGE 22919 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ACKNOWLEDGE_INPUTARGUMENTS 22920 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_CONFIRM 22921 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_CONFIRM_INPUTARGUMENTS 22922 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ACTIVESTATE 22923 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_ID 22924 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_NAME 22925 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_NUMBER 22926 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_EFFECTIVEDISPLAYNAME 22927 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_TRANSITIONTIME 22928 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_EFFECTIVETRANSITIONTIME 22929 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_TRUESTATE 22930 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_FALSESTATE 22931 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_INPUTNODE 22932 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE 22933 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_ID 22934 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_NAME 22935 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_NUMBER 22936 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_EFFECTIVEDISPLAYNAME 22937 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_TRANSITIONTIME 22938 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_EFFECTIVETRANSITIONTIME 22939 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_TRUESTATE 22940 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_FALSESTATE 22941 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE 22942 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_ID 22943 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_NAME 22944 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_NUMBER 22945 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_EFFECTIVEDISPLAYNAME 22946 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_TRANSITIONTIME 22947 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_EFFECTIVETRANSITIONTIME 22948 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_TRUESTATE 22949 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_FALSESTATE 22950 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE 22951 /* Object */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_CURRENTSTATE 22952 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_CURRENTSTATE_ID 22953 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_CURRENTSTATE_NAME 22954 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_CURRENTSTATE_NUMBER 22955 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_CURRENTSTATE_EFFECTIVEDISPLAYNAME 22956 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION 22957 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION_ID 22958 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION_NAME 22959 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION_NUMBER 22960 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION_TRANSITIONTIME 22961 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION_EFFECTIVETRANSITIONTIME 22962 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_AVAILABLESTATES 22963 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_AVAILABLETRANSITIONS 22964 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_UNSHELVETIME 22965 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_TIMEDSHELVE 22966 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_TIMEDSHELVE_INPUTARGUMENTS 22967 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_UNSHELVE 22968 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_ONESHOTSHELVE 22969 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SUPPRESSEDORSHELVED 22970 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_MAXTIMESHELVED 22971 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_AUDIBLEENABLED 22972 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_AUDIBLESOUND 22973 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_AUDIBLESOUND_LISTID 22974 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_AUDIBLESOUND_AGENCYID 22975 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_AUDIBLESOUND_VERSIONID 22976 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SILENCESTATE 22977 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SILENCESTATE_ID 22978 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SILENCESTATE_NAME 22979 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SILENCESTATE_NUMBER 22980 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SILENCESTATE_EFFECTIVEDISPLAYNAME 22981 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SILENCESTATE_TRANSITIONTIME 22982 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SILENCESTATE_EFFECTIVETRANSITIONTIME 22983 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SILENCESTATE_TRUESTATE 22984 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SILENCESTATE_FALSESTATE 22985 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_ONDELAY 22986 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_OFFDELAY 22987 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_FIRSTINGROUPFLAG 22988 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_FIRSTINGROUP 22989 /* Object */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE 22990 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_ID 22991 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_NAME 22992 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_NUMBER 22993 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_EFFECTIVEDISPLAYNAME 22994 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_TRANSITIONTIME 22995 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_EFFECTIVETRANSITIONTIME 22996 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_TRUESTATE 22997 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_FALSESTATE 22998 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_REALARMTIME 22999 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_REALARMREPEATCOUNT 23000 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SILENCE 23001 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_SUPPRESS 23002 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_UNSUPPRESS 23003 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_REMOVEFROMSERVICE 23004 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_PLACEINSERVICE 23005 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_RESET 23006 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_NORMALSTATE 23007 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_EXPIRATIONDATE 23008 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_EXPIRATIONLIMIT 23009 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_CERTIFICATETYPE 23010 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_CERTIFICATEEXPIRED_CERTIFICATE 23011 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE 23012 /* Object */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_EVENTID 23013 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_EVENTTYPE 23014 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SOURCENODE 23015 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SOURCENAME 23016 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_TIME 23017 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_RECEIVETIME 23018 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_LOCALTIME 23019 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_MESSAGE 23020 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SEVERITY 23021 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_CONDITIONCLASSID 23022 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_CONDITIONCLASSNAME 23023 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_CONDITIONSUBCLASSID 23024 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_CONDITIONSUBCLASSNAME 23025 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_CONDITIONNAME 23026 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_BRANCHID 23027 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_RETAIN 23028 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE 23029 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_ID 23030 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_NAME 23031 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_NUMBER 23032 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_EFFECTIVEDISPLAYNAME 23033 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_TRANSITIONTIME 23034 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_EFFECTIVETRANSITIONTIME 23035 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_TRUESTATE 23036 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_FALSESTATE 23037 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_QUALITY 23038 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_QUALITY_SOURCETIMESTAMP 23039 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_LASTSEVERITY 23040 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_LASTSEVERITY_SOURCETIMESTAMP 23041 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_COMMENT 23042 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_COMMENT_SOURCETIMESTAMP 23043 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_CLIENTUSERID 23044 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_DISABLE 23045 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ENABLE 23046 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ADDCOMMENT 23047 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ADDCOMMENT_INPUTARGUMENTS 23048 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE 23049 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_ID 23050 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_NAME 23051 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_NUMBER 23052 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_EFFECTIVEDISPLAYNAME 23053 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_TRANSITIONTIME 23054 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_EFFECTIVETRANSITIONTIME 23055 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_TRUESTATE 23056 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_FALSESTATE 23057 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE 23058 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_ID 23059 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_NAME 23060 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_NUMBER 23061 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_EFFECTIVEDISPLAYNAME 23062 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_TRANSITIONTIME 23063 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_EFFECTIVETRANSITIONTIME 23064 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_TRUESTATE 23065 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_FALSESTATE 23066 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ACKNOWLEDGE 23067 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ACKNOWLEDGE_INPUTARGUMENTS 23068 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_CONFIRM 23069 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_CONFIRM_INPUTARGUMENTS 23070 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE 23071 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_ID 23072 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_NAME 23073 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_NUMBER 23074 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_EFFECTIVEDISPLAYNAME 23075 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_TRANSITIONTIME 23076 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_EFFECTIVETRANSITIONTIME 23077 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_TRUESTATE 23078 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_FALSESTATE 23079 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_INPUTNODE 23080 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE 23081 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_ID 23082 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_NAME 23083 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_NUMBER 23084 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_EFFECTIVEDISPLAYNAME 23085 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_TRANSITIONTIME 23086 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_EFFECTIVETRANSITIONTIME 23087 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_TRUESTATE 23088 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_FALSESTATE 23089 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE 23090 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_ID 23091 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_NAME 23092 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_NUMBER 23093 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_EFFECTIVEDISPLAYNAME 23094 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_TRANSITIONTIME 23095 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_EFFECTIVETRANSITIONTIME 23096 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_TRUESTATE 23097 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_FALSESTATE 23098 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE 23099 /* Object */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_CURRENTSTATE 23100 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_CURRENTSTATE_ID 23101 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_CURRENTSTATE_NAME 23102 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_CURRENTSTATE_NUMBER 23103 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_CURRENTSTATE_EFFECTIVEDISPLAYNAME 23104 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION 23105 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION_ID 23106 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION_NAME 23107 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION_NUMBER 23108 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION_TRANSITIONTIME 23109 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION_EFFECTIVETRANSITIONTIME 23110 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_AVAILABLESTATES 23111 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_AVAILABLETRANSITIONS 23112 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_UNSHELVETIME 23113 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_TIMEDSHELVE 23114 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_TIMEDSHELVE_INPUTARGUMENTS 23115 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_UNSHELVE 23116 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_ONESHOTSHELVE 23117 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDORSHELVED 23118 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_MAXTIMESHELVED 23119 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_AUDIBLEENABLED 23120 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_AUDIBLESOUND 23121 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_AUDIBLESOUND_LISTID 23122 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_AUDIBLESOUND_AGENCYID 23123 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_AUDIBLESOUND_VERSIONID 23124 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE 23125 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_ID 23126 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_NAME 23127 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_NUMBER 23128 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_EFFECTIVEDISPLAYNAME 23129 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_TRANSITIONTIME 23130 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_EFFECTIVETRANSITIONTIME 23131 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_TRUESTATE 23132 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_FALSESTATE 23133 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_ONDELAY 23134 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_OFFDELAY 23135 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_FIRSTINGROUPFLAG 23136 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_FIRSTINGROUP 23137 /* Object */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE 23138 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_ID 23139 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_NAME 23140 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_NUMBER 23141 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_EFFECTIVEDISPLAYNAME 23142 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_TRANSITIONTIME 23143 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_EFFECTIVETRANSITIONTIME 23144 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_TRUESTATE 23145 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_FALSESTATE 23146 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_REALARMTIME 23147 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_REALARMREPEATCOUNT 23148 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SILENCE 23149 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_SUPPRESS 23150 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_UNSUPPRESS 23151 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_REMOVEFROMSERVICE 23152 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_PLACEINSERVICE 23153 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_RESET 23154 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_NORMALSTATE 23155 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_TRUSTLISTID 23156 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_LASTUPDATETIME 23157 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_TRUSTLISTOUTOFDATE_UPDATEFREQUENCY 23158 /* Variable */
 #define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLIST_UPDATEFREQUENCY 23159 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED 23160 /* Object */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_EVENTID 23161 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_EVENTTYPE 23162 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SOURCENODE 23163 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SOURCENAME 23164 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_TIME 23165 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_RECEIVETIME 23166 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_LOCALTIME 23167 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_MESSAGE 23168 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SEVERITY 23169 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_CONDITIONCLASSID 23170 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_CONDITIONCLASSNAME 23171 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_CONDITIONSUBCLASSID 23172 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_CONDITIONSUBCLASSNAME 23173 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_CONDITIONNAME 23174 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_BRANCHID 23175 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_RETAIN 23176 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE 23177 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_ID 23178 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_NAME 23179 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_NUMBER 23180 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_EFFECTIVEDISPLAYNAME 23181 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_TRANSITIONTIME 23182 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_EFFECTIVETRANSITIONTIME 23183 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_TRUESTATE 23184 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ENABLEDSTATE_FALSESTATE 23185 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_QUALITY 23186 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_QUALITY_SOURCETIMESTAMP 23187 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_LASTSEVERITY 23188 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_LASTSEVERITY_SOURCETIMESTAMP 23189 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_COMMENT 23190 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_COMMENT_SOURCETIMESTAMP 23191 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_CLIENTUSERID 23192 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_DISABLE 23193 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ENABLE 23194 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ADDCOMMENT 23195 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ADDCOMMENT_INPUTARGUMENTS 23196 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ACKEDSTATE 23197 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_ID 23198 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_NAME 23199 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_NUMBER 23200 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_EFFECTIVEDISPLAYNAME 23201 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_TRANSITIONTIME 23202 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_EFFECTIVETRANSITIONTIME 23203 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_TRUESTATE 23204 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ACKEDSTATE_FALSESTATE 23205 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE 23206 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_ID 23207 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_NAME 23208 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_NUMBER 23209 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_EFFECTIVEDISPLAYNAME 23210 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_TRANSITIONTIME 23211 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_EFFECTIVETRANSITIONTIME 23212 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_TRUESTATE 23213 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_CONFIRMEDSTATE_FALSESTATE 23214 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ACKNOWLEDGE 23215 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ACKNOWLEDGE_INPUTARGUMENTS 23216 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_CONFIRM 23217 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_CONFIRM_INPUTARGUMENTS 23218 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ACTIVESTATE 23219 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_ID 23220 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_NAME 23221 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_NUMBER 23222 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_EFFECTIVEDISPLAYNAME 23223 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_TRANSITIONTIME 23224 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_EFFECTIVETRANSITIONTIME 23225 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_TRUESTATE 23226 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ACTIVESTATE_FALSESTATE 23227 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_INPUTNODE 23228 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE 23229 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_ID 23230 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_NAME 23231 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_NUMBER 23232 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_EFFECTIVEDISPLAYNAME 23233 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_TRANSITIONTIME 23234 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_EFFECTIVETRANSITIONTIME 23235 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_TRUESTATE 23236 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SUPPRESSEDSTATE_FALSESTATE 23237 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE 23238 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_ID 23239 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_NAME 23240 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_NUMBER 23241 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_EFFECTIVEDISPLAYNAME 23242 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_TRANSITIONTIME 23243 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_EFFECTIVETRANSITIONTIME 23244 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_TRUESTATE 23245 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_OUTOFSERVICESTATE_FALSESTATE 23246 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE 23247 /* Object */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_CURRENTSTATE 23248 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_CURRENTSTATE_ID 23249 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_CURRENTSTATE_NAME 23250 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_CURRENTSTATE_NUMBER 23251 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_CURRENTSTATE_EFFECTIVEDISPLAYNAME 23252 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION 23253 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION_ID 23254 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION_NAME 23255 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION_NUMBER 23256 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION_TRANSITIONTIME 23257 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_LASTTRANSITION_EFFECTIVETRANSITIONTIME 23258 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_AVAILABLESTATES 23259 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_AVAILABLETRANSITIONS 23260 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_UNSHELVETIME 23261 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_TIMEDSHELVE 23262 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_TIMEDSHELVE_INPUTARGUMENTS 23263 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_UNSHELVE 23264 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SHELVINGSTATE_ONESHOTSHELVE 23265 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SUPPRESSEDORSHELVED 23266 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_MAXTIMESHELVED 23267 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_AUDIBLEENABLED 23268 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_AUDIBLESOUND 23269 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_AUDIBLESOUND_LISTID 23270 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_AUDIBLESOUND_AGENCYID 23271 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_AUDIBLESOUND_VERSIONID 23272 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SILENCESTATE 23273 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SILENCESTATE_ID 23274 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SILENCESTATE_NAME 23275 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SILENCESTATE_NUMBER 23276 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SILENCESTATE_EFFECTIVEDISPLAYNAME 23277 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SILENCESTATE_TRANSITIONTIME 23278 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SILENCESTATE_EFFECTIVETRANSITIONTIME 23279 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SILENCESTATE_TRUESTATE 23280 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SILENCESTATE_FALSESTATE 23281 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_ONDELAY 23282 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_OFFDELAY 23283 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_FIRSTINGROUPFLAG 23284 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_FIRSTINGROUP 23285 /* Object */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE 23286 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_ID 23287 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_NAME 23288 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_NUMBER 23289 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_EFFECTIVEDISPLAYNAME 23290 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_TRANSITIONTIME 23291 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_EFFECTIVETRANSITIONTIME 23292 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_TRUESTATE 23293 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_LATCHEDSTATE_FALSESTATE 23294 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_REALARMTIME 23295 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_REALARMREPEATCOUNT 23296 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SILENCE 23297 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_SUPPRESS 23298 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_UNSUPPRESS 23299 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_REMOVEFROMSERVICE 23300 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_PLACEINSERVICE 23301 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_RESET 23302 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_NORMALSTATE 23303 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_EXPIRATIONDATE 23304 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_EXPIRATIONLIMIT 23305 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_CERTIFICATETYPE 23306 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_CERTIFICATEEXPIRED_CERTIFICATE 23307 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE 23308 /* Object */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_EVENTID 23309 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_EVENTTYPE 23310 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SOURCENODE 23311 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SOURCENAME 23312 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_TIME 23313 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_RECEIVETIME 23314 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_LOCALTIME 23315 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_MESSAGE 23316 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SEVERITY 23317 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_CONDITIONCLASSID 23318 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_CONDITIONCLASSNAME 23319 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_CONDITIONSUBCLASSID 23320 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_CONDITIONSUBCLASSNAME 23321 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_CONDITIONNAME 23322 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_BRANCHID 23323 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_RETAIN 23324 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE 23325 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_ID 23326 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_NAME 23327 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_NUMBER 23328 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_EFFECTIVEDISPLAYNAME 23329 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_TRANSITIONTIME 23330 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_EFFECTIVETRANSITIONTIME 23331 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_TRUESTATE 23332 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ENABLEDSTATE_FALSESTATE 23333 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_QUALITY 23334 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_QUALITY_SOURCETIMESTAMP 23335 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_LASTSEVERITY 23336 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_LASTSEVERITY_SOURCETIMESTAMP 23337 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_COMMENT 23338 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_COMMENT_SOURCETIMESTAMP 23339 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_CLIENTUSERID 23340 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_DISABLE 23341 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ENABLE 23342 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ADDCOMMENT 23343 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ADDCOMMENT_INPUTARGUMENTS 23344 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE 23345 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_ID 23346 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_NAME 23347 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_NUMBER 23348 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_EFFECTIVEDISPLAYNAME 23349 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_TRANSITIONTIME 23350 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_EFFECTIVETRANSITIONTIME 23351 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_TRUESTATE 23352 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ACKEDSTATE_FALSESTATE 23353 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE 23354 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_ID 23355 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_NAME 23356 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_NUMBER 23357 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_EFFECTIVEDISPLAYNAME 23358 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_TRANSITIONTIME 23359 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_EFFECTIVETRANSITIONTIME 23360 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_TRUESTATE 23361 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_CONFIRMEDSTATE_FALSESTATE 23362 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ACKNOWLEDGE 23363 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ACKNOWLEDGE_INPUTARGUMENTS 23364 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_CONFIRM 23365 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_CONFIRM_INPUTARGUMENTS 23366 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE 23367 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_ID 23368 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_NAME 23369 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_NUMBER 23370 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_EFFECTIVEDISPLAYNAME 23371 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_TRANSITIONTIME 23372 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_EFFECTIVETRANSITIONTIME 23373 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_TRUESTATE 23374 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ACTIVESTATE_FALSESTATE 23375 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_INPUTNODE 23376 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE 23377 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_ID 23378 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_NAME 23379 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_NUMBER 23380 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_EFFECTIVEDISPLAYNAME 23381 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_TRANSITIONTIME 23382 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_EFFECTIVETRANSITIONTIME 23383 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_TRUESTATE 23384 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDSTATE_FALSESTATE 23385 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE 23386 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_ID 23387 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_NAME 23388 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_NUMBER 23389 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_EFFECTIVEDISPLAYNAME 23390 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_TRANSITIONTIME 23391 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_EFFECTIVETRANSITIONTIME 23392 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_TRUESTATE 23393 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_OUTOFSERVICESTATE_FALSESTATE 23394 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE 23395 /* Object */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_CURRENTSTATE 23396 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_CURRENTSTATE_ID 23397 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_CURRENTSTATE_NAME 23398 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_CURRENTSTATE_NUMBER 23399 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_CURRENTSTATE_EFFECTIVEDISPLAYNAME 23400 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION 23401 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION_ID 23402 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION_NAME 23403 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION_NUMBER 23404 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION_TRANSITIONTIME 23405 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_LASTTRANSITION_EFFECTIVETRANSITIONTIME 23406 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_AVAILABLESTATES 23407 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_AVAILABLETRANSITIONS 23408 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_UNSHELVETIME 23409 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_TIMEDSHELVE 23410 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_TIMEDSHELVE_INPUTARGUMENTS 23411 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_UNSHELVE 23412 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SHELVINGSTATE_ONESHOTSHELVE 23413 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SUPPRESSEDORSHELVED 23414 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_MAXTIMESHELVED 23415 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_AUDIBLEENABLED 23416 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_AUDIBLESOUND 23417 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_AUDIBLESOUND_LISTID 23418 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_AUDIBLESOUND_AGENCYID 23419 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_AUDIBLESOUND_VERSIONID 23420 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE 23421 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_ID 23422 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_NAME 23423 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_NUMBER 23424 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_EFFECTIVEDISPLAYNAME 23425 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_TRANSITIONTIME 23426 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_EFFECTIVETRANSITIONTIME 23427 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_TRUESTATE 23428 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SILENCESTATE_FALSESTATE 23429 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_ONDELAY 23430 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_OFFDELAY 23431 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_FIRSTINGROUPFLAG 23432 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_FIRSTINGROUP 23433 /* Object */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE 23434 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_ID 23435 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_NAME 23436 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_NUMBER 23437 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_EFFECTIVEDISPLAYNAME 23438 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_TRANSITIONTIME 23439 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_EFFECTIVETRANSITIONTIME 23440 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_TRUESTATE 23441 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_LATCHEDSTATE_FALSESTATE 23442 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_REALARMTIME 23443 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_REALARMREPEATCOUNT 23444 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SILENCE 23445 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_SUPPRESS 23446 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_UNSUPPRESS 23447 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_REMOVEFROMSERVICE 23448 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_PLACEINSERVICE 23449 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_RESET 23450 /* Method */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_NORMALSTATE 23451 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_TRUSTLISTID 23452 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_LASTUPDATETIME 23453 /* Variable */
-#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_TRUSTLISTOUTOFDATE_UPDATEFREQUENCY 23454 /* Variable */
 #define UA_NS0ID_ALIASNAMETYPE 23455 /* ObjectType */
 #define UA_NS0ID_ALIASNAMECATEGORYTYPE 23456 /* ObjectType */
 #define UA_NS0ID_ALIASNAMECATEGORYTYPE_ALIAS_PLACEHOLDER 23457 /* Object */
@@ -16149,10 +12995,44 @@ UA_atomic_subSize(volatile size_t *addr, size_t decrease) {
 #define UA_NS0ID_OPCUA_XMLSCHEMA_CURRENCYUNITTYPE_DATATYPEVERSION 23523 /* Variable */
 #define UA_NS0ID_OPCUA_XMLSCHEMA_CURRENCYUNITTYPE_DICTIONARYFRAGMENT 23524 /* Variable */
 #define UA_NS0ID_ORDEREDLISTTYPE_NODEVERSION 23525 /* Variable */
+#define UA_NS0ID_CERTIFICATEGROUPTYPE_GETREJECTEDLIST 23526 /* Method */
+#define UA_NS0ID_CERTIFICATEGROUPTYPE_GETREJECTEDLIST_OUTPUTARGUMENTS 23527 /* Variable */
 #define UA_NS0ID_CURRENCYUNITTYPE_ENCODING_DEFAULTJSON 23528 /* Object */
+#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_GETREJECTEDLIST 23529 /* Method */
+#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTAPPLICATIONGROUP_GETREJECTEDLIST_OUTPUTARGUMENTS 23530 /* Variable */
+#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_GETREJECTEDLIST 23531 /* Method */
+#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTHTTPSGROUP_GETREJECTEDLIST_OUTPUTARGUMENTS 23532 /* Variable */
+#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_GETREJECTEDLIST 23533 /* Method */
+#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_DEFAULTUSERTOKENGROUP_GETREJECTEDLIST_OUTPUTARGUMENTS 23534 /* Variable */
+#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_GETREJECTEDLIST 23535 /* Method */
+#define UA_NS0ID_CERTIFICATEGROUPFOLDERTYPE_ADDITIONALGROUP_PLACEHOLDER_GETREJECTEDLIST_OUTPUTARGUMENTS 23536 /* Variable */
+#define UA_NS0ID_ECCAPPLICATIONCERTIFICATETYPE 23537 /* ObjectType */
+#define UA_NS0ID_ECCNISTP256APPLICATIONCERTIFICATETYPE 23538 /* ObjectType */
+#define UA_NS0ID_ECCNISTP384APPLICATIONCERTIFICATETYPE 23539 /* ObjectType */
+#define UA_NS0ID_ECCBRAINPOOLP256R1APPLICATIONCERTIFICATETYPE 23540 /* ObjectType */
+#define UA_NS0ID_ECCBRAINPOOLP384R1APPLICATIONCERTIFICATETYPE 23541 /* ObjectType */
+#define UA_NS0ID_ECCCURVE25519APPLICATIONCERTIFICATETYPE 23542 /* ObjectType */
+#define UA_NS0ID_ECCCURVE448APPLICATIONCERTIFICATETYPE 23543 /* ObjectType */
+#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_GETREJECTEDLIST 23544 /* Method */
+#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_GETREJECTEDLIST_OUTPUTARGUMENTS 23545 /* Variable */
+#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_GETREJECTEDLIST 23546 /* Method */
+#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_GETREJECTEDLIST_OUTPUTARGUMENTS 23547 /* Variable */
+#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_GETREJECTEDLIST 23548 /* Method */
+#define UA_NS0ID_SERVERCONFIGURATIONTYPE_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_GETREJECTEDLIST_OUTPUTARGUMENTS 23549 /* Variable */
+#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_GETREJECTEDLIST 23550 /* Method */
+#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTAPPLICATIONGROUP_GETREJECTEDLIST_OUTPUTARGUMENTS 23551 /* Variable */
+#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_GETREJECTEDLIST 23552 /* Method */
+#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTHTTPSGROUP_GETREJECTEDLIST_OUTPUTARGUMENTS 23553 /* Variable */
+#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_GETREJECTEDLIST 23554 /* Method */
+#define UA_NS0ID_SERVERCONFIGURATION_CERTIFICATEGROUPS_DEFAULTUSERTOKENGROUP_GETREJECTEDLIST_OUTPUTARGUMENTS 23555 /* Variable */
+#define UA_NS0ID_AUTHORIZATIONSERVICESCONFIGURATIONFOLDERTYPE 23556 /* ObjectType */
+#define UA_NS0ID_AUTHORIZATIONSERVICESCONFIGURATIONFOLDERTYPE_SERVICENAME_PLACEHOLDER 23557 /* Object */
+#define UA_NS0ID_AUTHORIZATIONSERVICESCONFIGURATIONFOLDERTYPE_SERVICENAME_PLACEHOLDER_SERVICEURI 23558 /* Variable */
+#define UA_NS0ID_AUTHORIZATIONSERVICESCONFIGURATIONFOLDERTYPE_SERVICENAME_PLACEHOLDER_SERVICECERTIFICATE 23559 /* Variable */
+#define UA_NS0ID_AUTHORIZATIONSERVICESCONFIGURATIONFOLDERTYPE_SERVICENAME_PLACEHOLDER_ISSUERENDPOINTURL 23560 /* Variable */
 #endif /* UA_NODEIDS_NS0_H_ */ 
 
-/*********************************** amalgamated original file "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/include/open62541/common.h" ***********************************/
+/*********************************** amalgamated original file "C:/Projects/open62541Upstream/include/open62541/common.h" ***********************************/
 
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -16304,14 +13184,15 @@ typedef enum {
  * ---------------- */
 
 typedef enum {
-    UA_SECURECHANNELSTATE_CLOSED,
+    UA_SECURECHANNELSTATE_FRESH = 0,
     UA_SECURECHANNELSTATE_HEL_SENT,
     UA_SECURECHANNELSTATE_HEL_RECEIVED,
     UA_SECURECHANNELSTATE_ACK_SENT,
     UA_SECURECHANNELSTATE_ACK_RECEIVED,
     UA_SECURECHANNELSTATE_OPN_SENT,
     UA_SECURECHANNELSTATE_OPEN,
-    UA_SECURECHANNELSTATE_CLOSING
+    UA_SECURECHANNELSTATE_CLOSING,
+    UA_SECURECHANNELSTATE_CLOSED
 } UA_SecureChannelState;
 
 typedef enum {
@@ -16370,7 +13251,7 @@ typedef struct {
 _UA_END_DECLS
 
 
-/*********************************** amalgamated original file "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/include/open62541/types.h" ***********************************/
+/*********************************** amalgamated original file "C:/Projects/open62541Upstream/include/open62541/types.h" ***********************************/
 
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -16387,11 +13268,6 @@ _UA_END_DECLS
  *    Copyright 2017 (c) Thomas Stalder, Blue Time Concept SA
  */
 
-
-#if _WIN32
-#define UA_Array_copy_safe UA_Array_copy
-#define UA_Array_new_safe UA_Array_new
-#endif
 
 
 _UA_BEGIN_DECLS
@@ -17055,11 +13931,10 @@ typedef struct UA_DataType UA_DataType;
 #define UA_EMPTY_ARRAY_SENTINEL ((void*)0x01)
 
 typedef enum {
-    UA_VARIANT_DATA,          /* The data has the same lifecycle as the
-                                 variant */
-    UA_VARIANT_DATA_NODELETE /* The data is "borrowed" by the variant and
-                                 shall not be deleted at the end of the
-                                 variant's lifecycle. */
+    UA_VARIANT_DATA,         /* The data has the same lifecycle as the variant */
+    UA_VARIANT_DATA_NODELETE /* The data is "borrowed" by the variant and is
+                              * not deleted when the variant is cleared up.
+                              * The array dimensions also borrowed. */
 } UA_VariantStorageType;
 
 typedef struct {
@@ -17127,7 +14002,7 @@ UA_Variant_setScalar(UA_Variant *v, void * UA_RESTRICT p,
  * @param type The datatype of the value
  * @return Indicates whether the operation succeeded or returns an error code */
 UA_StatusCode UA_EXPORT
-UA_Variant_setScalarCopy(UA_Variant *v, const void *p,
+UA_Variant_setScalarCopy(UA_Variant *v, const void * UA_RESTRICT p,
                          const UA_DataType *type);
 
 /* Set the variant to an array that already resides in memory. The array takes
@@ -17149,7 +14024,7 @@ UA_Variant_setArray(UA_Variant *v, void * UA_RESTRICT array,
  * @param type The datatype of the array
  * @return Indicates whether the operation succeeded or returns an error code */
 UA_StatusCode UA_EXPORT
-UA_Variant_setArrayCopy(UA_Variant *v, const void *array,
+UA_Variant_setArrayCopy(UA_Variant *v, const void * UA_RESTRICT array,
                         size_t arraySize, const UA_DataType *type);
 
 /* Copy the variant, but use only a subset of the (multidimensional) array into
@@ -17161,7 +14036,7 @@ UA_Variant_setArrayCopy(UA_Variant *v, const void *array,
  * @param range The range of the copied data
  * @return Returns UA_STATUSCODE_GOOD or an error code */
 UA_StatusCode UA_EXPORT
-UA_Variant_copyRange(const UA_Variant *src, UA_Variant *dst,
+UA_Variant_copyRange(const UA_Variant *src, UA_Variant * UA_RESTRICT dst,
                      const UA_NumericRange range);
 
 /* Insert a range of data into an existing variant. The data array can't be
@@ -17187,7 +14062,7 @@ UA_Variant_setRange(UA_Variant *v, void * UA_RESTRICT array,
  * @param range The range of where the new data is inserted
  * @return Returns UA_STATUSCODE_GOOD or an error code */
 UA_StatusCode UA_EXPORT
-UA_Variant_setRangeCopy(UA_Variant *v, const void *array,
+UA_Variant_setRangeCopy(UA_Variant *v, const void * UA_RESTRICT array,
                         size_t arraySize, const UA_NumericRange range);
 
 /**
@@ -17223,6 +14098,29 @@ typedef struct {
         } decoded;
     } content;
 } UA_ExtensionObject;
+
+/* Initialize the ExtensionObject and set the "decoded" value to the given
+ * pointer. The value will be deleted when the ExtensionObject is cleared. */
+void UA_EXPORT
+UA_ExtensionObject_setValue(UA_ExtensionObject *eo,
+                            void * UA_RESTRICT p,
+                            const UA_DataType *type);
+
+/* Initialize the ExtensionObject and set the "decoded" value to the given
+ * pointer. The value will *not* be deleted when the ExtensionObject is
+ * cleared. */
+void UA_EXPORT
+UA_ExtensionObject_setValueNoDelete(UA_ExtensionObject *eo,
+                                    void * UA_RESTRICT p,
+                                    const UA_DataType *type);
+
+/* Initialize the ExtensionObject and set the "decoded" value to a fresh copy of
+ * the given value pointer. The value will be deleted when the ExtensionObject
+ * is cleared. */
+UA_StatusCode UA_EXPORT
+UA_ExtensionObject_setValueCopy(UA_ExtensionObject *eo,
+                                void * UA_RESTRICT p,
+                                const UA_DataType *type);
 
 /**
  * .. _datavalue:
@@ -17300,7 +14198,10 @@ typedef struct {
                                      member element? For arrays this is the
                                      padding before the size_t length member.
                                      (No padding between size_t and the
-                                     following ptr.) */
+                                     following ptr.) For unions, the padding
+                                     includes the size of the switchfield (the
+                                     offset from the start of the union
+                                     type). */
     UA_Boolean namespaceZero : 1; /* The type of the member is defined in
                                      namespace zero. In this implementation,
                                      types from custom namespace may contain
@@ -17466,9 +14367,6 @@ UA_print(const void *p, const UA_DataType *type, UA_String *output);
 void UA_EXPORT *
 UA_Array_new(size_t size, const UA_DataType *type) UA_FUNC_ATTR_MALLOC;
 
-void UA_EXPORT *
-UA_Array_new_safe(size_t size, const UA_DataType *type) UA_FUNC_ATTR_MALLOC;
-
 /* Allocates and copies an array
  *
  * @param src The memory location of the source array
@@ -17479,10 +14377,6 @@ UA_Array_new_safe(size_t size, const UA_DataType *type) UA_FUNC_ATTR_MALLOC;
 UA_StatusCode UA_EXPORT
 UA_Array_copy(const void *src, size_t size, void **dst,
               const UA_DataType *type) UA_FUNC_ATTR_WARN_UNUSED_RESULT;
-              
-UA_StatusCode UA_EXPORT
-UA_Array_copy_safe(const void *src, size_t size, void **dst,
-              const UA_DataType *type) UA_FUNC_ATTR_WARN_UNUSED_RESULT;              
 
 /* Deletes an array.
  *
@@ -17535,9 +14429,9 @@ typedef struct UA_DataTypeArray {
 _UA_END_DECLS
 
 
-/*********************************** amalgamated original file "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/src_generated/open62541/types_generated.h" ***********************************/
+/*********************************** amalgamated original file "C:/Projects/open62541Upstream/buildWIN/src_generated/open62541/types_generated.h" ***********************************/
 
-/* Generated from Opc.Ua.Types.bsd with script C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/tools/generate_datatypes.py * on host VM-WIN16-DEV by user Rudolf at 2021-05-18 08:29:21 */
+/* Generated from Opc.Ua.Types.bsd with script C:/Projects/open62541Upstream/tools/generate_datatypes.py * on host VM-WIN16-DEV by user Rudolf at 2021-05-19 05:56:27 */
 
 
 #ifdef UA_ENABLE_AMALGAMATION
@@ -17552,7 +14446,7 @@ _UA_BEGIN_DECLS
  * Every type is assigned an index in an array containing the type descriptions.
  * These descriptions are used during type handling (copying, deletion,
  * binary encoding, ...). */
-#define UA_TYPES_COUNT 377
+#define UA_TYPES_COUNT 190
 extern UA_EXPORT const UA_DataType UA_TYPES[UA_TYPES_COUNT];
 
 /**
@@ -17706,824 +14600,6 @@ extern UA_EXPORT const UA_DataType UA_TYPES[UA_TYPES_COUNT];
 #define UA_TYPES_DIAGNOSTICINFO 24
 
 /**
- * NamingRuleType
- * ^^^^^^^^^^^^^^
- */
-typedef enum {
-    UA_NAMINGRULETYPE_MANDATORY = 1,
-    UA_NAMINGRULETYPE_OPTIONAL = 2,
-    UA_NAMINGRULETYPE_CONSTRAINT = 3,
-    __UA_NAMINGRULETYPE_FORCE32BIT = 0x7fffffff
-} UA_NamingRuleType;
-UA_STATIC_ASSERT(sizeof(UA_NamingRuleType) == sizeof(UA_Int32), enum_must_be_32bit);
-
-#define UA_TYPES_NAMINGRULETYPE 25
-
-/**
- * ImageBMP
- * ^^^^^^^^
- */
-typedef UA_ByteString UA_ImageBMP;
-
-#define UA_TYPES_IMAGEBMP 26
-
-/**
- * ImageGIF
- * ^^^^^^^^
- */
-typedef UA_ByteString UA_ImageGIF;
-
-#define UA_TYPES_IMAGEGIF 27
-
-/**
- * ImageJPG
- * ^^^^^^^^
- */
-typedef UA_ByteString UA_ImageJPG;
-
-#define UA_TYPES_IMAGEJPG 28
-
-/**
- * ImagePNG
- * ^^^^^^^^
- */
-typedef UA_ByteString UA_ImagePNG;
-
-#define UA_TYPES_IMAGEPNG 29
-
-/**
- * AudioDataType
- * ^^^^^^^^^^^^^
- */
-typedef UA_ByteString UA_AudioDataType;
-
-#define UA_TYPES_AUDIODATATYPE 30
-
-/**
- * BitFieldMaskDataType
- * ^^^^^^^^^^^^^^^^^^^^
- */
-typedef UA_UInt64 UA_BitFieldMaskDataType;
-
-#define UA_TYPES_BITFIELDMASKDATATYPE 31
-
-/**
- * KeyValuePair
- * ^^^^^^^^^^^^
- */
-typedef struct {
-    UA_QualifiedName key;
-    UA_Variant value;
-} UA_KeyValuePair;
-
-#define UA_TYPES_KEYVALUEPAIR 32
-
-/**
- * RationalNumber
- * ^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_Int32 numerator;
-    UA_UInt32 denominator;
-} UA_RationalNumber;
-
-#define UA_TYPES_RATIONALNUMBER 33
-
-/**
- * Vector
- * ^^^^^^
- */
-typedef void * UA_Vector;
-
-#define UA_TYPES_VECTOR 34
-
-/**
- * ThreeDVector
- * ^^^^^^^^^^^^
- */
-typedef struct {
-    UA_Double x;
-    UA_Double y;
-    UA_Double z;
-} UA_ThreeDVector;
-
-#define UA_TYPES_THREEDVECTOR 35
-
-/**
- * CartesianCoordinates
- * ^^^^^^^^^^^^^^^^^^^^
- */
-typedef void * UA_CartesianCoordinates;
-
-#define UA_TYPES_CARTESIANCOORDINATES 36
-
-/**
- * ThreeDCartesianCoordinates
- * ^^^^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_Double x;
-    UA_Double y;
-    UA_Double z;
-} UA_ThreeDCartesianCoordinates;
-
-#define UA_TYPES_THREEDCARTESIANCOORDINATES 37
-
-/**
- * Orientation
- * ^^^^^^^^^^^
- */
-typedef void * UA_Orientation;
-
-#define UA_TYPES_ORIENTATION 38
-
-/**
- * ThreeDOrientation
- * ^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_Double a;
-    UA_Double b;
-    UA_Double c;
-} UA_ThreeDOrientation;
-
-#define UA_TYPES_THREEDORIENTATION 39
-
-/**
- * Frame
- * ^^^^^
- */
-typedef void * UA_Frame;
-
-#define UA_TYPES_FRAME 40
-
-/**
- * ThreeDFrame
- * ^^^^^^^^^^^
- */
-typedef struct {
-    UA_ThreeDCartesianCoordinates cartesianCoordinates;
-    UA_ThreeDOrientation orientation;
-} UA_ThreeDFrame;
-
-#define UA_TYPES_THREEDFRAME 41
-
-/**
- * OpenFileMode
- * ^^^^^^^^^^^^
- */
-typedef enum {
-    UA_OPENFILEMODE_READ = 1,
-    UA_OPENFILEMODE_WRITE = 2,
-    UA_OPENFILEMODE_ERASEEXISTING = 4,
-    UA_OPENFILEMODE_APPEND = 8,
-    __UA_OPENFILEMODE_FORCE32BIT = 0x7fffffff
-} UA_OpenFileMode;
-UA_STATIC_ASSERT(sizeof(UA_OpenFileMode) == sizeof(UA_Int32), enum_must_be_32bit);
-
-#define UA_TYPES_OPENFILEMODE 42
-
-/**
- * IdentityCriteriaType
- * ^^^^^^^^^^^^^^^^^^^^
- */
-typedef enum {
-    UA_IDENTITYCRITERIATYPE_USERNAME = 1,
-    UA_IDENTITYCRITERIATYPE_THUMBPRINT = 2,
-    UA_IDENTITYCRITERIATYPE_ROLE = 3,
-    UA_IDENTITYCRITERIATYPE_GROUPID = 4,
-    UA_IDENTITYCRITERIATYPE_ANONYMOUS = 5,
-    UA_IDENTITYCRITERIATYPE_AUTHENTICATEDUSER = 6,
-    __UA_IDENTITYCRITERIATYPE_FORCE32BIT = 0x7fffffff
-} UA_IdentityCriteriaType;
-UA_STATIC_ASSERT(sizeof(UA_IdentityCriteriaType) == sizeof(UA_Int32), enum_must_be_32bit);
-
-#define UA_TYPES_IDENTITYCRITERIATYPE 43
-
-/**
- * IdentityMappingRuleType
- * ^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_IdentityCriteriaType criteriaType;
-    UA_String criteria;
-} UA_IdentityMappingRuleType;
-
-#define UA_TYPES_IDENTITYMAPPINGRULETYPE 44
-
-/**
- * CurrencyUnitType
- * ^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_Int16 numericCode;
-    UA_SByte exponent;
-    UA_String alphabeticCode;
-    UA_LocalizedText currency;
-} UA_CurrencyUnitType;
-
-#define UA_TYPES_CURRENCYUNITTYPE 45
-
-/**
- * TrustListMasks
- * ^^^^^^^^^^^^^^
- */
-typedef enum {
-    UA_TRUSTLISTMASKS_NONE = 0,
-    UA_TRUSTLISTMASKS_TRUSTEDCERTIFICATES = 1,
-    UA_TRUSTLISTMASKS_TRUSTEDCRLS = 2,
-    UA_TRUSTLISTMASKS_ISSUERCERTIFICATES = 4,
-    UA_TRUSTLISTMASKS_ISSUERCRLS = 8,
-    UA_TRUSTLISTMASKS_ALL = 15,
-    __UA_TRUSTLISTMASKS_FORCE32BIT = 0x7fffffff
-} UA_TrustListMasks;
-UA_STATIC_ASSERT(sizeof(UA_TrustListMasks) == sizeof(UA_Int32), enum_must_be_32bit);
-
-#define UA_TYPES_TRUSTLISTMASKS 46
-
-/**
- * TrustListDataType
- * ^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_UInt32 specifiedLists;
-    size_t trustedCertificatesSize;
-    UA_ByteString *trustedCertificates;
-    size_t trustedCrlsSize;
-    UA_ByteString *trustedCrls;
-    size_t issuerCertificatesSize;
-    UA_ByteString *issuerCertificates;
-    size_t issuerCrlsSize;
-    UA_ByteString *issuerCrls;
-} UA_TrustListDataType;
-
-#define UA_TYPES_TRUSTLISTDATATYPE 47
-
-/**
- * DecimalDataType
- * ^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_Int16 scale;
-    UA_ByteString value;
-} UA_DecimalDataType;
-
-#define UA_TYPES_DECIMALDATATYPE 48
-
-/**
- * DataTypeDescription
- * ^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_NodeId dataTypeId;
-    UA_QualifiedName name;
-} UA_DataTypeDescription;
-
-#define UA_TYPES_DATATYPEDESCRIPTION 49
-
-/**
- * SimpleTypeDescription
- * ^^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_NodeId dataTypeId;
-    UA_QualifiedName name;
-    UA_NodeId baseDataType;
-    UA_Byte builtInType;
-} UA_SimpleTypeDescription;
-
-#define UA_TYPES_SIMPLETYPEDESCRIPTION 50
-
-/**
- * PubSubState
- * ^^^^^^^^^^^
- */
-typedef enum {
-    UA_PUBSUBSTATE_DISABLED = 0,
-    UA_PUBSUBSTATE_PAUSED = 1,
-    UA_PUBSUBSTATE_OPERATIONAL = 2,
-    UA_PUBSUBSTATE_ERROR = 3,
-    __UA_PUBSUBSTATE_FORCE32BIT = 0x7fffffff
-} UA_PubSubState;
-UA_STATIC_ASSERT(sizeof(UA_PubSubState) == sizeof(UA_Int32), enum_must_be_32bit);
-
-#define UA_TYPES_PUBSUBSTATE 51
-
-/**
- * DataSetFieldFlags
- * ^^^^^^^^^^^^^^^^^
- */
-typedef UA_UInt16 UA_DataSetFieldFlags;
-
-#define UA_DATASETFIELDFLAGS_NONE 0
-#define UA_DATASETFIELDFLAGS_PROMOTEDFIELD 1
-
-#define UA_TYPES_DATASETFIELDFLAGS 52
-
-/**
- * ConfigurationVersionDataType
- * ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_UInt32 majorVersion;
-    UA_UInt32 minorVersion;
-} UA_ConfigurationVersionDataType;
-
-#define UA_TYPES_CONFIGURATIONVERSIONDATATYPE 53
-
-/**
- * PublishedDataSetSourceDataType
- * ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef void * UA_PublishedDataSetSourceDataType;
-
-#define UA_TYPES_PUBLISHEDDATASETSOURCEDATATYPE 54
-
-/**
- * PublishedVariableDataType
- * ^^^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_NodeId publishedVariable;
-    UA_UInt32 attributeId;
-    UA_Double samplingIntervalHint;
-    UA_UInt32 deadbandType;
-    UA_Double deadbandValue;
-    UA_String indexRange;
-    UA_Variant substituteValue;
-    size_t metaDataPropertiesSize;
-    UA_QualifiedName *metaDataProperties;
-} UA_PublishedVariableDataType;
-
-#define UA_TYPES_PUBLISHEDVARIABLEDATATYPE 55
-
-/**
- * PublishedDataItemsDataType
- * ^^^^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    size_t publishedDataSize;
-    UA_PublishedVariableDataType *publishedData;
-} UA_PublishedDataItemsDataType;
-
-#define UA_TYPES_PUBLISHEDDATAITEMSDATATYPE 56
-
-/**
- * DataSetFieldContentMask
- * ^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef UA_UInt32 UA_DataSetFieldContentMask;
-
-#define UA_DATASETFIELDCONTENTMASK_NONE 0
-#define UA_DATASETFIELDCONTENTMASK_STATUSCODE 1
-#define UA_DATASETFIELDCONTENTMASK_SOURCETIMESTAMP 2
-#define UA_DATASETFIELDCONTENTMASK_SERVERTIMESTAMP 4
-#define UA_DATASETFIELDCONTENTMASK_SOURCEPICOSECONDS 8
-#define UA_DATASETFIELDCONTENTMASK_SERVERPICOSECONDS 16
-#define UA_DATASETFIELDCONTENTMASK_RAWDATA 32
-
-#define UA_TYPES_DATASETFIELDCONTENTMASK 57
-
-/**
- * DataSetWriterDataType
- * ^^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_String name;
-    UA_Boolean enabled;
-    UA_UInt16 dataSetWriterId;
-    UA_DataSetFieldContentMask dataSetFieldContentMask;
-    UA_UInt32 keyFrameCount;
-    UA_String dataSetName;
-    size_t dataSetWriterPropertiesSize;
-    UA_KeyValuePair *dataSetWriterProperties;
-    UA_ExtensionObject transportSettings;
-    UA_ExtensionObject messageSettings;
-} UA_DataSetWriterDataType;
-
-#define UA_TYPES_DATASETWRITERDATATYPE 58
-
-/**
- * DataSetWriterTransportDataType
- * ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef void * UA_DataSetWriterTransportDataType;
-
-#define UA_TYPES_DATASETWRITERTRANSPORTDATATYPE 59
-
-/**
- * DataSetWriterMessageDataType
- * ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef void * UA_DataSetWriterMessageDataType;
-
-#define UA_TYPES_DATASETWRITERMESSAGEDATATYPE 60
-
-/**
- * WriterGroupTransportDataType
- * ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef void * UA_WriterGroupTransportDataType;
-
-#define UA_TYPES_WRITERGROUPTRANSPORTDATATYPE 61
-
-/**
- * WriterGroupMessageDataType
- * ^^^^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef void * UA_WriterGroupMessageDataType;
-
-#define UA_TYPES_WRITERGROUPMESSAGEDATATYPE 62
-
-/**
- * ConnectionTransportDataType
- * ^^^^^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef void * UA_ConnectionTransportDataType;
-
-#define UA_TYPES_CONNECTIONTRANSPORTDATATYPE 63
-
-/**
- * NetworkAddressDataType
- * ^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_String networkInterface;
-} UA_NetworkAddressDataType;
-
-#define UA_TYPES_NETWORKADDRESSDATATYPE 64
-
-/**
- * NetworkAddressUrlDataType
- * ^^^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_String networkInterface;
-    UA_String url;
-} UA_NetworkAddressUrlDataType;
-
-#define UA_TYPES_NETWORKADDRESSURLDATATYPE 65
-
-/**
- * ReaderGroupTransportDataType
- * ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef void * UA_ReaderGroupTransportDataType;
-
-#define UA_TYPES_READERGROUPTRANSPORTDATATYPE 66
-
-/**
- * ReaderGroupMessageDataType
- * ^^^^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef void * UA_ReaderGroupMessageDataType;
-
-#define UA_TYPES_READERGROUPMESSAGEDATATYPE 67
-
-/**
- * DataSetReaderTransportDataType
- * ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef void * UA_DataSetReaderTransportDataType;
-
-#define UA_TYPES_DATASETREADERTRANSPORTDATATYPE 68
-
-/**
- * DataSetReaderMessageDataType
- * ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef void * UA_DataSetReaderMessageDataType;
-
-#define UA_TYPES_DATASETREADERMESSAGEDATATYPE 69
-
-/**
- * SubscribedDataSetDataType
- * ^^^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef void * UA_SubscribedDataSetDataType;
-
-#define UA_TYPES_SUBSCRIBEDDATASETDATATYPE 70
-
-/**
- * OverrideValueHandling
- * ^^^^^^^^^^^^^^^^^^^^^
- */
-typedef enum {
-    UA_OVERRIDEVALUEHANDLING_DISABLED = 0,
-    UA_OVERRIDEVALUEHANDLING_LASTUSABLEVALUE = 1,
-    UA_OVERRIDEVALUEHANDLING_OVERRIDEVALUE = 2,
-    __UA_OVERRIDEVALUEHANDLING_FORCE32BIT = 0x7fffffff
-} UA_OverrideValueHandling;
-UA_STATIC_ASSERT(sizeof(UA_OverrideValueHandling) == sizeof(UA_Int32), enum_must_be_32bit);
-
-#define UA_TYPES_OVERRIDEVALUEHANDLING 71
-
-/**
- * DataSetOrderingType
- * ^^^^^^^^^^^^^^^^^^^
- */
-typedef enum {
-    UA_DATASETORDERINGTYPE_UNDEFINED = 0,
-    UA_DATASETORDERINGTYPE_ASCENDINGWRITERID = 1,
-    UA_DATASETORDERINGTYPE_ASCENDINGWRITERIDSINGLE = 2,
-    __UA_DATASETORDERINGTYPE_FORCE32BIT = 0x7fffffff
-} UA_DataSetOrderingType;
-UA_STATIC_ASSERT(sizeof(UA_DataSetOrderingType) == sizeof(UA_Int32), enum_must_be_32bit);
-
-#define UA_TYPES_DATASETORDERINGTYPE 72
-
-/**
- * UadpNetworkMessageContentMask
- * ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef UA_UInt32 UA_UadpNetworkMessageContentMask;
-
-#define UA_UADPNETWORKMESSAGECONTENTMASK_NONE 0
-#define UA_UADPNETWORKMESSAGECONTENTMASK_PUBLISHERID 1
-#define UA_UADPNETWORKMESSAGECONTENTMASK_GROUPHEADER 2
-#define UA_UADPNETWORKMESSAGECONTENTMASK_WRITERGROUPID 4
-#define UA_UADPNETWORKMESSAGECONTENTMASK_GROUPVERSION 8
-#define UA_UADPNETWORKMESSAGECONTENTMASK_NETWORKMESSAGENUMBER 16
-#define UA_UADPNETWORKMESSAGECONTENTMASK_SEQUENCENUMBER 32
-#define UA_UADPNETWORKMESSAGECONTENTMASK_PAYLOADHEADER 64
-#define UA_UADPNETWORKMESSAGECONTENTMASK_TIMESTAMP 128
-#define UA_UADPNETWORKMESSAGECONTENTMASK_PICOSECONDS 256
-#define UA_UADPNETWORKMESSAGECONTENTMASK_DATASETCLASSID 512
-#define UA_UADPNETWORKMESSAGECONTENTMASK_PROMOTEDFIELDS 1024
-
-#define UA_TYPES_UADPNETWORKMESSAGECONTENTMASK 73
-
-/**
- * UadpWriterGroupMessageDataType
- * ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_UInt32 groupVersion;
-    UA_DataSetOrderingType dataSetOrdering;
-    UA_UadpNetworkMessageContentMask networkMessageContentMask;
-    UA_Double samplingOffset;
-    size_t publishingOffsetSize;
-    UA_Double *publishingOffset;
-} UA_UadpWriterGroupMessageDataType;
-
-#define UA_TYPES_UADPWRITERGROUPMESSAGEDATATYPE 74
-
-/**
- * UadpDataSetMessageContentMask
- * ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef UA_UInt32 UA_UadpDataSetMessageContentMask;
-
-#define UA_UADPDATASETMESSAGECONTENTMASK_NONE 0
-#define UA_UADPDATASETMESSAGECONTENTMASK_TIMESTAMP 1
-#define UA_UADPDATASETMESSAGECONTENTMASK_PICOSECONDS 2
-#define UA_UADPDATASETMESSAGECONTENTMASK_STATUS 4
-#define UA_UADPDATASETMESSAGECONTENTMASK_MAJORVERSION 8
-#define UA_UADPDATASETMESSAGECONTENTMASK_MINORVERSION 16
-#define UA_UADPDATASETMESSAGECONTENTMASK_SEQUENCENUMBER 32
-
-#define UA_TYPES_UADPDATASETMESSAGECONTENTMASK 75
-
-/**
- * UadpDataSetWriterMessageDataType
- * ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_UadpDataSetMessageContentMask dataSetMessageContentMask;
-    UA_UInt16 configuredSize;
-    UA_UInt16 networkMessageNumber;
-    UA_UInt16 dataSetOffset;
-} UA_UadpDataSetWriterMessageDataType;
-
-#define UA_TYPES_UADPDATASETWRITERMESSAGEDATATYPE 76
-
-/**
- * UadpDataSetReaderMessageDataType
- * ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_UInt32 groupVersion;
-    UA_UInt16 networkMessageNumber;
-    UA_UInt16 dataSetOffset;
-    UA_Guid dataSetClassId;
-    UA_UadpNetworkMessageContentMask networkMessageContentMask;
-    UA_UadpDataSetMessageContentMask dataSetMessageContentMask;
-    UA_Double publishingInterval;
-    UA_Double receiveOffset;
-    UA_Double processingOffset;
-} UA_UadpDataSetReaderMessageDataType;
-
-#define UA_TYPES_UADPDATASETREADERMESSAGEDATATYPE 77
-
-/**
- * JsonNetworkMessageContentMask
- * ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef UA_UInt32 UA_JsonNetworkMessageContentMask;
-
-#define UA_JSONNETWORKMESSAGECONTENTMASK_NONE 0
-#define UA_JSONNETWORKMESSAGECONTENTMASK_NETWORKMESSAGEHEADER 1
-#define UA_JSONNETWORKMESSAGECONTENTMASK_DATASETMESSAGEHEADER 2
-#define UA_JSONNETWORKMESSAGECONTENTMASK_SINGLEDATASETMESSAGE 4
-#define UA_JSONNETWORKMESSAGECONTENTMASK_PUBLISHERID 8
-#define UA_JSONNETWORKMESSAGECONTENTMASK_DATASETCLASSID 16
-#define UA_JSONNETWORKMESSAGECONTENTMASK_REPLYTO 32
-
-#define UA_TYPES_JSONNETWORKMESSAGECONTENTMASK 78
-
-/**
- * JsonWriterGroupMessageDataType
- * ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_JsonNetworkMessageContentMask networkMessageContentMask;
-} UA_JsonWriterGroupMessageDataType;
-
-#define UA_TYPES_JSONWRITERGROUPMESSAGEDATATYPE 79
-
-/**
- * JsonDataSetMessageContentMask
- * ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef UA_UInt32 UA_JsonDataSetMessageContentMask;
-
-#define UA_JSONDATASETMESSAGECONTENTMASK_NONE 0
-#define UA_JSONDATASETMESSAGECONTENTMASK_DATASETWRITERID 1
-#define UA_JSONDATASETMESSAGECONTENTMASK_METADATAVERSION 2
-#define UA_JSONDATASETMESSAGECONTENTMASK_SEQUENCENUMBER 4
-#define UA_JSONDATASETMESSAGECONTENTMASK_TIMESTAMP 8
-#define UA_JSONDATASETMESSAGECONTENTMASK_STATUS 16
-
-#define UA_TYPES_JSONDATASETMESSAGECONTENTMASK 80
-
-/**
- * JsonDataSetWriterMessageDataType
- * ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_JsonDataSetMessageContentMask dataSetMessageContentMask;
-} UA_JsonDataSetWriterMessageDataType;
-
-#define UA_TYPES_JSONDATASETWRITERMESSAGEDATATYPE 81
-
-/**
- * JsonDataSetReaderMessageDataType
- * ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_JsonNetworkMessageContentMask networkMessageContentMask;
-    UA_JsonDataSetMessageContentMask dataSetMessageContentMask;
-} UA_JsonDataSetReaderMessageDataType;
-
-#define UA_TYPES_JSONDATASETREADERMESSAGEDATATYPE 82
-
-/**
- * DatagramConnectionTransportDataType
- * ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_ExtensionObject discoveryAddress;
-} UA_DatagramConnectionTransportDataType;
-
-#define UA_TYPES_DATAGRAMCONNECTIONTRANSPORTDATATYPE 83
-
-/**
- * DatagramWriterGroupTransportDataType
- * ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_Byte messageRepeatCount;
-    UA_Double messageRepeatDelay;
-} UA_DatagramWriterGroupTransportDataType;
-
-#define UA_TYPES_DATAGRAMWRITERGROUPTRANSPORTDATATYPE 84
-
-/**
- * BrokerConnectionTransportDataType
- * ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_String resourceUri;
-    UA_String authenticationProfileUri;
-} UA_BrokerConnectionTransportDataType;
-
-#define UA_TYPES_BROKERCONNECTIONTRANSPORTDATATYPE 85
-
-/**
- * BrokerTransportQualityOfService
- * ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef enum {
-    UA_BROKERTRANSPORTQUALITYOFSERVICE_NOTSPECIFIED = 0,
-    UA_BROKERTRANSPORTQUALITYOFSERVICE_BESTEFFORT = 1,
-    UA_BROKERTRANSPORTQUALITYOFSERVICE_ATLEASTONCE = 2,
-    UA_BROKERTRANSPORTQUALITYOFSERVICE_ATMOSTONCE = 3,
-    UA_BROKERTRANSPORTQUALITYOFSERVICE_EXACTLYONCE = 4,
-    __UA_BROKERTRANSPORTQUALITYOFSERVICE_FORCE32BIT = 0x7fffffff
-} UA_BrokerTransportQualityOfService;
-UA_STATIC_ASSERT(sizeof(UA_BrokerTransportQualityOfService) == sizeof(UA_Int32), enum_must_be_32bit);
-
-#define UA_TYPES_BROKERTRANSPORTQUALITYOFSERVICE 86
-
-/**
- * BrokerWriterGroupTransportDataType
- * ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_String queueName;
-    UA_String resourceUri;
-    UA_String authenticationProfileUri;
-    UA_BrokerTransportQualityOfService requestedDeliveryGuarantee;
-} UA_BrokerWriterGroupTransportDataType;
-
-#define UA_TYPES_BROKERWRITERGROUPTRANSPORTDATATYPE 87
-
-/**
- * BrokerDataSetWriterTransportDataType
- * ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_String queueName;
-    UA_String resourceUri;
-    UA_String authenticationProfileUri;
-    UA_BrokerTransportQualityOfService requestedDeliveryGuarantee;
-    UA_String metaDataQueueName;
-    UA_Double metaDataUpdateTime;
-} UA_BrokerDataSetWriterTransportDataType;
-
-#define UA_TYPES_BROKERDATASETWRITERTRANSPORTDATATYPE 88
-
-/**
- * BrokerDataSetReaderTransportDataType
- * ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_String queueName;
-    UA_String resourceUri;
-    UA_String authenticationProfileUri;
-    UA_BrokerTransportQualityOfService requestedDeliveryGuarantee;
-    UA_String metaDataQueueName;
-} UA_BrokerDataSetReaderTransportDataType;
-
-#define UA_TYPES_BROKERDATASETREADERTRANSPORTDATATYPE 89
-
-/**
- * DiagnosticsLevel
- * ^^^^^^^^^^^^^^^^
- */
-typedef enum {
-    UA_DIAGNOSTICSLEVEL_BASIC = 0,
-    UA_DIAGNOSTICSLEVEL_ADVANCED = 1,
-    UA_DIAGNOSTICSLEVEL_INFO = 2,
-    UA_DIAGNOSTICSLEVEL_LOG = 3,
-    UA_DIAGNOSTICSLEVEL_DEBUG = 4,
-    __UA_DIAGNOSTICSLEVEL_FORCE32BIT = 0x7fffffff
-} UA_DiagnosticsLevel;
-UA_STATIC_ASSERT(sizeof(UA_DiagnosticsLevel) == sizeof(UA_Int32), enum_must_be_32bit);
-
-#define UA_TYPES_DIAGNOSTICSLEVEL 90
-
-/**
- * PubSubDiagnosticsCounterClassification
- * ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef enum {
-    UA_PUBSUBDIAGNOSTICSCOUNTERCLASSIFICATION_INFORMATION = 0,
-    UA_PUBSUBDIAGNOSTICSCOUNTERCLASSIFICATION_ERROR = 1,
-    __UA_PUBSUBDIAGNOSTICSCOUNTERCLASSIFICATION_FORCE32BIT = 0x7fffffff
-} UA_PubSubDiagnosticsCounterClassification;
-UA_STATIC_ASSERT(sizeof(UA_PubSubDiagnosticsCounterClassification) == sizeof(UA_Int32), enum_must_be_32bit);
-
-#define UA_TYPES_PUBSUBDIAGNOSTICSCOUNTERCLASSIFICATION 91
-
-/**
- * AliasNameDataType
- * ^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_QualifiedName aliasName;
-    size_t referencedNodesSize;
-    UA_ExpandedNodeId *referencedNodes;
-} UA_AliasNameDataType;
-
-#define UA_TYPES_ALIASNAMEDATATYPE 92
-
-/**
- * IdType
- * ^^^^^^
- */
-typedef enum {
-    UA_IDTYPE_NUMERIC = 0,
-    UA_IDTYPE_STRING = 1,
-    UA_IDTYPE_GUID = 2,
-    UA_IDTYPE_OPAQUE = 3,
-    __UA_IDTYPE_FORCE32BIT = 0x7fffffff
-} UA_IdType;
-UA_STATIC_ASSERT(sizeof(UA_IdType) == sizeof(UA_Int32), enum_must_be_32bit);
-
-#define UA_TYPES_IDTYPE 93
-
-/**
  * NodeClass
  * ^^^^^^^^^
  */
@@ -18541,108 +14617,7 @@ typedef enum {
 } UA_NodeClass;
 UA_STATIC_ASSERT(sizeof(UA_NodeClass) == sizeof(UA_Int32), enum_must_be_32bit);
 
-#define UA_TYPES_NODECLASS 94
-
-/**
- * PermissionType
- * ^^^^^^^^^^^^^^
- */
-typedef UA_UInt32 UA_PermissionType;
-
-#define UA_PERMISSIONTYPE_NONE 0
-#define UA_PERMISSIONTYPE_BROWSE 1
-#define UA_PERMISSIONTYPE_READROLEPERMISSIONS 2
-#define UA_PERMISSIONTYPE_WRITEATTRIBUTE 4
-#define UA_PERMISSIONTYPE_WRITEROLEPERMISSIONS 8
-#define UA_PERMISSIONTYPE_WRITEHISTORIZING 16
-#define UA_PERMISSIONTYPE_READ 32
-#define UA_PERMISSIONTYPE_WRITE 64
-#define UA_PERMISSIONTYPE_READHISTORY 128
-#define UA_PERMISSIONTYPE_INSERTHISTORY 256
-#define UA_PERMISSIONTYPE_MODIFYHISTORY 512
-#define UA_PERMISSIONTYPE_DELETEHISTORY 1024
-#define UA_PERMISSIONTYPE_RECEIVEEVENTS 2048
-#define UA_PERMISSIONTYPE_CALL 4096
-#define UA_PERMISSIONTYPE_ADDREFERENCE 8192
-#define UA_PERMISSIONTYPE_REMOVEREFERENCE 16384
-#define UA_PERMISSIONTYPE_DELETENODE 32768
-#define UA_PERMISSIONTYPE_ADDNODE 65536
-
-#define UA_TYPES_PERMISSIONTYPE 95
-
-/**
- * AccessLevelType
- * ^^^^^^^^^^^^^^^
- */
-typedef UA_Byte UA_AccessLevelType;
-
-#define UA_ACCESSLEVELTYPE_NONE 0
-#define UA_ACCESSLEVELTYPE_CURRENTREAD 1
-#define UA_ACCESSLEVELTYPE_CURRENTWRITE 2
-#define UA_ACCESSLEVELTYPE_HISTORYREAD 4
-#define UA_ACCESSLEVELTYPE_HISTORYWRITE 8
-#define UA_ACCESSLEVELTYPE_SEMANTICCHANGE 16
-#define UA_ACCESSLEVELTYPE_STATUSWRITE 32
-#define UA_ACCESSLEVELTYPE_TIMESTAMPWRITE 64
-
-#define UA_TYPES_ACCESSLEVELTYPE 96
-
-/**
- * AccessLevelExType
- * ^^^^^^^^^^^^^^^^^
- */
-typedef UA_UInt32 UA_AccessLevelExType;
-
-#define UA_ACCESSLEVELEXTYPE_NONE 0
-#define UA_ACCESSLEVELEXTYPE_CURRENTREAD 1
-#define UA_ACCESSLEVELEXTYPE_CURRENTWRITE 2
-#define UA_ACCESSLEVELEXTYPE_HISTORYREAD 4
-#define UA_ACCESSLEVELEXTYPE_HISTORYWRITE 8
-#define UA_ACCESSLEVELEXTYPE_SEMANTICCHANGE 16
-#define UA_ACCESSLEVELEXTYPE_STATUSWRITE 32
-#define UA_ACCESSLEVELEXTYPE_TIMESTAMPWRITE 64
-#define UA_ACCESSLEVELEXTYPE_NONATOMICREAD 256
-#define UA_ACCESSLEVELEXTYPE_NONATOMICWRITE 512
-#define UA_ACCESSLEVELEXTYPE_WRITEFULLARRAYONLY 1024
-
-#define UA_TYPES_ACCESSLEVELEXTYPE 97
-
-/**
- * EventNotifierType
- * ^^^^^^^^^^^^^^^^^
- */
-typedef UA_Byte UA_EventNotifierType;
-
-#define UA_EVENTNOTIFIERTYPE_NONE 0
-#define UA_EVENTNOTIFIERTYPE_SUBSCRIBETOEVENTS 1
-#define UA_EVENTNOTIFIERTYPE_HISTORYREAD 4
-#define UA_EVENTNOTIFIERTYPE_HISTORYWRITE 8
-
-#define UA_TYPES_EVENTNOTIFIERTYPE 98
-
-/**
- * AccessRestrictionType
- * ^^^^^^^^^^^^^^^^^^^^^
- */
-typedef UA_UInt32 UA_AccessRestrictionType;
-
-#define UA_ACCESSRESTRICTIONTYPE_NONE 0
-#define UA_ACCESSRESTRICTIONTYPE_SIGNINGREQUIRED 1
-#define UA_ACCESSRESTRICTIONTYPE_ENCRYPTIONREQUIRED 2
-#define UA_ACCESSRESTRICTIONTYPE_SESSIONREQUIRED 4
-
-#define UA_TYPES_ACCESSRESTRICTIONTYPE 99
-
-/**
- * RolePermissionType
- * ^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_NodeId roleId;
-    UA_PermissionType permissions;
-} UA_RolePermissionType;
-
-#define UA_TYPES_ROLEPERMISSIONTYPE 100
+#define UA_TYPES_NODECLASS 25
 
 /**
  * StructureType
@@ -18656,7 +14631,7 @@ typedef enum {
 } UA_StructureType;
 UA_STATIC_ASSERT(sizeof(UA_StructureType) == sizeof(UA_Int32), enum_must_be_32bit);
 
-#define UA_TYPES_STRUCTURETYPE 101
+#define UA_TYPES_STRUCTURETYPE 26
 
 /**
  * StructureField
@@ -18673,7 +14648,7 @@ typedef struct {
     UA_Boolean isOptional;
 } UA_StructureField;
 
-#define UA_TYPES_STRUCTUREFIELD 102
+#define UA_TYPES_STRUCTUREFIELD 27
 
 /**
  * StructureDefinition
@@ -18687,19 +14662,7 @@ typedef struct {
     UA_StructureField *fields;
 } UA_StructureDefinition;
 
-#define UA_TYPES_STRUCTUREDEFINITION 103
-
-/**
- * ReferenceNode
- * ^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_NodeId referenceTypeId;
-    UA_Boolean isInverse;
-    UA_ExpandedNodeId targetId;
-} UA_ReferenceNode;
-
-#define UA_TYPES_REFERENCENODE 104
+#define UA_TYPES_STRUCTUREDEFINITION 28
 
 /**
  * Argument
@@ -18714,7 +14677,7 @@ typedef struct {
     UA_LocalizedText description;
 } UA_Argument;
 
-#define UA_TYPES_ARGUMENT 105
+#define UA_TYPES_ARGUMENT 29
 
 /**
  * EnumValueType
@@ -18726,7 +14689,7 @@ typedef struct {
     UA_LocalizedText description;
 } UA_EnumValueType;
 
-#define UA_TYPES_ENUMVALUETYPE 106
+#define UA_TYPES_ENUMVALUETYPE 30
 
 /**
  * EnumField
@@ -18739,66 +14702,7 @@ typedef struct {
     UA_String name;
 } UA_EnumField;
 
-#define UA_TYPES_ENUMFIELD 107
-
-/**
- * OptionSet
- * ^^^^^^^^^
- */
-typedef struct {
-    UA_ByteString value;
-    UA_ByteString validBits;
-} UA_OptionSet;
-
-#define UA_TYPES_OPTIONSET 108
-
-/**
- * Union
- * ^^^^^
- */
-typedef void * UA_Union;
-
-#define UA_TYPES_UNION 109
-
-/**
- * NormalizedString
- * ^^^^^^^^^^^^^^^^
- */
-typedef UA_String UA_NormalizedString;
-
-#define UA_TYPES_NORMALIZEDSTRING 110
-
-/**
- * DecimalString
- * ^^^^^^^^^^^^^
- */
-typedef UA_String UA_DecimalString;
-
-#define UA_TYPES_DECIMALSTRING 111
-
-/**
- * DurationString
- * ^^^^^^^^^^^^^^
- */
-typedef UA_String UA_DurationString;
-
-#define UA_TYPES_DURATIONSTRING 112
-
-/**
- * TimeString
- * ^^^^^^^^^^
- */
-typedef UA_String UA_TimeString;
-
-#define UA_TYPES_TIMESTRING 113
-
-/**
- * DateString
- * ^^^^^^^^^^
- */
-typedef UA_String UA_DateString;
-
-#define UA_TYPES_DATESTRING 114
+#define UA_TYPES_ENUMFIELD 31
 
 /**
  * Duration
@@ -18806,7 +14710,7 @@ typedef UA_String UA_DateString;
  */
 typedef UA_Double UA_Duration;
 
-#define UA_TYPES_DURATION 115
+#define UA_TYPES_DURATION 32
 
 /**
  * UtcTime
@@ -18814,7 +14718,7 @@ typedef UA_Double UA_Duration;
  */
 typedef UA_DateTime UA_UtcTime;
 
-#define UA_TYPES_UTCTIME 116
+#define UA_TYPES_UTCTIME 33
 
 /**
  * LocaleId
@@ -18822,34 +14726,7 @@ typedef UA_DateTime UA_UtcTime;
  */
 typedef UA_String UA_LocaleId;
 
-#define UA_TYPES_LOCALEID 117
-
-/**
- * TimeZoneDataType
- * ^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_Int16 offset;
-    UA_Boolean daylightSavingInOffset;
-} UA_TimeZoneDataType;
-
-#define UA_TYPES_TIMEZONEDATATYPE 118
-
-/**
- * Index
- * ^^^^^
- */
-typedef UA_ByteString UA_Index;
-
-#define UA_TYPES_INDEX 119
-
-/**
- * IntegerId
- * ^^^^^^^^^
- */
-typedef UA_UInt32 UA_IntegerId;
-
-#define UA_TYPES_INTEGERID 120
+#define UA_TYPES_LOCALEID 34
 
 /**
  * ApplicationType
@@ -18864,7 +14741,7 @@ typedef enum {
 } UA_ApplicationType;
 UA_STATIC_ASSERT(sizeof(UA_ApplicationType) == sizeof(UA_Int32), enum_must_be_32bit);
 
-#define UA_TYPES_APPLICATIONTYPE 121
+#define UA_TYPES_APPLICATIONTYPE 35
 
 /**
  * ApplicationDescription
@@ -18881,7 +14758,7 @@ typedef struct {
     UA_String *discoveryUrls;
 } UA_ApplicationDescription;
 
-#define UA_TYPES_APPLICATIONDESCRIPTION 122
+#define UA_TYPES_APPLICATIONDESCRIPTION 36
 
 /**
  * RequestHeader
@@ -18897,7 +14774,7 @@ typedef struct {
     UA_ExtensionObject additionalHeader;
 } UA_RequestHeader;
 
-#define UA_TYPES_REQUESTHEADER 123
+#define UA_TYPES_REQUESTHEADER 37
 
 /**
  * ResponseHeader
@@ -18913,15 +14790,7 @@ typedef struct {
     UA_ExtensionObject additionalHeader;
 } UA_ResponseHeader;
 
-#define UA_TYPES_RESPONSEHEADER 124
-
-/**
- * VersionTime
- * ^^^^^^^^^^^
- */
-typedef UA_ByteString UA_VersionTime;
-
-#define UA_TYPES_VERSIONTIME 125
+#define UA_TYPES_RESPONSEHEADER 38
 
 /**
  * ServiceFault
@@ -18931,39 +14800,7 @@ typedef struct {
     UA_ResponseHeader responseHeader;
 } UA_ServiceFault;
 
-#define UA_TYPES_SERVICEFAULT 126
-
-/**
- * SessionlessInvokeRequestType
- * ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    size_t urisVersionSize;
-    UA_UInt32 *urisVersion;
-    size_t namespaceUrisSize;
-    UA_String *namespaceUris;
-    size_t serverUrisSize;
-    UA_String *serverUris;
-    size_t localeIdsSize;
-    UA_String *localeIds;
-    UA_UInt32 serviceId;
-} UA_SessionlessInvokeRequestType;
-
-#define UA_TYPES_SESSIONLESSINVOKEREQUESTTYPE 127
-
-/**
- * SessionlessInvokeResponseType
- * ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    size_t namespaceUrisSize;
-    UA_String *namespaceUris;
-    size_t serverUrisSize;
-    UA_String *serverUris;
-    UA_UInt32 serviceId;
-} UA_SessionlessInvokeResponseType;
-
-#define UA_TYPES_SESSIONLESSINVOKERESPONSETYPE 128
+#define UA_TYPES_SERVICEFAULT 39
 
 /**
  * FindServersRequest
@@ -18978,7 +14815,7 @@ typedef struct {
     UA_String *serverUris;
 } UA_FindServersRequest;
 
-#define UA_TYPES_FINDSERVERSREQUEST 129
+#define UA_TYPES_FINDSERVERSREQUEST 40
 
 /**
  * FindServersResponse
@@ -18990,56 +14827,7 @@ typedef struct {
     UA_ApplicationDescription *servers;
 } UA_FindServersResponse;
 
-#define UA_TYPES_FINDSERVERSRESPONSE 130
-
-/**
- * ServerOnNetwork
- * ^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_UInt32 recordId;
-    UA_String serverName;
-    UA_String discoveryUrl;
-    size_t serverCapabilitiesSize;
-    UA_String *serverCapabilities;
-} UA_ServerOnNetwork;
-
-#define UA_TYPES_SERVERONNETWORK 131
-
-/**
- * FindServersOnNetworkRequest
- * ^^^^^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_RequestHeader requestHeader;
-    UA_UInt32 startingRecordId;
-    UA_UInt32 maxRecordsToReturn;
-    size_t serverCapabilityFilterSize;
-    UA_String *serverCapabilityFilter;
-} UA_FindServersOnNetworkRequest;
-
-#define UA_TYPES_FINDSERVERSONNETWORKREQUEST 132
-
-/**
- * FindServersOnNetworkResponse
- * ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_ResponseHeader responseHeader;
-    UA_DateTime lastCounterResetTime;
-    size_t serversSize;
-    UA_ServerOnNetwork *servers;
-} UA_FindServersOnNetworkResponse;
-
-#define UA_TYPES_FINDSERVERSONNETWORKRESPONSE 133
-
-/**
- * ApplicationInstanceCertificate
- * ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef UA_ByteString UA_ApplicationInstanceCertificate;
-
-#define UA_TYPES_APPLICATIONINSTANCECERTIFICATE 134
+#define UA_TYPES_FINDSERVERSRESPONSE 41
 
 /**
  * MessageSecurityMode
@@ -19054,7 +14842,7 @@ typedef enum {
 } UA_MessageSecurityMode;
 UA_STATIC_ASSERT(sizeof(UA_MessageSecurityMode) == sizeof(UA_Int32), enum_must_be_32bit);
 
-#define UA_TYPES_MESSAGESECURITYMODE 135
+#define UA_TYPES_MESSAGESECURITYMODE 42
 
 /**
  * UserTokenType
@@ -19069,7 +14857,7 @@ typedef enum {
 } UA_UserTokenType;
 UA_STATIC_ASSERT(sizeof(UA_UserTokenType) == sizeof(UA_Int32), enum_must_be_32bit);
 
-#define UA_TYPES_USERTOKENTYPE 136
+#define UA_TYPES_USERTOKENTYPE 43
 
 /**
  * UserTokenPolicy
@@ -19083,7 +14871,7 @@ typedef struct {
     UA_String securityPolicyUri;
 } UA_UserTokenPolicy;
 
-#define UA_TYPES_USERTOKENPOLICY 137
+#define UA_TYPES_USERTOKENPOLICY 44
 
 /**
  * EndpointDescription
@@ -19101,7 +14889,7 @@ typedef struct {
     UA_Byte securityLevel;
 } UA_EndpointDescription;
 
-#define UA_TYPES_ENDPOINTDESCRIPTION 138
+#define UA_TYPES_ENDPOINTDESCRIPTION 45
 
 /**
  * GetEndpointsRequest
@@ -19116,7 +14904,7 @@ typedef struct {
     UA_String *profileUris;
 } UA_GetEndpointsRequest;
 
-#define UA_TYPES_GETENDPOINTSREQUEST 139
+#define UA_TYPES_GETENDPOINTSREQUEST 46
 
 /**
  * GetEndpointsResponse
@@ -19128,94 +14916,7 @@ typedef struct {
     UA_EndpointDescription *endpoints;
 } UA_GetEndpointsResponse;
 
-#define UA_TYPES_GETENDPOINTSRESPONSE 140
-
-/**
- * RegisteredServer
- * ^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_String serverUri;
-    UA_String productUri;
-    size_t serverNamesSize;
-    UA_LocalizedText *serverNames;
-    UA_ApplicationType serverType;
-    UA_String gatewayServerUri;
-    size_t discoveryUrlsSize;
-    UA_String *discoveryUrls;
-    UA_String semaphoreFilePath;
-    UA_Boolean isOnline;
-} UA_RegisteredServer;
-
-#define UA_TYPES_REGISTEREDSERVER 141
-
-/**
- * RegisterServerRequest
- * ^^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_RequestHeader requestHeader;
-    UA_RegisteredServer server;
-} UA_RegisterServerRequest;
-
-#define UA_TYPES_REGISTERSERVERREQUEST 142
-
-/**
- * RegisterServerResponse
- * ^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_ResponseHeader responseHeader;
-} UA_RegisterServerResponse;
-
-#define UA_TYPES_REGISTERSERVERRESPONSE 143
-
-/**
- * DiscoveryConfiguration
- * ^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef void * UA_DiscoveryConfiguration;
-
-#define UA_TYPES_DISCOVERYCONFIGURATION 144
-
-/**
- * MdnsDiscoveryConfiguration
- * ^^^^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_String mdnsServerName;
-    size_t serverCapabilitiesSize;
-    UA_String *serverCapabilities;
-} UA_MdnsDiscoveryConfiguration;
-
-#define UA_TYPES_MDNSDISCOVERYCONFIGURATION 145
-
-/**
- * RegisterServer2Request
- * ^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_RequestHeader requestHeader;
-    UA_RegisteredServer server;
-    size_t discoveryConfigurationSize;
-    UA_ExtensionObject *discoveryConfiguration;
-} UA_RegisterServer2Request;
-
-#define UA_TYPES_REGISTERSERVER2REQUEST 146
-
-/**
- * RegisterServer2Response
- * ^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_ResponseHeader responseHeader;
-    size_t configurationResultsSize;
-    UA_StatusCode *configurationResults;
-    size_t diagnosticInfosSize;
-    UA_DiagnosticInfo *diagnosticInfos;
-} UA_RegisterServer2Response;
-
-#define UA_TYPES_REGISTERSERVER2RESPONSE 147
+#define UA_TYPES_GETENDPOINTSRESPONSE 47
 
 /**
  * SecurityTokenRequestType
@@ -19228,7 +14929,7 @@ typedef enum {
 } UA_SecurityTokenRequestType;
 UA_STATIC_ASSERT(sizeof(UA_SecurityTokenRequestType) == sizeof(UA_Int32), enum_must_be_32bit);
 
-#define UA_TYPES_SECURITYTOKENREQUESTTYPE 148
+#define UA_TYPES_SECURITYTOKENREQUESTTYPE 48
 
 /**
  * ChannelSecurityToken
@@ -19241,7 +14942,7 @@ typedef struct {
     UA_UInt32 revisedLifetime;
 } UA_ChannelSecurityToken;
 
-#define UA_TYPES_CHANNELSECURITYTOKEN 149
+#define UA_TYPES_CHANNELSECURITYTOKEN 49
 
 /**
  * OpenSecureChannelRequest
@@ -19256,7 +14957,7 @@ typedef struct {
     UA_UInt32 requestedLifetime;
 } UA_OpenSecureChannelRequest;
 
-#define UA_TYPES_OPENSECURECHANNELREQUEST 150
+#define UA_TYPES_OPENSECURECHANNELREQUEST 50
 
 /**
  * OpenSecureChannelResponse
@@ -19269,7 +14970,7 @@ typedef struct {
     UA_ByteString serverNonce;
 } UA_OpenSecureChannelResponse;
 
-#define UA_TYPES_OPENSECURECHANNELRESPONSE 151
+#define UA_TYPES_OPENSECURECHANNELRESPONSE 51
 
 /**
  * CloseSecureChannelRequest
@@ -19279,7 +14980,7 @@ typedef struct {
     UA_RequestHeader requestHeader;
 } UA_CloseSecureChannelRequest;
 
-#define UA_TYPES_CLOSESECURECHANNELREQUEST 152
+#define UA_TYPES_CLOSESECURECHANNELREQUEST 52
 
 /**
  * CloseSecureChannelResponse
@@ -19289,7 +14990,7 @@ typedef struct {
     UA_ResponseHeader responseHeader;
 } UA_CloseSecureChannelResponse;
 
-#define UA_TYPES_CLOSESECURECHANNELRESPONSE 153
+#define UA_TYPES_CLOSESECURECHANNELRESPONSE 53
 
 /**
  * SignedSoftwareCertificate
@@ -19300,15 +15001,7 @@ typedef struct {
     UA_ByteString signature;
 } UA_SignedSoftwareCertificate;
 
-#define UA_TYPES_SIGNEDSOFTWARECERTIFICATE 154
-
-/**
- * SessionAuthenticationToken
- * ^^^^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef UA_NodeId UA_SessionAuthenticationToken;
-
-#define UA_TYPES_SESSIONAUTHENTICATIONTOKEN 155
+#define UA_TYPES_SIGNEDSOFTWARECERTIFICATE 54
 
 /**
  * SignatureData
@@ -19319,7 +15012,7 @@ typedef struct {
     UA_ByteString signature;
 } UA_SignatureData;
 
-#define UA_TYPES_SIGNATUREDATA 156
+#define UA_TYPES_SIGNATUREDATA 55
 
 /**
  * CreateSessionRequest
@@ -19337,7 +15030,7 @@ typedef struct {
     UA_UInt32 maxResponseMessageSize;
 } UA_CreateSessionRequest;
 
-#define UA_TYPES_CREATESESSIONREQUEST 157
+#define UA_TYPES_CREATESESSIONREQUEST 56
 
 /**
  * CreateSessionResponse
@@ -19358,7 +15051,7 @@ typedef struct {
     UA_UInt32 maxRequestMessageSize;
 } UA_CreateSessionResponse;
 
-#define UA_TYPES_CREATESESSIONRESPONSE 158
+#define UA_TYPES_CREATESESSIONRESPONSE 57
 
 /**
  * UserIdentityToken
@@ -19368,7 +15061,7 @@ typedef struct {
     UA_String policyId;
 } UA_UserIdentityToken;
 
-#define UA_TYPES_USERIDENTITYTOKEN 159
+#define UA_TYPES_USERIDENTITYTOKEN 58
 
 /**
  * AnonymousIdentityToken
@@ -19378,7 +15071,7 @@ typedef struct {
     UA_String policyId;
 } UA_AnonymousIdentityToken;
 
-#define UA_TYPES_ANONYMOUSIDENTITYTOKEN 160
+#define UA_TYPES_ANONYMOUSIDENTITYTOKEN 59
 
 /**
  * UserNameIdentityToken
@@ -19391,7 +15084,7 @@ typedef struct {
     UA_String encryptionAlgorithm;
 } UA_UserNameIdentityToken;
 
-#define UA_TYPES_USERNAMEIDENTITYTOKEN 161
+#define UA_TYPES_USERNAMEIDENTITYTOKEN 60
 
 /**
  * X509IdentityToken
@@ -19402,7 +15095,7 @@ typedef struct {
     UA_ByteString certificateData;
 } UA_X509IdentityToken;
 
-#define UA_TYPES_X509IDENTITYTOKEN 162
+#define UA_TYPES_X509IDENTITYTOKEN 61
 
 /**
  * IssuedIdentityToken
@@ -19414,15 +15107,7 @@ typedef struct {
     UA_String encryptionAlgorithm;
 } UA_IssuedIdentityToken;
 
-#define UA_TYPES_ISSUEDIDENTITYTOKEN 163
-
-/**
- * RsaEncryptedSecret
- * ^^^^^^^^^^^^^^^^^^
- */
-typedef UA_ByteString UA_RsaEncryptedSecret;
-
-#define UA_TYPES_RSAENCRYPTEDSECRET 164
+#define UA_TYPES_ISSUEDIDENTITYTOKEN 62
 
 /**
  * ActivateSessionRequest
@@ -19439,7 +15124,7 @@ typedef struct {
     UA_SignatureData userTokenSignature;
 } UA_ActivateSessionRequest;
 
-#define UA_TYPES_ACTIVATESESSIONREQUEST 165
+#define UA_TYPES_ACTIVATESESSIONREQUEST 63
 
 /**
  * ActivateSessionResponse
@@ -19454,7 +15139,7 @@ typedef struct {
     UA_DiagnosticInfo *diagnosticInfos;
 } UA_ActivateSessionResponse;
 
-#define UA_TYPES_ACTIVATESESSIONRESPONSE 166
+#define UA_TYPES_ACTIVATESESSIONRESPONSE 64
 
 /**
  * CloseSessionRequest
@@ -19465,7 +15150,7 @@ typedef struct {
     UA_Boolean deleteSubscriptions;
 } UA_CloseSessionRequest;
 
-#define UA_TYPES_CLOSESESSIONREQUEST 167
+#define UA_TYPES_CLOSESESSIONREQUEST 65
 
 /**
  * CloseSessionResponse
@@ -19475,29 +15160,7 @@ typedef struct {
     UA_ResponseHeader responseHeader;
 } UA_CloseSessionResponse;
 
-#define UA_TYPES_CLOSESESSIONRESPONSE 168
-
-/**
- * CancelRequest
- * ^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_RequestHeader requestHeader;
-    UA_UInt32 requestHandle;
-} UA_CancelRequest;
-
-#define UA_TYPES_CANCELREQUEST 169
-
-/**
- * CancelResponse
- * ^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_ResponseHeader responseHeader;
-    UA_UInt32 cancelCount;
-} UA_CancelResponse;
-
-#define UA_TYPES_CANCELRESPONSE 170
+#define UA_TYPES_CLOSESESSIONRESPONSE 66
 
 /**
  * NodeAttributesMask
@@ -19543,7 +15206,7 @@ typedef enum {
 } UA_NodeAttributesMask;
 UA_STATIC_ASSERT(sizeof(UA_NodeAttributesMask) == sizeof(UA_Int32), enum_must_be_32bit);
 
-#define UA_TYPES_NODEATTRIBUTESMASK 171
+#define UA_TYPES_NODEATTRIBUTESMASK 67
 
 /**
  * NodeAttributes
@@ -19557,7 +15220,7 @@ typedef struct {
     UA_UInt32 userWriteMask;
 } UA_NodeAttributes;
 
-#define UA_TYPES_NODEATTRIBUTES 172
+#define UA_TYPES_NODEATTRIBUTES 68
 
 /**
  * ObjectAttributes
@@ -19572,7 +15235,7 @@ typedef struct {
     UA_Byte eventNotifier;
 } UA_ObjectAttributes;
 
-#define UA_TYPES_OBJECTATTRIBUTES 173
+#define UA_TYPES_OBJECTATTRIBUTES 69
 
 /**
  * VariableAttributes
@@ -19595,7 +15258,7 @@ typedef struct {
     UA_Boolean historizing;
 } UA_VariableAttributes;
 
-#define UA_TYPES_VARIABLEATTRIBUTES 174
+#define UA_TYPES_VARIABLEATTRIBUTES 70
 
 /**
  * MethodAttributes
@@ -19611,7 +15274,7 @@ typedef struct {
     UA_Boolean userExecutable;
 } UA_MethodAttributes;
 
-#define UA_TYPES_METHODATTRIBUTES 175
+#define UA_TYPES_METHODATTRIBUTES 71
 
 /**
  * ObjectTypeAttributes
@@ -19626,7 +15289,7 @@ typedef struct {
     UA_Boolean isAbstract;
 } UA_ObjectTypeAttributes;
 
-#define UA_TYPES_OBJECTTYPEATTRIBUTES 176
+#define UA_TYPES_OBJECTTYPEATTRIBUTES 72
 
 /**
  * VariableTypeAttributes
@@ -19646,7 +15309,7 @@ typedef struct {
     UA_Boolean isAbstract;
 } UA_VariableTypeAttributes;
 
-#define UA_TYPES_VARIABLETYPEATTRIBUTES 177
+#define UA_TYPES_VARIABLETYPEATTRIBUTES 73
 
 /**
  * ReferenceTypeAttributes
@@ -19663,7 +15326,7 @@ typedef struct {
     UA_LocalizedText inverseName;
 } UA_ReferenceTypeAttributes;
 
-#define UA_TYPES_REFERENCETYPEATTRIBUTES 178
+#define UA_TYPES_REFERENCETYPEATTRIBUTES 74
 
 /**
  * DataTypeAttributes
@@ -19678,7 +15341,7 @@ typedef struct {
     UA_Boolean isAbstract;
 } UA_DataTypeAttributes;
 
-#define UA_TYPES_DATATYPEATTRIBUTES 179
+#define UA_TYPES_DATATYPEATTRIBUTES 75
 
 /**
  * ViewAttributes
@@ -19694,34 +15357,7 @@ typedef struct {
     UA_Byte eventNotifier;
 } UA_ViewAttributes;
 
-#define UA_TYPES_VIEWATTRIBUTES 180
-
-/**
- * GenericAttributeValue
- * ^^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_UInt32 attributeId;
-    UA_Variant value;
-} UA_GenericAttributeValue;
-
-#define UA_TYPES_GENERICATTRIBUTEVALUE 181
-
-/**
- * GenericAttributes
- * ^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_UInt32 specifiedAttributes;
-    UA_LocalizedText displayName;
-    UA_LocalizedText description;
-    UA_UInt32 writeMask;
-    UA_UInt32 userWriteMask;
-    size_t attributeValuesSize;
-    UA_GenericAttributeValue *attributeValues;
-} UA_GenericAttributes;
-
-#define UA_TYPES_GENERICATTRIBUTES 182
+#define UA_TYPES_VIEWATTRIBUTES 76
 
 /**
  * AddNodesItem
@@ -19737,7 +15373,7 @@ typedef struct {
     UA_ExpandedNodeId typeDefinition;
 } UA_AddNodesItem;
 
-#define UA_TYPES_ADDNODESITEM 183
+#define UA_TYPES_ADDNODESITEM 77
 
 /**
  * AddNodesResult
@@ -19748,7 +15384,7 @@ typedef struct {
     UA_NodeId addedNodeId;
 } UA_AddNodesResult;
 
-#define UA_TYPES_ADDNODESRESULT 184
+#define UA_TYPES_ADDNODESRESULT 78
 
 /**
  * AddNodesRequest
@@ -19760,7 +15396,7 @@ typedef struct {
     UA_AddNodesItem *nodesToAdd;
 } UA_AddNodesRequest;
 
-#define UA_TYPES_ADDNODESREQUEST 185
+#define UA_TYPES_ADDNODESREQUEST 79
 
 /**
  * AddNodesResponse
@@ -19774,7 +15410,7 @@ typedef struct {
     UA_DiagnosticInfo *diagnosticInfos;
 } UA_AddNodesResponse;
 
-#define UA_TYPES_ADDNODESRESPONSE 186
+#define UA_TYPES_ADDNODESRESPONSE 80
 
 /**
  * AddReferencesItem
@@ -19789,7 +15425,7 @@ typedef struct {
     UA_NodeClass targetNodeClass;
 } UA_AddReferencesItem;
 
-#define UA_TYPES_ADDREFERENCESITEM 187
+#define UA_TYPES_ADDREFERENCESITEM 81
 
 /**
  * AddReferencesRequest
@@ -19801,7 +15437,7 @@ typedef struct {
     UA_AddReferencesItem *referencesToAdd;
 } UA_AddReferencesRequest;
 
-#define UA_TYPES_ADDREFERENCESREQUEST 188
+#define UA_TYPES_ADDREFERENCESREQUEST 82
 
 /**
  * AddReferencesResponse
@@ -19815,7 +15451,7 @@ typedef struct {
     UA_DiagnosticInfo *diagnosticInfos;
 } UA_AddReferencesResponse;
 
-#define UA_TYPES_ADDREFERENCESRESPONSE 189
+#define UA_TYPES_ADDREFERENCESRESPONSE 83
 
 /**
  * DeleteNodesItem
@@ -19826,7 +15462,7 @@ typedef struct {
     UA_Boolean deleteTargetReferences;
 } UA_DeleteNodesItem;
 
-#define UA_TYPES_DELETENODESITEM 190
+#define UA_TYPES_DELETENODESITEM 84
 
 /**
  * DeleteNodesRequest
@@ -19838,7 +15474,7 @@ typedef struct {
     UA_DeleteNodesItem *nodesToDelete;
 } UA_DeleteNodesRequest;
 
-#define UA_TYPES_DELETENODESREQUEST 191
+#define UA_TYPES_DELETENODESREQUEST 85
 
 /**
  * DeleteNodesResponse
@@ -19852,7 +15488,7 @@ typedef struct {
     UA_DiagnosticInfo *diagnosticInfos;
 } UA_DeleteNodesResponse;
 
-#define UA_TYPES_DELETENODESRESPONSE 192
+#define UA_TYPES_DELETENODESRESPONSE 86
 
 /**
  * DeleteReferencesItem
@@ -19866,7 +15502,7 @@ typedef struct {
     UA_Boolean deleteBidirectional;
 } UA_DeleteReferencesItem;
 
-#define UA_TYPES_DELETEREFERENCESITEM 193
+#define UA_TYPES_DELETEREFERENCESITEM 87
 
 /**
  * DeleteReferencesRequest
@@ -19878,7 +15514,7 @@ typedef struct {
     UA_DeleteReferencesItem *referencesToDelete;
 } UA_DeleteReferencesRequest;
 
-#define UA_TYPES_DELETEREFERENCESREQUEST 194
+#define UA_TYPES_DELETEREFERENCESREQUEST 88
 
 /**
  * DeleteReferencesResponse
@@ -19892,43 +15528,7 @@ typedef struct {
     UA_DiagnosticInfo *diagnosticInfos;
 } UA_DeleteReferencesResponse;
 
-#define UA_TYPES_DELETEREFERENCESRESPONSE 195
-
-/**
- * AttributeWriteMask
- * ^^^^^^^^^^^^^^^^^^
- */
-typedef UA_UInt32 UA_AttributeWriteMask;
-
-#define UA_ATTRIBUTEWRITEMASK_NONE 0
-#define UA_ATTRIBUTEWRITEMASK_ACCESSLEVEL 1
-#define UA_ATTRIBUTEWRITEMASK_ARRAYDIMENSIONS 2
-#define UA_ATTRIBUTEWRITEMASK_BROWSENAME 4
-#define UA_ATTRIBUTEWRITEMASK_CONTAINSNOLOOPS 8
-#define UA_ATTRIBUTEWRITEMASK_DATATYPE 16
-#define UA_ATTRIBUTEWRITEMASK_DESCRIPTION 32
-#define UA_ATTRIBUTEWRITEMASK_DISPLAYNAME 64
-#define UA_ATTRIBUTEWRITEMASK_EVENTNOTIFIER 128
-#define UA_ATTRIBUTEWRITEMASK_EXECUTABLE 256
-#define UA_ATTRIBUTEWRITEMASK_HISTORIZING 512
-#define UA_ATTRIBUTEWRITEMASK_INVERSENAME 1024
-#define UA_ATTRIBUTEWRITEMASK_ISABSTRACT 2048
-#define UA_ATTRIBUTEWRITEMASK_MINIMUMSAMPLINGINTERVAL 4096
-#define UA_ATTRIBUTEWRITEMASK_NODECLASS 8192
-#define UA_ATTRIBUTEWRITEMASK_NODEID 16384
-#define UA_ATTRIBUTEWRITEMASK_SYMMETRIC 32768
-#define UA_ATTRIBUTEWRITEMASK_USERACCESSLEVEL 65536
-#define UA_ATTRIBUTEWRITEMASK_USEREXECUTABLE 131072
-#define UA_ATTRIBUTEWRITEMASK_USERWRITEMASK 262144
-#define UA_ATTRIBUTEWRITEMASK_VALUERANK 524288
-#define UA_ATTRIBUTEWRITEMASK_WRITEMASK 1048576
-#define UA_ATTRIBUTEWRITEMASK_VALUEFORVARIABLETYPE 2097152
-#define UA_ATTRIBUTEWRITEMASK_DATATYPEDEFINITION 4194304
-#define UA_ATTRIBUTEWRITEMASK_ROLEPERMISSIONS 8388608
-#define UA_ATTRIBUTEWRITEMASK_ACCESSRESTRICTIONS 16777216
-#define UA_ATTRIBUTEWRITEMASK_ACCESSLEVELEX 33554432
-
-#define UA_TYPES_ATTRIBUTEWRITEMASK 196
+#define UA_TYPES_DELETEREFERENCESRESPONSE 89
 
 /**
  * BrowseDirection
@@ -19943,7 +15543,7 @@ typedef enum {
 } UA_BrowseDirection;
 UA_STATIC_ASSERT(sizeof(UA_BrowseDirection) == sizeof(UA_Int32), enum_must_be_32bit);
 
-#define UA_TYPES_BROWSEDIRECTION 197
+#define UA_TYPES_BROWSEDIRECTION 90
 
 /**
  * ViewDescription
@@ -19955,7 +15555,7 @@ typedef struct {
     UA_UInt32 viewVersion;
 } UA_ViewDescription;
 
-#define UA_TYPES_VIEWDESCRIPTION 198
+#define UA_TYPES_VIEWDESCRIPTION 91
 
 /**
  * BrowseDescription
@@ -19970,7 +15570,7 @@ typedef struct {
     UA_UInt32 resultMask;
 } UA_BrowseDescription;
 
-#define UA_TYPES_BROWSEDESCRIPTION 199
+#define UA_TYPES_BROWSEDESCRIPTION 92
 
 /**
  * BrowseResultMask
@@ -19991,7 +15591,7 @@ typedef enum {
 } UA_BrowseResultMask;
 UA_STATIC_ASSERT(sizeof(UA_BrowseResultMask) == sizeof(UA_Int32), enum_must_be_32bit);
 
-#define UA_TYPES_BROWSERESULTMASK 200
+#define UA_TYPES_BROWSERESULTMASK 93
 
 /**
  * ReferenceDescription
@@ -20007,15 +15607,7 @@ typedef struct {
     UA_ExpandedNodeId typeDefinition;
 } UA_ReferenceDescription;
 
-#define UA_TYPES_REFERENCEDESCRIPTION 201
-
-/**
- * ContinuationPoint
- * ^^^^^^^^^^^^^^^^^
- */
-typedef UA_ByteString UA_ContinuationPoint;
-
-#define UA_TYPES_CONTINUATIONPOINT 202
+#define UA_TYPES_REFERENCEDESCRIPTION 94
 
 /**
  * BrowseResult
@@ -20028,7 +15620,7 @@ typedef struct {
     UA_ReferenceDescription *references;
 } UA_BrowseResult;
 
-#define UA_TYPES_BROWSERESULT 203
+#define UA_TYPES_BROWSERESULT 95
 
 /**
  * BrowseRequest
@@ -20042,7 +15634,7 @@ typedef struct {
     UA_BrowseDescription *nodesToBrowse;
 } UA_BrowseRequest;
 
-#define UA_TYPES_BROWSEREQUEST 204
+#define UA_TYPES_BROWSEREQUEST 96
 
 /**
  * BrowseResponse
@@ -20056,7 +15648,7 @@ typedef struct {
     UA_DiagnosticInfo *diagnosticInfos;
 } UA_BrowseResponse;
 
-#define UA_TYPES_BROWSERESPONSE 205
+#define UA_TYPES_BROWSERESPONSE 97
 
 /**
  * BrowseNextRequest
@@ -20069,7 +15661,7 @@ typedef struct {
     UA_ByteString *continuationPoints;
 } UA_BrowseNextRequest;
 
-#define UA_TYPES_BROWSENEXTREQUEST 206
+#define UA_TYPES_BROWSENEXTREQUEST 98
 
 /**
  * BrowseNextResponse
@@ -20083,7 +15675,7 @@ typedef struct {
     UA_DiagnosticInfo *diagnosticInfos;
 } UA_BrowseNextResponse;
 
-#define UA_TYPES_BROWSENEXTRESPONSE 207
+#define UA_TYPES_BROWSENEXTRESPONSE 99
 
 /**
  * RelativePathElement
@@ -20096,7 +15688,7 @@ typedef struct {
     UA_QualifiedName targetName;
 } UA_RelativePathElement;
 
-#define UA_TYPES_RELATIVEPATHELEMENT 208
+#define UA_TYPES_RELATIVEPATHELEMENT 100
 
 /**
  * RelativePath
@@ -20107,7 +15699,7 @@ typedef struct {
     UA_RelativePathElement *elements;
 } UA_RelativePath;
 
-#define UA_TYPES_RELATIVEPATH 209
+#define UA_TYPES_RELATIVEPATH 101
 
 /**
  * BrowsePath
@@ -20118,7 +15710,7 @@ typedef struct {
     UA_RelativePath relativePath;
 } UA_BrowsePath;
 
-#define UA_TYPES_BROWSEPATH 210
+#define UA_TYPES_BROWSEPATH 102
 
 /**
  * BrowsePathTarget
@@ -20129,7 +15721,7 @@ typedef struct {
     UA_UInt32 remainingPathIndex;
 } UA_BrowsePathTarget;
 
-#define UA_TYPES_BROWSEPATHTARGET 211
+#define UA_TYPES_BROWSEPATHTARGET 103
 
 /**
  * BrowsePathResult
@@ -20141,7 +15733,7 @@ typedef struct {
     UA_BrowsePathTarget *targets;
 } UA_BrowsePathResult;
 
-#define UA_TYPES_BROWSEPATHRESULT 212
+#define UA_TYPES_BROWSEPATHRESULT 104
 
 /**
  * TranslateBrowsePathsToNodeIdsRequest
@@ -20153,7 +15745,7 @@ typedef struct {
     UA_BrowsePath *browsePaths;
 } UA_TranslateBrowsePathsToNodeIdsRequest;
 
-#define UA_TYPES_TRANSLATEBROWSEPATHSTONODEIDSREQUEST 213
+#define UA_TYPES_TRANSLATEBROWSEPATHSTONODEIDSREQUEST 105
 
 /**
  * TranslateBrowsePathsToNodeIdsResponse
@@ -20167,7 +15759,7 @@ typedef struct {
     UA_DiagnosticInfo *diagnosticInfos;
 } UA_TranslateBrowsePathsToNodeIdsResponse;
 
-#define UA_TYPES_TRANSLATEBROWSEPATHSTONODEIDSRESPONSE 214
+#define UA_TYPES_TRANSLATEBROWSEPATHSTONODEIDSRESPONSE 106
 
 /**
  * RegisterNodesRequest
@@ -20179,7 +15771,7 @@ typedef struct {
     UA_NodeId *nodesToRegister;
 } UA_RegisterNodesRequest;
 
-#define UA_TYPES_REGISTERNODESREQUEST 215
+#define UA_TYPES_REGISTERNODESREQUEST 107
 
 /**
  * RegisterNodesResponse
@@ -20191,7 +15783,7 @@ typedef struct {
     UA_NodeId *registeredNodeIds;
 } UA_RegisterNodesResponse;
 
-#define UA_TYPES_REGISTERNODESRESPONSE 216
+#define UA_TYPES_REGISTERNODESRESPONSE 108
 
 /**
  * UnregisterNodesRequest
@@ -20203,7 +15795,7 @@ typedef struct {
     UA_NodeId *nodesToUnregister;
 } UA_UnregisterNodesRequest;
 
-#define UA_TYPES_UNREGISTERNODESREQUEST 217
+#define UA_TYPES_UNREGISTERNODESREQUEST 109
 
 /**
  * UnregisterNodesResponse
@@ -20213,82 +15805,7 @@ typedef struct {
     UA_ResponseHeader responseHeader;
 } UA_UnregisterNodesResponse;
 
-#define UA_TYPES_UNREGISTERNODESRESPONSE 218
-
-/**
- * Counter
- * ^^^^^^^
- */
-typedef UA_UInt32 UA_Counter;
-
-#define UA_TYPES_COUNTER 219
-
-/**
- * OpaqueNumericRange
- * ^^^^^^^^^^^^^^^^^^
- */
-typedef UA_String UA_OpaqueNumericRange;
-
-#define UA_TYPES_OPAQUENUMERICRANGE 220
-
-/**
- * Time
- * ^^^^
- */
-typedef UA_String UA_Time;
-
-#define UA_TYPES_TIME 221
-
-/**
- * Date
- * ^^^^
- */
-typedef UA_DateTime UA_Date;
-
-#define UA_TYPES_DATE 222
-
-/**
- * EndpointConfiguration
- * ^^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_Int32 operationTimeout;
-    UA_Boolean useBinaryEncoding;
-    UA_Int32 maxStringLength;
-    UA_Int32 maxByteStringLength;
-    UA_Int32 maxArrayLength;
-    UA_Int32 maxMessageSize;
-    UA_Int32 maxBufferSize;
-    UA_Int32 channelLifetime;
-    UA_Int32 securityTokenLifetime;
-} UA_EndpointConfiguration;
-
-#define UA_TYPES_ENDPOINTCONFIGURATION 223
-
-/**
- * QueryDataDescription
- * ^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_RelativePath relativePath;
-    UA_UInt32 attributeId;
-    UA_String indexRange;
-} UA_QueryDataDescription;
-
-#define UA_TYPES_QUERYDATADESCRIPTION 224
-
-/**
- * NodeTypeDescription
- * ^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_ExpandedNodeId typeDefinitionNode;
-    UA_Boolean includeSubTypes;
-    size_t dataToReturnSize;
-    UA_QueryDataDescription *dataToReturn;
-} UA_NodeTypeDescription;
-
-#define UA_TYPES_NODETYPEDESCRIPTION 225
+#define UA_TYPES_UNREGISTERNODESRESPONSE 110
 
 /**
  * FilterOperator
@@ -20317,34 +15834,7 @@ typedef enum {
 } UA_FilterOperator;
 UA_STATIC_ASSERT(sizeof(UA_FilterOperator) == sizeof(UA_Int32), enum_must_be_32bit);
 
-#define UA_TYPES_FILTEROPERATOR 226
-
-/**
- * QueryDataSet
- * ^^^^^^^^^^^^
- */
-typedef struct {
-    UA_ExpandedNodeId nodeId;
-    UA_ExpandedNodeId typeDefinitionNode;
-    size_t valuesSize;
-    UA_Variant *values;
-} UA_QueryDataSet;
-
-#define UA_TYPES_QUERYDATASET 227
-
-/**
- * NodeReference
- * ^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_NodeId nodeId;
-    UA_NodeId referenceTypeId;
-    UA_Boolean isForward;
-    size_t referencedNodeIdsSize;
-    UA_NodeId *referencedNodeIds;
-} UA_NodeReference;
-
-#define UA_TYPES_NODEREFERENCE 228
+#define UA_TYPES_FILTEROPERATOR 111
 
 /**
  * ContentFilterElement
@@ -20356,7 +15846,7 @@ typedef struct {
     UA_ExtensionObject *filterOperands;
 } UA_ContentFilterElement;
 
-#define UA_TYPES_CONTENTFILTERELEMENT 229
+#define UA_TYPES_CONTENTFILTERELEMENT 112
 
 /**
  * ContentFilter
@@ -20367,7 +15857,7 @@ typedef struct {
     UA_ContentFilterElement *elements;
 } UA_ContentFilter;
 
-#define UA_TYPES_CONTENTFILTER 230
+#define UA_TYPES_CONTENTFILTER 113
 
 /**
  * FilterOperand
@@ -20375,7 +15865,7 @@ typedef struct {
  */
 typedef void * UA_FilterOperand;
 
-#define UA_TYPES_FILTEROPERAND 231
+#define UA_TYPES_FILTEROPERAND 114
 
 /**
  * ElementOperand
@@ -20385,7 +15875,7 @@ typedef struct {
     UA_UInt32 index;
 } UA_ElementOperand;
 
-#define UA_TYPES_ELEMENTOPERAND 232
+#define UA_TYPES_ELEMENTOPERAND 115
 
 /**
  * LiteralOperand
@@ -20395,7 +15885,7 @@ typedef struct {
     UA_Variant value;
 } UA_LiteralOperand;
 
-#define UA_TYPES_LITERALOPERAND 233
+#define UA_TYPES_LITERALOPERAND 116
 
 /**
  * AttributeOperand
@@ -20409,7 +15899,7 @@ typedef struct {
     UA_String indexRange;
 } UA_AttributeOperand;
 
-#define UA_TYPES_ATTRIBUTEOPERAND 234
+#define UA_TYPES_ATTRIBUTEOPERAND 117
 
 /**
  * SimpleAttributeOperand
@@ -20423,7 +15913,7 @@ typedef struct {
     UA_String indexRange;
 } UA_SimpleAttributeOperand;
 
-#define UA_TYPES_SIMPLEATTRIBUTEOPERAND 235
+#define UA_TYPES_SIMPLEATTRIBUTEOPERAND 118
 
 /**
  * ContentFilterElementResult
@@ -20437,7 +15927,7 @@ typedef struct {
     UA_DiagnosticInfo *operandDiagnosticInfos;
 } UA_ContentFilterElementResult;
 
-#define UA_TYPES_CONTENTFILTERELEMENTRESULT 236
+#define UA_TYPES_CONTENTFILTERELEMENTRESULT 119
 
 /**
  * ContentFilterResult
@@ -20450,80 +15940,7 @@ typedef struct {
     UA_DiagnosticInfo *elementDiagnosticInfos;
 } UA_ContentFilterResult;
 
-#define UA_TYPES_CONTENTFILTERRESULT 237
-
-/**
- * ParsingResult
- * ^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_StatusCode statusCode;
-    size_t dataStatusCodesSize;
-    UA_StatusCode *dataStatusCodes;
-    size_t dataDiagnosticInfosSize;
-    UA_DiagnosticInfo *dataDiagnosticInfos;
-} UA_ParsingResult;
-
-#define UA_TYPES_PARSINGRESULT 238
-
-/**
- * QueryFirstRequest
- * ^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_RequestHeader requestHeader;
-    UA_ViewDescription view;
-    size_t nodeTypesSize;
-    UA_NodeTypeDescription *nodeTypes;
-    UA_ContentFilter filter;
-    UA_UInt32 maxDataSetsToReturn;
-    UA_UInt32 maxReferencesToReturn;
-} UA_QueryFirstRequest;
-
-#define UA_TYPES_QUERYFIRSTREQUEST 239
-
-/**
- * QueryFirstResponse
- * ^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_ResponseHeader responseHeader;
-    size_t queryDataSetsSize;
-    UA_QueryDataSet *queryDataSets;
-    UA_ByteString continuationPoint;
-    size_t parsingResultsSize;
-    UA_ParsingResult *parsingResults;
-    size_t diagnosticInfosSize;
-    UA_DiagnosticInfo *diagnosticInfos;
-    UA_ContentFilterResult filterResult;
-} UA_QueryFirstResponse;
-
-#define UA_TYPES_QUERYFIRSTRESPONSE 240
-
-/**
- * QueryNextRequest
- * ^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_RequestHeader requestHeader;
-    UA_Boolean releaseContinuationPoint;
-    UA_ByteString continuationPoint;
-} UA_QueryNextRequest;
-
-#define UA_TYPES_QUERYNEXTREQUEST 241
-
-/**
- * QueryNextResponse
- * ^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_ResponseHeader responseHeader;
-    size_t queryDataSetsSize;
-    UA_QueryDataSet *queryDataSets;
-    UA_ByteString revisedContinuationPoint;
-} UA_QueryNextResponse;
-
-#define UA_TYPES_QUERYNEXTRESPONSE 242
+#define UA_TYPES_CONTENTFILTERRESULT 120
 
 /**
  * TimestampsToReturn
@@ -20539,7 +15956,7 @@ typedef enum {
 } UA_TimestampsToReturn;
 UA_STATIC_ASSERT(sizeof(UA_TimestampsToReturn) == sizeof(UA_Int32), enum_must_be_32bit);
 
-#define UA_TYPES_TIMESTAMPSTORETURN 243
+#define UA_TYPES_TIMESTAMPSTORETURN 121
 
 /**
  * ReadValueId
@@ -20552,7 +15969,7 @@ typedef struct {
     UA_QualifiedName dataEncoding;
 } UA_ReadValueId;
 
-#define UA_TYPES_READVALUEID 244
+#define UA_TYPES_READVALUEID 122
 
 /**
  * ReadRequest
@@ -20566,7 +15983,7 @@ typedef struct {
     UA_ReadValueId *nodesToRead;
 } UA_ReadRequest;
 
-#define UA_TYPES_READREQUEST 245
+#define UA_TYPES_READREQUEST 123
 
 /**
  * ReadResponse
@@ -20580,117 +15997,7 @@ typedef struct {
     UA_DiagnosticInfo *diagnosticInfos;
 } UA_ReadResponse;
 
-#define UA_TYPES_READRESPONSE 246
-
-/**
- * HistoryReadValueId
- * ^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_NodeId nodeId;
-    UA_String indexRange;
-    UA_QualifiedName dataEncoding;
-    UA_ByteString continuationPoint;
-} UA_HistoryReadValueId;
-
-#define UA_TYPES_HISTORYREADVALUEID 247
-
-/**
- * HistoryReadResult
- * ^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_StatusCode statusCode;
-    UA_ByteString continuationPoint;
-    UA_ExtensionObject historyData;
-} UA_HistoryReadResult;
-
-#define UA_TYPES_HISTORYREADRESULT 248
-
-/**
- * HistoryReadDetails
- * ^^^^^^^^^^^^^^^^^^
- */
-typedef void * UA_HistoryReadDetails;
-
-#define UA_TYPES_HISTORYREADDETAILS 249
-
-/**
- * ReadRawModifiedDetails
- * ^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_Boolean isReadModified;
-    UA_DateTime startTime;
-    UA_DateTime endTime;
-    UA_UInt32 numValuesPerNode;
-    UA_Boolean returnBounds;
-} UA_ReadRawModifiedDetails;
-
-#define UA_TYPES_READRAWMODIFIEDDETAILS 250
-
-/**
- * ReadAtTimeDetails
- * ^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    size_t reqTimesSize;
-    UA_DateTime *reqTimes;
-    UA_Boolean useSimpleBounds;
-} UA_ReadAtTimeDetails;
-
-#define UA_TYPES_READATTIMEDETAILS 251
-
-/**
- * ReadAnnotationDataDetails
- * ^^^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    size_t reqTimesSize;
-    UA_DateTime *reqTimes;
-} UA_ReadAnnotationDataDetails;
-
-#define UA_TYPES_READANNOTATIONDATADETAILS 252
-
-/**
- * HistoryData
- * ^^^^^^^^^^^
- */
-typedef struct {
-    size_t dataValuesSize;
-    UA_DataValue *dataValues;
-} UA_HistoryData;
-
-#define UA_TYPES_HISTORYDATA 253
-
-/**
- * HistoryReadRequest
- * ^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_RequestHeader requestHeader;
-    UA_ExtensionObject historyReadDetails;
-    UA_TimestampsToReturn timestampsToReturn;
-    UA_Boolean releaseContinuationPoints;
-    size_t nodesToReadSize;
-    UA_HistoryReadValueId *nodesToRead;
-} UA_HistoryReadRequest;
-
-#define UA_TYPES_HISTORYREADREQUEST 254
-
-/**
- * HistoryReadResponse
- * ^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_ResponseHeader responseHeader;
-    size_t resultsSize;
-    UA_HistoryReadResult *results;
-    size_t diagnosticInfosSize;
-    UA_DiagnosticInfo *diagnosticInfos;
-} UA_HistoryReadResponse;
-
-#define UA_TYPES_HISTORYREADRESPONSE 255
+#define UA_TYPES_READRESPONSE 124
 
 /**
  * WriteValue
@@ -20703,7 +16010,7 @@ typedef struct {
     UA_DataValue value;
 } UA_WriteValue;
 
-#define UA_TYPES_WRITEVALUE 256
+#define UA_TYPES_WRITEVALUE 125
 
 /**
  * WriteRequest
@@ -20715,7 +16022,7 @@ typedef struct {
     UA_WriteValue *nodesToWrite;
 } UA_WriteRequest;
 
-#define UA_TYPES_WRITEREQUEST 257
+#define UA_TYPES_WRITEREQUEST 126
 
 /**
  * WriteResponse
@@ -20729,150 +16036,7 @@ typedef struct {
     UA_DiagnosticInfo *diagnosticInfos;
 } UA_WriteResponse;
 
-#define UA_TYPES_WRITERESPONSE 258
-
-/**
- * HistoryUpdateDetails
- * ^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_NodeId nodeId;
-} UA_HistoryUpdateDetails;
-
-#define UA_TYPES_HISTORYUPDATEDETAILS 259
-
-/**
- * HistoryUpdateType
- * ^^^^^^^^^^^^^^^^^
- */
-typedef enum {
-    UA_HISTORYUPDATETYPE_INSERT = 1,
-    UA_HISTORYUPDATETYPE_REPLACE = 2,
-    UA_HISTORYUPDATETYPE_UPDATE = 3,
-    UA_HISTORYUPDATETYPE_DELETE = 4,
-    __UA_HISTORYUPDATETYPE_FORCE32BIT = 0x7fffffff
-} UA_HistoryUpdateType;
-UA_STATIC_ASSERT(sizeof(UA_HistoryUpdateType) == sizeof(UA_Int32), enum_must_be_32bit);
-
-#define UA_TYPES_HISTORYUPDATETYPE 260
-
-/**
- * PerformUpdateType
- * ^^^^^^^^^^^^^^^^^
- */
-typedef enum {
-    UA_PERFORMUPDATETYPE_INSERT = 1,
-    UA_PERFORMUPDATETYPE_REPLACE = 2,
-    UA_PERFORMUPDATETYPE_UPDATE = 3,
-    UA_PERFORMUPDATETYPE_REMOVE = 4,
-    __UA_PERFORMUPDATETYPE_FORCE32BIT = 0x7fffffff
-} UA_PerformUpdateType;
-UA_STATIC_ASSERT(sizeof(UA_PerformUpdateType) == sizeof(UA_Int32), enum_must_be_32bit);
-
-#define UA_TYPES_PERFORMUPDATETYPE 261
-
-/**
- * UpdateDataDetails
- * ^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_NodeId nodeId;
-    UA_PerformUpdateType performInsertReplace;
-    size_t updateValuesSize;
-    UA_DataValue *updateValues;
-} UA_UpdateDataDetails;
-
-#define UA_TYPES_UPDATEDATADETAILS 262
-
-/**
- * UpdateStructureDataDetails
- * ^^^^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_NodeId nodeId;
-    UA_PerformUpdateType performInsertReplace;
-    size_t updateValuesSize;
-    UA_DataValue *updateValues;
-} UA_UpdateStructureDataDetails;
-
-#define UA_TYPES_UPDATESTRUCTUREDATADETAILS 263
-
-/**
- * DeleteRawModifiedDetails
- * ^^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_NodeId nodeId;
-    UA_Boolean isDeleteModified;
-    UA_DateTime startTime;
-    UA_DateTime endTime;
-} UA_DeleteRawModifiedDetails;
-
-#define UA_TYPES_DELETERAWMODIFIEDDETAILS 264
-
-/**
- * DeleteAtTimeDetails
- * ^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_NodeId nodeId;
-    size_t reqTimesSize;
-    UA_DateTime *reqTimes;
-} UA_DeleteAtTimeDetails;
-
-#define UA_TYPES_DELETEATTIMEDETAILS 265
-
-/**
- * DeleteEventDetails
- * ^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_NodeId nodeId;
-    size_t eventIdsSize;
-    UA_ByteString *eventIds;
-} UA_DeleteEventDetails;
-
-#define UA_TYPES_DELETEEVENTDETAILS 266
-
-/**
- * HistoryUpdateResult
- * ^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_StatusCode statusCode;
-    size_t operationResultsSize;
-    UA_StatusCode *operationResults;
-    size_t diagnosticInfosSize;
-    UA_DiagnosticInfo *diagnosticInfos;
-} UA_HistoryUpdateResult;
-
-#define UA_TYPES_HISTORYUPDATERESULT 267
-
-/**
- * HistoryUpdateRequest
- * ^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_RequestHeader requestHeader;
-    size_t historyUpdateDetailsSize;
-    UA_ExtensionObject *historyUpdateDetails;
-} UA_HistoryUpdateRequest;
-
-#define UA_TYPES_HISTORYUPDATEREQUEST 268
-
-/**
- * HistoryUpdateResponse
- * ^^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_ResponseHeader responseHeader;
-    size_t resultsSize;
-    UA_HistoryUpdateResult *results;
-    size_t diagnosticInfosSize;
-    UA_DiagnosticInfo *diagnosticInfos;
-} UA_HistoryUpdateResponse;
-
-#define UA_TYPES_HISTORYUPDATERESPONSE 269
+#define UA_TYPES_WRITERESPONSE 127
 
 /**
  * CallMethodRequest
@@ -20885,7 +16049,7 @@ typedef struct {
     UA_Variant *inputArguments;
 } UA_CallMethodRequest;
 
-#define UA_TYPES_CALLMETHODREQUEST 270
+#define UA_TYPES_CALLMETHODREQUEST 128
 
 /**
  * CallMethodResult
@@ -20901,7 +16065,7 @@ typedef struct {
     UA_Variant *outputArguments;
 } UA_CallMethodResult;
 
-#define UA_TYPES_CALLMETHODRESULT 271
+#define UA_TYPES_CALLMETHODRESULT 129
 
 /**
  * CallRequest
@@ -20913,7 +16077,7 @@ typedef struct {
     UA_CallMethodRequest *methodsToCall;
 } UA_CallRequest;
 
-#define UA_TYPES_CALLREQUEST 272
+#define UA_TYPES_CALLREQUEST 130
 
 /**
  * CallResponse
@@ -20927,7 +16091,7 @@ typedef struct {
     UA_DiagnosticInfo *diagnosticInfos;
 } UA_CallResponse;
 
-#define UA_TYPES_CALLRESPONSE 273
+#define UA_TYPES_CALLRESPONSE 131
 
 /**
  * MonitoringMode
@@ -20941,7 +16105,7 @@ typedef enum {
 } UA_MonitoringMode;
 UA_STATIC_ASSERT(sizeof(UA_MonitoringMode) == sizeof(UA_Int32), enum_must_be_32bit);
 
-#define UA_TYPES_MONITORINGMODE 274
+#define UA_TYPES_MONITORINGMODE 132
 
 /**
  * DataChangeTrigger
@@ -20955,7 +16119,7 @@ typedef enum {
 } UA_DataChangeTrigger;
 UA_STATIC_ASSERT(sizeof(UA_DataChangeTrigger) == sizeof(UA_Int32), enum_must_be_32bit);
 
-#define UA_TYPES_DATACHANGETRIGGER 275
+#define UA_TYPES_DATACHANGETRIGGER 133
 
 /**
  * DeadbandType
@@ -20969,15 +16133,7 @@ typedef enum {
 } UA_DeadbandType;
 UA_STATIC_ASSERT(sizeof(UA_DeadbandType) == sizeof(UA_Int32), enum_must_be_32bit);
 
-#define UA_TYPES_DEADBANDTYPE 276
-
-/**
- * MonitoringFilter
- * ^^^^^^^^^^^^^^^^
- */
-typedef void * UA_MonitoringFilter;
-
-#define UA_TYPES_MONITORINGFILTER 277
+#define UA_TYPES_DEADBANDTYPE 134
 
 /**
  * DataChangeFilter
@@ -20989,7 +16145,7 @@ typedef struct {
     UA_Double deadbandValue;
 } UA_DataChangeFilter;
 
-#define UA_TYPES_DATACHANGEFILTER 278
+#define UA_TYPES_DATACHANGEFILTER 135
 
 /**
  * EventFilter
@@ -21001,7 +16157,7 @@ typedef struct {
     UA_ContentFilter whereClause;
 } UA_EventFilter;
 
-#define UA_TYPES_EVENTFILTER 279
+#define UA_TYPES_EVENTFILTER 136
 
 /**
  * AggregateConfiguration
@@ -21015,7 +16171,7 @@ typedef struct {
     UA_Boolean useSlopedExtrapolation;
 } UA_AggregateConfiguration;
 
-#define UA_TYPES_AGGREGATECONFIGURATION 280
+#define UA_TYPES_AGGREGATECONFIGURATION 137
 
 /**
  * AggregateFilter
@@ -21028,15 +16184,7 @@ typedef struct {
     UA_AggregateConfiguration aggregateConfiguration;
 } UA_AggregateFilter;
 
-#define UA_TYPES_AGGREGATEFILTER 281
-
-/**
- * MonitoringFilterResult
- * ^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef void * UA_MonitoringFilterResult;
-
-#define UA_TYPES_MONITORINGFILTERRESULT 282
+#define UA_TYPES_AGGREGATEFILTER 138
 
 /**
  * EventFilterResult
@@ -21050,19 +16198,7 @@ typedef struct {
     UA_ContentFilterResult whereClauseResult;
 } UA_EventFilterResult;
 
-#define UA_TYPES_EVENTFILTERRESULT 283
-
-/**
- * AggregateFilterResult
- * ^^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_DateTime revisedStartTime;
-    UA_Double revisedProcessingInterval;
-    UA_AggregateConfiguration revisedAggregateConfiguration;
-} UA_AggregateFilterResult;
-
-#define UA_TYPES_AGGREGATEFILTERRESULT 284
+#define UA_TYPES_EVENTFILTERRESULT 139
 
 /**
  * MonitoringParameters
@@ -21076,7 +16212,7 @@ typedef struct {
     UA_Boolean discardOldest;
 } UA_MonitoringParameters;
 
-#define UA_TYPES_MONITORINGPARAMETERS 285
+#define UA_TYPES_MONITORINGPARAMETERS 140
 
 /**
  * MonitoredItemCreateRequest
@@ -21088,7 +16224,7 @@ typedef struct {
     UA_MonitoringParameters requestedParameters;
 } UA_MonitoredItemCreateRequest;
 
-#define UA_TYPES_MONITOREDITEMCREATEREQUEST 286
+#define UA_TYPES_MONITOREDITEMCREATEREQUEST 141
 
 /**
  * MonitoredItemCreateResult
@@ -21102,7 +16238,7 @@ typedef struct {
     UA_ExtensionObject filterResult;
 } UA_MonitoredItemCreateResult;
 
-#define UA_TYPES_MONITOREDITEMCREATERESULT 287
+#define UA_TYPES_MONITOREDITEMCREATERESULT 142
 
 /**
  * CreateMonitoredItemsRequest
@@ -21116,7 +16252,7 @@ typedef struct {
     UA_MonitoredItemCreateRequest *itemsToCreate;
 } UA_CreateMonitoredItemsRequest;
 
-#define UA_TYPES_CREATEMONITOREDITEMSREQUEST 288
+#define UA_TYPES_CREATEMONITOREDITEMSREQUEST 143
 
 /**
  * CreateMonitoredItemsResponse
@@ -21130,7 +16266,7 @@ typedef struct {
     UA_DiagnosticInfo *diagnosticInfos;
 } UA_CreateMonitoredItemsResponse;
 
-#define UA_TYPES_CREATEMONITOREDITEMSRESPONSE 289
+#define UA_TYPES_CREATEMONITOREDITEMSRESPONSE 144
 
 /**
  * MonitoredItemModifyRequest
@@ -21141,7 +16277,7 @@ typedef struct {
     UA_MonitoringParameters requestedParameters;
 } UA_MonitoredItemModifyRequest;
 
-#define UA_TYPES_MONITOREDITEMMODIFYREQUEST 290
+#define UA_TYPES_MONITOREDITEMMODIFYREQUEST 145
 
 /**
  * MonitoredItemModifyResult
@@ -21154,7 +16290,7 @@ typedef struct {
     UA_ExtensionObject filterResult;
 } UA_MonitoredItemModifyResult;
 
-#define UA_TYPES_MONITOREDITEMMODIFYRESULT 291
+#define UA_TYPES_MONITOREDITEMMODIFYRESULT 146
 
 /**
  * ModifyMonitoredItemsRequest
@@ -21168,7 +16304,7 @@ typedef struct {
     UA_MonitoredItemModifyRequest *itemsToModify;
 } UA_ModifyMonitoredItemsRequest;
 
-#define UA_TYPES_MODIFYMONITOREDITEMSREQUEST 292
+#define UA_TYPES_MODIFYMONITOREDITEMSREQUEST 147
 
 /**
  * ModifyMonitoredItemsResponse
@@ -21182,7 +16318,7 @@ typedef struct {
     UA_DiagnosticInfo *diagnosticInfos;
 } UA_ModifyMonitoredItemsResponse;
 
-#define UA_TYPES_MODIFYMONITOREDITEMSRESPONSE 293
+#define UA_TYPES_MODIFYMONITOREDITEMSRESPONSE 148
 
 /**
  * SetMonitoringModeRequest
@@ -21196,7 +16332,7 @@ typedef struct {
     UA_UInt32 *monitoredItemIds;
 } UA_SetMonitoringModeRequest;
 
-#define UA_TYPES_SETMONITORINGMODEREQUEST 294
+#define UA_TYPES_SETMONITORINGMODEREQUEST 149
 
 /**
  * SetMonitoringModeResponse
@@ -21210,7 +16346,7 @@ typedef struct {
     UA_DiagnosticInfo *diagnosticInfos;
 } UA_SetMonitoringModeResponse;
 
-#define UA_TYPES_SETMONITORINGMODERESPONSE 295
+#define UA_TYPES_SETMONITORINGMODERESPONSE 150
 
 /**
  * SetTriggeringRequest
@@ -21226,7 +16362,7 @@ typedef struct {
     UA_UInt32 *linksToRemove;
 } UA_SetTriggeringRequest;
 
-#define UA_TYPES_SETTRIGGERINGREQUEST 296
+#define UA_TYPES_SETTRIGGERINGREQUEST 151
 
 /**
  * SetTriggeringResponse
@@ -21244,7 +16380,7 @@ typedef struct {
     UA_DiagnosticInfo *removeDiagnosticInfos;
 } UA_SetTriggeringResponse;
 
-#define UA_TYPES_SETTRIGGERINGRESPONSE 297
+#define UA_TYPES_SETTRIGGERINGRESPONSE 152
 
 /**
  * DeleteMonitoredItemsRequest
@@ -21257,7 +16393,7 @@ typedef struct {
     UA_UInt32 *monitoredItemIds;
 } UA_DeleteMonitoredItemsRequest;
 
-#define UA_TYPES_DELETEMONITOREDITEMSREQUEST 298
+#define UA_TYPES_DELETEMONITOREDITEMSREQUEST 153
 
 /**
  * DeleteMonitoredItemsResponse
@@ -21271,7 +16407,7 @@ typedef struct {
     UA_DiagnosticInfo *diagnosticInfos;
 } UA_DeleteMonitoredItemsResponse;
 
-#define UA_TYPES_DELETEMONITOREDITEMSRESPONSE 299
+#define UA_TYPES_DELETEMONITOREDITEMSRESPONSE 154
 
 /**
  * CreateSubscriptionRequest
@@ -21287,7 +16423,7 @@ typedef struct {
     UA_Byte priority;
 } UA_CreateSubscriptionRequest;
 
-#define UA_TYPES_CREATESUBSCRIPTIONREQUEST 300
+#define UA_TYPES_CREATESUBSCRIPTIONREQUEST 155
 
 /**
  * CreateSubscriptionResponse
@@ -21301,7 +16437,7 @@ typedef struct {
     UA_UInt32 revisedMaxKeepAliveCount;
 } UA_CreateSubscriptionResponse;
 
-#define UA_TYPES_CREATESUBSCRIPTIONRESPONSE 301
+#define UA_TYPES_CREATESUBSCRIPTIONRESPONSE 156
 
 /**
  * ModifySubscriptionRequest
@@ -21317,7 +16453,7 @@ typedef struct {
     UA_Byte priority;
 } UA_ModifySubscriptionRequest;
 
-#define UA_TYPES_MODIFYSUBSCRIPTIONREQUEST 302
+#define UA_TYPES_MODIFYSUBSCRIPTIONREQUEST 157
 
 /**
  * ModifySubscriptionResponse
@@ -21330,7 +16466,7 @@ typedef struct {
     UA_UInt32 revisedMaxKeepAliveCount;
 } UA_ModifySubscriptionResponse;
 
-#define UA_TYPES_MODIFYSUBSCRIPTIONRESPONSE 303
+#define UA_TYPES_MODIFYSUBSCRIPTIONRESPONSE 158
 
 /**
  * SetPublishingModeRequest
@@ -21343,7 +16479,7 @@ typedef struct {
     UA_UInt32 *subscriptionIds;
 } UA_SetPublishingModeRequest;
 
-#define UA_TYPES_SETPUBLISHINGMODEREQUEST 304
+#define UA_TYPES_SETPUBLISHINGMODEREQUEST 159
 
 /**
  * SetPublishingModeResponse
@@ -21357,7 +16493,7 @@ typedef struct {
     UA_DiagnosticInfo *diagnosticInfos;
 } UA_SetPublishingModeResponse;
 
-#define UA_TYPES_SETPUBLISHINGMODERESPONSE 305
+#define UA_TYPES_SETPUBLISHINGMODERESPONSE 160
 
 /**
  * NotificationMessage
@@ -21370,15 +16506,7 @@ typedef struct {
     UA_ExtensionObject *notificationData;
 } UA_NotificationMessage;
 
-#define UA_TYPES_NOTIFICATIONMESSAGE 306
-
-/**
- * NotificationData
- * ^^^^^^^^^^^^^^^^
- */
-typedef void * UA_NotificationData;
-
-#define UA_TYPES_NOTIFICATIONDATA 307
+#define UA_TYPES_NOTIFICATIONMESSAGE 161
 
 /**
  * MonitoredItemNotification
@@ -21389,7 +16517,7 @@ typedef struct {
     UA_DataValue value;
 } UA_MonitoredItemNotification;
 
-#define UA_TYPES_MONITOREDITEMNOTIFICATION 308
+#define UA_TYPES_MONITOREDITEMNOTIFICATION 162
 
 /**
  * EventFieldList
@@ -21401,18 +16529,7 @@ typedef struct {
     UA_Variant *eventFields;
 } UA_EventFieldList;
 
-#define UA_TYPES_EVENTFIELDLIST 309
-
-/**
- * HistoryEventFieldList
- * ^^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    size_t eventFieldsSize;
-    UA_Variant *eventFields;
-} UA_HistoryEventFieldList;
-
-#define UA_TYPES_HISTORYEVENTFIELDLIST 310
+#define UA_TYPES_EVENTFIELDLIST 163
 
 /**
  * StatusChangeNotification
@@ -21423,7 +16540,7 @@ typedef struct {
     UA_DiagnosticInfo diagnosticInfo;
 } UA_StatusChangeNotification;
 
-#define UA_TYPES_STATUSCHANGENOTIFICATION 311
+#define UA_TYPES_STATUSCHANGENOTIFICATION 164
 
 /**
  * SubscriptionAcknowledgement
@@ -21434,7 +16551,7 @@ typedef struct {
     UA_UInt32 sequenceNumber;
 } UA_SubscriptionAcknowledgement;
 
-#define UA_TYPES_SUBSCRIPTIONACKNOWLEDGEMENT 312
+#define UA_TYPES_SUBSCRIPTIONACKNOWLEDGEMENT 165
 
 /**
  * PublishRequest
@@ -21446,7 +16563,7 @@ typedef struct {
     UA_SubscriptionAcknowledgement *subscriptionAcknowledgements;
 } UA_PublishRequest;
 
-#define UA_TYPES_PUBLISHREQUEST 313
+#define UA_TYPES_PUBLISHREQUEST 166
 
 /**
  * PublishResponse
@@ -21465,7 +16582,7 @@ typedef struct {
     UA_DiagnosticInfo *diagnosticInfos;
 } UA_PublishResponse;
 
-#define UA_TYPES_PUBLISHRESPONSE 314
+#define UA_TYPES_PUBLISHRESPONSE 167
 
 /**
  * RepublishRequest
@@ -21477,7 +16594,7 @@ typedef struct {
     UA_UInt32 retransmitSequenceNumber;
 } UA_RepublishRequest;
 
-#define UA_TYPES_REPUBLISHREQUEST 315
+#define UA_TYPES_REPUBLISHREQUEST 168
 
 /**
  * RepublishResponse
@@ -21488,7 +16605,7 @@ typedef struct {
     UA_NotificationMessage notificationMessage;
 } UA_RepublishResponse;
 
-#define UA_TYPES_REPUBLISHRESPONSE 316
+#define UA_TYPES_REPUBLISHRESPONSE 169
 
 /**
  * TransferResult
@@ -21500,7 +16617,7 @@ typedef struct {
     UA_UInt32 *availableSequenceNumbers;
 } UA_TransferResult;
 
-#define UA_TYPES_TRANSFERRESULT 317
+#define UA_TYPES_TRANSFERRESULT 170
 
 /**
  * TransferSubscriptionsRequest
@@ -21513,7 +16630,7 @@ typedef struct {
     UA_Boolean sendInitialValues;
 } UA_TransferSubscriptionsRequest;
 
-#define UA_TYPES_TRANSFERSUBSCRIPTIONSREQUEST 318
+#define UA_TYPES_TRANSFERSUBSCRIPTIONSREQUEST 171
 
 /**
  * TransferSubscriptionsResponse
@@ -21527,7 +16644,7 @@ typedef struct {
     UA_DiagnosticInfo *diagnosticInfos;
 } UA_TransferSubscriptionsResponse;
 
-#define UA_TYPES_TRANSFERSUBSCRIPTIONSRESPONSE 319
+#define UA_TYPES_TRANSFERSUBSCRIPTIONSRESPONSE 172
 
 /**
  * DeleteSubscriptionsRequest
@@ -21539,7 +16656,7 @@ typedef struct {
     UA_UInt32 *subscriptionIds;
 } UA_DeleteSubscriptionsRequest;
 
-#define UA_TYPES_DELETESUBSCRIPTIONSREQUEST 320
+#define UA_TYPES_DELETESUBSCRIPTIONSREQUEST 173
 
 /**
  * DeleteSubscriptionsResponse
@@ -21553,7 +16670,7 @@ typedef struct {
     UA_DiagnosticInfo *diagnosticInfos;
 } UA_DeleteSubscriptionsResponse;
 
-#define UA_TYPES_DELETESUBSCRIPTIONSRESPONSE 321
+#define UA_TYPES_DELETESUBSCRIPTIONSRESPONSE 174
 
 /**
  * BuildInfo
@@ -21568,7 +16685,7 @@ typedef struct {
     UA_DateTime buildDate;
 } UA_BuildInfo;
 
-#define UA_TYPES_BUILDINFO 322
+#define UA_TYPES_BUILDINFO 175
 
 /**
  * RedundancySupport
@@ -21585,7 +16702,7 @@ typedef enum {
 } UA_RedundancySupport;
 UA_STATIC_ASSERT(sizeof(UA_RedundancySupport) == sizeof(UA_Int32), enum_must_be_32bit);
 
-#define UA_TYPES_REDUNDANCYSUPPORT 323
+#define UA_TYPES_REDUNDANCYSUPPORT 176
 
 /**
  * ServerState
@@ -21604,55 +16721,7 @@ typedef enum {
 } UA_ServerState;
 UA_STATIC_ASSERT(sizeof(UA_ServerState) == sizeof(UA_Int32), enum_must_be_32bit);
 
-#define UA_TYPES_SERVERSTATE 324
-
-/**
- * RedundantServerDataType
- * ^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_String serverId;
-    UA_Byte serviceLevel;
-    UA_ServerState serverState;
-} UA_RedundantServerDataType;
-
-#define UA_TYPES_REDUNDANTSERVERDATATYPE 325
-
-/**
- * EndpointUrlListDataType
- * ^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    size_t endpointUrlListSize;
-    UA_String *endpointUrlList;
-} UA_EndpointUrlListDataType;
-
-#define UA_TYPES_ENDPOINTURLLISTDATATYPE 326
-
-/**
- * NetworkGroupDataType
- * ^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_String serverUri;
-    size_t networkPathsSize;
-    UA_EndpointUrlListDataType *networkPaths;
-} UA_NetworkGroupDataType;
-
-#define UA_TYPES_NETWORKGROUPDATATYPE 327
-
-/**
- * SamplingIntervalDiagnosticsDataType
- * ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_Double samplingInterval;
-    UA_UInt32 monitoredItemCount;
-    UA_UInt32 maxMonitoredItemCount;
-    UA_UInt32 disabledMonitoredItemCount;
-} UA_SamplingIntervalDiagnosticsDataType;
-
-#define UA_TYPES_SAMPLINGINTERVALDIAGNOSTICSDATATYPE 328
+#define UA_TYPES_SERVERSTATE 177
 
 /**
  * ServerDiagnosticsSummaryDataType
@@ -21673,7 +16742,7 @@ typedef struct {
     UA_UInt32 rejectedRequestsCount;
 } UA_ServerDiagnosticsSummaryDataType;
 
-#define UA_TYPES_SERVERDIAGNOSTICSSUMMARYDATATYPE 329
+#define UA_TYPES_SERVERDIAGNOSTICSSUMMARYDATATYPE 178
 
 /**
  * ServerStatusDataType
@@ -21688,127 +16757,7 @@ typedef struct {
     UA_LocalizedText shutdownReason;
 } UA_ServerStatusDataType;
 
-#define UA_TYPES_SERVERSTATUSDATATYPE 330
-
-/**
- * SessionSecurityDiagnosticsDataType
- * ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_NodeId sessionId;
-    UA_String clientUserIdOfSession;
-    size_t clientUserIdHistorySize;
-    UA_String *clientUserIdHistory;
-    UA_String authenticationMechanism;
-    UA_String encoding;
-    UA_String transportProtocol;
-    UA_MessageSecurityMode securityMode;
-    UA_String securityPolicyUri;
-    UA_ByteString clientCertificate;
-} UA_SessionSecurityDiagnosticsDataType;
-
-#define UA_TYPES_SESSIONSECURITYDIAGNOSTICSDATATYPE 331
-
-/**
- * ServiceCounterDataType
- * ^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_UInt32 totalCount;
-    UA_UInt32 errorCount;
-} UA_ServiceCounterDataType;
-
-#define UA_TYPES_SERVICECOUNTERDATATYPE 332
-
-/**
- * StatusResult
- * ^^^^^^^^^^^^
- */
-typedef struct {
-    UA_StatusCode statusCode;
-    UA_DiagnosticInfo diagnosticInfo;
-} UA_StatusResult;
-
-#define UA_TYPES_STATUSRESULT 333
-
-/**
- * SubscriptionDiagnosticsDataType
- * ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_NodeId sessionId;
-    UA_UInt32 subscriptionId;
-    UA_Byte priority;
-    UA_Double publishingInterval;
-    UA_UInt32 maxKeepAliveCount;
-    UA_UInt32 maxLifetimeCount;
-    UA_UInt32 maxNotificationsPerPublish;
-    UA_Boolean publishingEnabled;
-    UA_UInt32 modifyCount;
-    UA_UInt32 enableCount;
-    UA_UInt32 disableCount;
-    UA_UInt32 republishRequestCount;
-    UA_UInt32 republishMessageRequestCount;
-    UA_UInt32 republishMessageCount;
-    UA_UInt32 transferRequestCount;
-    UA_UInt32 transferredToAltClientCount;
-    UA_UInt32 transferredToSameClientCount;
-    UA_UInt32 publishRequestCount;
-    UA_UInt32 dataChangeNotificationsCount;
-    UA_UInt32 eventNotificationsCount;
-    UA_UInt32 notificationsCount;
-    UA_UInt32 latePublishRequestCount;
-    UA_UInt32 currentKeepAliveCount;
-    UA_UInt32 currentLifetimeCount;
-    UA_UInt32 unacknowledgedMessageCount;
-    UA_UInt32 discardedMessageCount;
-    UA_UInt32 monitoredItemCount;
-    UA_UInt32 disabledMonitoredItemCount;
-    UA_UInt32 monitoringQueueOverflowCount;
-    UA_UInt32 nextSequenceNumber;
-    UA_UInt32 eventQueueOverFlowCount;
-} UA_SubscriptionDiagnosticsDataType;
-
-#define UA_TYPES_SUBSCRIPTIONDIAGNOSTICSDATATYPE 334
-
-/**
- * ModelChangeStructureVerbMask
- * ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef enum {
-    UA_MODELCHANGESTRUCTUREVERBMASK_NODEADDED = 1,
-    UA_MODELCHANGESTRUCTUREVERBMASK_NODEDELETED = 2,
-    UA_MODELCHANGESTRUCTUREVERBMASK_REFERENCEADDED = 4,
-    UA_MODELCHANGESTRUCTUREVERBMASK_REFERENCEDELETED = 8,
-    UA_MODELCHANGESTRUCTUREVERBMASK_DATATYPECHANGED = 16,
-    __UA_MODELCHANGESTRUCTUREVERBMASK_FORCE32BIT = 0x7fffffff
-} UA_ModelChangeStructureVerbMask;
-UA_STATIC_ASSERT(sizeof(UA_ModelChangeStructureVerbMask) == sizeof(UA_Int32), enum_must_be_32bit);
-
-#define UA_TYPES_MODELCHANGESTRUCTUREVERBMASK 335
-
-/**
- * ModelChangeStructureDataType
- * ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_NodeId affected;
-    UA_NodeId affectedType;
-    UA_Byte verb;
-} UA_ModelChangeStructureDataType;
-
-#define UA_TYPES_MODELCHANGESTRUCTUREDATATYPE 336
-
-/**
- * SemanticChangeStructureDataType
- * ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_NodeId affected;
-    UA_NodeId affectedType;
-} UA_SemanticChangeStructureDataType;
-
-#define UA_TYPES_SEMANTICCHANGESTRUCTUREDATATYPE 337
+#define UA_TYPES_SERVERSTATUSDATATYPE 179
 
 /**
  * Range
@@ -21819,7 +16768,7 @@ typedef struct {
     UA_Double high;
 } UA_Range;
 
-#define UA_TYPES_RANGE 338
+#define UA_TYPES_RANGE 180
 
 /**
  * EUInformation
@@ -21832,7 +16781,7 @@ typedef struct {
     UA_LocalizedText description;
 } UA_EUInformation;
 
-#define UA_TYPES_EUINFORMATION 339
+#define UA_TYPES_EUINFORMATION 181
 
 /**
  * AxisScaleEnumeration
@@ -21846,7 +16795,7 @@ typedef enum {
 } UA_AxisScaleEnumeration;
 UA_STATIC_ASSERT(sizeof(UA_AxisScaleEnumeration) == sizeof(UA_Int32), enum_must_be_32bit);
 
-#define UA_TYPES_AXISSCALEENUMERATION 340
+#define UA_TYPES_AXISSCALEENUMERATION 182
 
 /**
  * ComplexNumberType
@@ -21857,7 +16806,7 @@ typedef struct {
     UA_Float imaginary;
 } UA_ComplexNumberType;
 
-#define UA_TYPES_COMPLEXNUMBERTYPE 341
+#define UA_TYPES_COMPLEXNUMBERTYPE 183
 
 /**
  * DoubleComplexNumberType
@@ -21868,7 +16817,7 @@ typedef struct {
     UA_Double imaginary;
 } UA_DoubleComplexNumberType;
 
-#define UA_TYPES_DOUBLECOMPLEXNUMBERTYPE 342
+#define UA_TYPES_DOUBLECOMPLEXNUMBERTYPE 184
 
 /**
  * AxisInformation
@@ -21883,7 +16832,7 @@ typedef struct {
     UA_Double *axisSteps;
 } UA_AxisInformation;
 
-#define UA_TYPES_AXISINFORMATION 343
+#define UA_TYPES_AXISINFORMATION 185
 
 /**
  * XVType
@@ -21894,215 +16843,7 @@ typedef struct {
     UA_Float value;
 } UA_XVType;
 
-#define UA_TYPES_XVTYPE 344
-
-/**
- * ProgramDiagnosticDataType
- * ^^^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_NodeId createSessionId;
-    UA_String createClientName;
-    UA_DateTime invocationCreationTime;
-    UA_DateTime lastTransitionTime;
-    UA_String lastMethodCall;
-    UA_NodeId lastMethodSessionId;
-    size_t lastMethodInputArgumentsSize;
-    UA_Argument *lastMethodInputArguments;
-    size_t lastMethodOutputArgumentsSize;
-    UA_Argument *lastMethodOutputArguments;
-    UA_DateTime lastMethodCallTime;
-    UA_StatusResult lastMethodReturnStatus;
-} UA_ProgramDiagnosticDataType;
-
-#define UA_TYPES_PROGRAMDIAGNOSTICDATATYPE 345
-
-/**
- * ProgramDiagnostic2DataType
- * ^^^^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_NodeId createSessionId;
-    UA_String createClientName;
-    UA_DateTime invocationCreationTime;
-    UA_DateTime lastTransitionTime;
-    UA_String lastMethodCall;
-    UA_NodeId lastMethodSessionId;
-    size_t lastMethodInputArgumentsSize;
-    UA_Argument *lastMethodInputArguments;
-    size_t lastMethodOutputArgumentsSize;
-    UA_Argument *lastMethodOutputArguments;
-    size_t lastMethodInputValuesSize;
-    UA_Variant *lastMethodInputValues;
-    size_t lastMethodOutputValuesSize;
-    UA_Variant *lastMethodOutputValues;
-    UA_DateTime lastMethodCallTime;
-    UA_StatusResult lastMethodReturnStatus;
-} UA_ProgramDiagnostic2DataType;
-
-#define UA_TYPES_PROGRAMDIAGNOSTIC2DATATYPE 346
-
-/**
- * Annotation
- * ^^^^^^^^^^
- */
-typedef struct {
-    UA_String message;
-    UA_String userName;
-    UA_DateTime annotationTime;
-} UA_Annotation;
-
-#define UA_TYPES_ANNOTATION 347
-
-/**
- * ExceptionDeviationFormat
- * ^^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef enum {
-    UA_EXCEPTIONDEVIATIONFORMAT_ABSOLUTEVALUE = 0,
-    UA_EXCEPTIONDEVIATIONFORMAT_PERCENTOFVALUE = 1,
-    UA_EXCEPTIONDEVIATIONFORMAT_PERCENTOFRANGE = 2,
-    UA_EXCEPTIONDEVIATIONFORMAT_PERCENTOFEURANGE = 3,
-    UA_EXCEPTIONDEVIATIONFORMAT_UNKNOWN = 4,
-    __UA_EXCEPTIONDEVIATIONFORMAT_FORCE32BIT = 0x7fffffff
-} UA_ExceptionDeviationFormat;
-UA_STATIC_ASSERT(sizeof(UA_ExceptionDeviationFormat) == sizeof(UA_Int32), enum_must_be_32bit);
-
-#define UA_TYPES_EXCEPTIONDEVIATIONFORMAT 348
-
-/**
- * EndpointType
- * ^^^^^^^^^^^^
- */
-typedef struct {
-    UA_String endpointUrl;
-    UA_MessageSecurityMode securityMode;
-    UA_String securityPolicyUri;
-    UA_String transportProfileUri;
-} UA_EndpointType;
-
-#define UA_TYPES_ENDPOINTTYPE 349
-
-/**
- * StructureDescription
- * ^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_NodeId dataTypeId;
-    UA_QualifiedName name;
-    UA_StructureDefinition structureDefinition;
-} UA_StructureDescription;
-
-#define UA_TYPES_STRUCTUREDESCRIPTION 350
-
-/**
- * FieldMetaData
- * ^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_String name;
-    UA_LocalizedText description;
-    UA_DataSetFieldFlags fieldFlags;
-    UA_Byte builtInType;
-    UA_NodeId dataType;
-    UA_Int32 valueRank;
-    size_t arrayDimensionsSize;
-    UA_UInt32 *arrayDimensions;
-    UA_UInt32 maxStringLength;
-    UA_Guid dataSetFieldId;
-    size_t propertiesSize;
-    UA_KeyValuePair *properties;
-} UA_FieldMetaData;
-
-#define UA_TYPES_FIELDMETADATA 351
-
-/**
- * PublishedEventsDataType
- * ^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_NodeId eventNotifier;
-    size_t selectedFieldsSize;
-    UA_SimpleAttributeOperand *selectedFields;
-    UA_ContentFilter filter;
-} UA_PublishedEventsDataType;
-
-#define UA_TYPES_PUBLISHEDEVENTSDATATYPE 352
-
-/**
- * PubSubGroupDataType
- * ^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_String name;
-    UA_Boolean enabled;
-    UA_MessageSecurityMode securityMode;
-    UA_String securityGroupId;
-    size_t securityKeyServicesSize;
-    UA_EndpointDescription *securityKeyServices;
-    UA_UInt32 maxNetworkMessageSize;
-    size_t groupPropertiesSize;
-    UA_KeyValuePair *groupProperties;
-} UA_PubSubGroupDataType;
-
-#define UA_TYPES_PUBSUBGROUPDATATYPE 353
-
-/**
- * WriterGroupDataType
- * ^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_String name;
-    UA_Boolean enabled;
-    UA_MessageSecurityMode securityMode;
-    UA_String securityGroupId;
-    size_t securityKeyServicesSize;
-    UA_EndpointDescription *securityKeyServices;
-    UA_UInt32 maxNetworkMessageSize;
-    size_t groupPropertiesSize;
-    UA_KeyValuePair *groupProperties;
-    UA_UInt16 writerGroupId;
-    UA_Double publishingInterval;
-    UA_Double keepAliveTime;
-    UA_Byte priority;
-    size_t localeIdsSize;
-    UA_String *localeIds;
-    UA_String headerLayoutUri;
-    UA_ExtensionObject transportSettings;
-    UA_ExtensionObject messageSettings;
-    size_t dataSetWritersSize;
-    UA_DataSetWriterDataType *dataSetWriters;
-} UA_WriterGroupDataType;
-
-#define UA_TYPES_WRITERGROUPDATATYPE 354
-
-/**
- * FieldTargetDataType
- * ^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_Guid dataSetFieldId;
-    UA_String receiverIndexRange;
-    UA_NodeId targetNodeId;
-    UA_UInt32 attributeId;
-    UA_String writeIndexRange;
-    UA_OverrideValueHandling overrideValueHandling;
-    UA_Variant overrideValue;
-} UA_FieldTargetDataType;
-
-#define UA_TYPES_FIELDTARGETDATATYPE 355
-
-/**
- * SubscribedDataSetMirrorDataType
- * ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_String parentNodeName;
-    size_t rolePermissionsSize;
-    UA_RolePermissionType *rolePermissions;
-} UA_SubscribedDataSetMirrorDataType;
-
-#define UA_TYPES_SUBSCRIBEDDATASETMIRRORDATATYPE 356
+#define UA_TYPES_XVTYPE 186
 
 /**
  * EnumDefinition
@@ -22113,85 +16854,7 @@ typedef struct {
     UA_EnumField *fields;
 } UA_EnumDefinition;
 
-#define UA_TYPES_ENUMDEFINITION 357
-
-/**
- * ReadEventDetails
- * ^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_UInt32 numValuesPerNode;
-    UA_DateTime startTime;
-    UA_DateTime endTime;
-    UA_EventFilter filter;
-} UA_ReadEventDetails;
-
-#define UA_TYPES_READEVENTDETAILS 358
-
-/**
- * ReadProcessedDetails
- * ^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_DateTime startTime;
-    UA_DateTime endTime;
-    UA_Double processingInterval;
-    size_t aggregateTypeSize;
-    UA_NodeId *aggregateType;
-    UA_AggregateConfiguration aggregateConfiguration;
-} UA_ReadProcessedDetails;
-
-#define UA_TYPES_READPROCESSEDDETAILS 359
-
-/**
- * ModificationInfo
- * ^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_DateTime modificationTime;
-    UA_HistoryUpdateType updateType;
-    UA_String userName;
-} UA_ModificationInfo;
-
-#define UA_TYPES_MODIFICATIONINFO 360
-
-/**
- * HistoryModifiedData
- * ^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    size_t dataValuesSize;
-    UA_DataValue *dataValues;
-    size_t modificationInfosSize;
-    UA_ModificationInfo *modificationInfos;
-} UA_HistoryModifiedData;
-
-#define UA_TYPES_HISTORYMODIFIEDDATA 361
-
-/**
- * HistoryEvent
- * ^^^^^^^^^^^^
- */
-typedef struct {
-    size_t eventsSize;
-    UA_HistoryEventFieldList *events;
-} UA_HistoryEvent;
-
-#define UA_TYPES_HISTORYEVENT 362
-
-/**
- * UpdateEventDetails
- * ^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_NodeId nodeId;
-    UA_PerformUpdateType performInsertReplace;
-    UA_EventFilter filter;
-    size_t eventDataSize;
-    UA_HistoryEventFieldList *eventData;
-} UA_UpdateEventDetails;
-
-#define UA_TYPES_UPDATEEVENTDETAILS 363
+#define UA_TYPES_ENUMDEFINITION 187
 
 /**
  * DataChangeNotification
@@ -22204,7 +16867,7 @@ typedef struct {
     UA_DiagnosticInfo *diagnosticInfos;
 } UA_DataChangeNotification;
 
-#define UA_TYPES_DATACHANGENOTIFICATION 364
+#define UA_TYPES_DATACHANGENOTIFICATION 188
 
 /**
  * EventNotificationList
@@ -22215,255 +16878,16 @@ typedef struct {
     UA_EventFieldList *events;
 } UA_EventNotificationList;
 
-#define UA_TYPES_EVENTNOTIFICATIONLIST 365
-
-/**
- * SessionDiagnosticsDataType
- * ^^^^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_NodeId sessionId;
-    UA_String sessionName;
-    UA_ApplicationDescription clientDescription;
-    UA_String serverUri;
-    UA_String endpointUrl;
-    size_t localeIdsSize;
-    UA_String *localeIds;
-    UA_Double actualSessionTimeout;
-    UA_UInt32 maxResponseMessageSize;
-    UA_DateTime clientConnectionTime;
-    UA_DateTime clientLastContactTime;
-    UA_UInt32 currentSubscriptionsCount;
-    UA_UInt32 currentMonitoredItemsCount;
-    UA_UInt32 currentPublishRequestsInQueue;
-    UA_ServiceCounterDataType totalRequestCount;
-    UA_UInt32 unauthorizedRequestCount;
-    UA_ServiceCounterDataType readCount;
-    UA_ServiceCounterDataType historyReadCount;
-    UA_ServiceCounterDataType writeCount;
-    UA_ServiceCounterDataType historyUpdateCount;
-    UA_ServiceCounterDataType callCount;
-    UA_ServiceCounterDataType createMonitoredItemsCount;
-    UA_ServiceCounterDataType modifyMonitoredItemsCount;
-    UA_ServiceCounterDataType setMonitoringModeCount;
-    UA_ServiceCounterDataType setTriggeringCount;
-    UA_ServiceCounterDataType deleteMonitoredItemsCount;
-    UA_ServiceCounterDataType createSubscriptionCount;
-    UA_ServiceCounterDataType modifySubscriptionCount;
-    UA_ServiceCounterDataType setPublishingModeCount;
-    UA_ServiceCounterDataType publishCount;
-    UA_ServiceCounterDataType republishCount;
-    UA_ServiceCounterDataType transferSubscriptionsCount;
-    UA_ServiceCounterDataType deleteSubscriptionsCount;
-    UA_ServiceCounterDataType addNodesCount;
-    UA_ServiceCounterDataType addReferencesCount;
-    UA_ServiceCounterDataType deleteNodesCount;
-    UA_ServiceCounterDataType deleteReferencesCount;
-    UA_ServiceCounterDataType browseCount;
-    UA_ServiceCounterDataType browseNextCount;
-    UA_ServiceCounterDataType translateBrowsePathsToNodeIdsCount;
-    UA_ServiceCounterDataType queryFirstCount;
-    UA_ServiceCounterDataType queryNextCount;
-    UA_ServiceCounterDataType registerNodesCount;
-    UA_ServiceCounterDataType unregisterNodesCount;
-} UA_SessionDiagnosticsDataType;
-
-#define UA_TYPES_SESSIONDIAGNOSTICSDATATYPE 366
-
-/**
- * EnumDescription
- * ^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_NodeId dataTypeId;
-    UA_QualifiedName name;
-    UA_EnumDefinition enumDefinition;
-    UA_Byte builtInType;
-} UA_EnumDescription;
-
-#define UA_TYPES_ENUMDESCRIPTION 367
-
-/**
- * UABinaryFileDataType
- * ^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    size_t namespacesSize;
-    UA_String *namespaces;
-    size_t structureDataTypesSize;
-    UA_StructureDescription *structureDataTypes;
-    size_t enumDataTypesSize;
-    UA_EnumDescription *enumDataTypes;
-    size_t simpleDataTypesSize;
-    UA_SimpleTypeDescription *simpleDataTypes;
-    UA_String schemaLocation;
-    size_t fileHeaderSize;
-    UA_KeyValuePair *fileHeader;
-    UA_Variant body;
-} UA_UABinaryFileDataType;
-
-#define UA_TYPES_UABINARYFILEDATATYPE 368
-
-/**
- * DataSetMetaDataType
- * ^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    size_t namespacesSize;
-    UA_String *namespaces;
-    size_t structureDataTypesSize;
-    UA_StructureDescription *structureDataTypes;
-    size_t enumDataTypesSize;
-    UA_EnumDescription *enumDataTypes;
-    size_t simpleDataTypesSize;
-    UA_SimpleTypeDescription *simpleDataTypes;
-    UA_String name;
-    UA_LocalizedText description;
-    size_t fieldsSize;
-    UA_FieldMetaData *fields;
-    UA_Guid dataSetClassId;
-    UA_ConfigurationVersionDataType configurationVersion;
-} UA_DataSetMetaDataType;
-
-#define UA_TYPES_DATASETMETADATATYPE 369
-
-/**
- * PublishedDataSetDataType
- * ^^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_String name;
-    size_t dataSetFolderSize;
-    UA_String *dataSetFolder;
-    UA_DataSetMetaDataType dataSetMetaData;
-    size_t extensionFieldsSize;
-    UA_KeyValuePair *extensionFields;
-    UA_ExtensionObject dataSetSource;
-} UA_PublishedDataSetDataType;
-
-#define UA_TYPES_PUBLISHEDDATASETDATATYPE 370
-
-/**
- * DataSetReaderDataType
- * ^^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_String name;
-    UA_Boolean enabled;
-    UA_Variant publisherId;
-    UA_UInt16 writerGroupId;
-    UA_UInt16 dataSetWriterId;
-    UA_DataSetMetaDataType dataSetMetaData;
-    UA_DataSetFieldContentMask dataSetFieldContentMask;
-    UA_Double messageReceiveTimeout;
-    UA_UInt32 keyFrameCount;
-    UA_String headerLayoutUri;
-    UA_MessageSecurityMode securityMode;
-    UA_String securityGroupId;
-    size_t securityKeyServicesSize;
-    UA_EndpointDescription *securityKeyServices;
-    size_t dataSetReaderPropertiesSize;
-    UA_KeyValuePair *dataSetReaderProperties;
-    UA_ExtensionObject transportSettings;
-    UA_ExtensionObject messageSettings;
-    UA_ExtensionObject subscribedDataSet;
-} UA_DataSetReaderDataType;
-
-#define UA_TYPES_DATASETREADERDATATYPE 371
-
-/**
- * TargetVariablesDataType
- * ^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    size_t targetVariablesSize;
-    UA_FieldTargetDataType *targetVariables;
-} UA_TargetVariablesDataType;
-
-#define UA_TYPES_TARGETVARIABLESDATATYPE 372
-
-/**
- * DataTypeSchemaHeader
- * ^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    size_t namespacesSize;
-    UA_String *namespaces;
-    size_t structureDataTypesSize;
-    UA_StructureDescription *structureDataTypes;
-    size_t enumDataTypesSize;
-    UA_EnumDescription *enumDataTypes;
-    size_t simpleDataTypesSize;
-    UA_SimpleTypeDescription *simpleDataTypes;
-} UA_DataTypeSchemaHeader;
-
-#define UA_TYPES_DATATYPESCHEMAHEADER 373
-
-/**
- * ReaderGroupDataType
- * ^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_String name;
-    UA_Boolean enabled;
-    UA_MessageSecurityMode securityMode;
-    UA_String securityGroupId;
-    size_t securityKeyServicesSize;
-    UA_EndpointDescription *securityKeyServices;
-    UA_UInt32 maxNetworkMessageSize;
-    size_t groupPropertiesSize;
-    UA_KeyValuePair *groupProperties;
-    UA_ExtensionObject transportSettings;
-    UA_ExtensionObject messageSettings;
-    size_t dataSetReadersSize;
-    UA_DataSetReaderDataType *dataSetReaders;
-} UA_ReaderGroupDataType;
-
-#define UA_TYPES_READERGROUPDATATYPE 374
-
-/**
- * PubSubConnectionDataType
- * ^^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_String name;
-    UA_Boolean enabled;
-    UA_Variant publisherId;
-    UA_String transportProfileUri;
-    UA_ExtensionObject address;
-    size_t connectionPropertiesSize;
-    UA_KeyValuePair *connectionProperties;
-    UA_ExtensionObject transportSettings;
-    size_t writerGroupsSize;
-    UA_WriterGroupDataType *writerGroups;
-    size_t readerGroupsSize;
-    UA_ReaderGroupDataType *readerGroups;
-} UA_PubSubConnectionDataType;
-
-#define UA_TYPES_PUBSUBCONNECTIONDATATYPE 375
-
-/**
- * PubSubConfigurationDataType
- * ^^^^^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    size_t publishedDataSetsSize;
-    UA_PublishedDataSetDataType *publishedDataSets;
-    size_t connectionsSize;
-    UA_PubSubConnectionDataType *connections;
-    UA_Boolean enabled;
-} UA_PubSubConfigurationDataType;
-
-#define UA_TYPES_PUBSUBCONFIGURATIONDATATYPE 376
+#define UA_TYPES_EVENTNOTIFICATIONLIST 189
 
 
 _UA_END_DECLS
 
 
-/*********************************** amalgamated original file "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/src_generated/open62541/types_generated_handling.h" ***********************************/
+/*********************************** amalgamated original file "C:/Projects/open62541Upstream/buildWIN/src_generated/open62541/types_generated_handling.h" ***********************************/
 
-/* Generated from Opc.Ua.Types.bsd with script C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/tools/generate_datatypes.py
- * on host VM-WIN16-DEV by user Rudolf at 2021-05-18 08:29:21 */
+/* Generated from Opc.Ua.Types.bsd with script C:/Projects/open62541Upstream/tools/generate_datatypes.py
+ * on host VM-WIN16-DEV by user Rudolf at 2021-05-19 05:56:27 */
 
 
 
@@ -23251,2145 +17675,6 @@ UA_DiagnosticInfo_delete(UA_DiagnosticInfo *p) {
     UA_delete(p, &UA_TYPES[UA_TYPES_DIAGNOSTICINFO]);
 }
 
-/* NamingRuleType */
-static UA_INLINE void
-UA_NamingRuleType_init(UA_NamingRuleType *p) {
-    memset(p, 0, sizeof(UA_NamingRuleType));
-}
-
-static UA_INLINE UA_NamingRuleType *
-UA_NamingRuleType_new(void) {
-    return (UA_NamingRuleType*)UA_new(&UA_TYPES[UA_TYPES_NAMINGRULETYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_NamingRuleType_copy(const UA_NamingRuleType *src, UA_NamingRuleType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_NAMINGRULETYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_NamingRuleType_deleteMembers(UA_NamingRuleType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_NAMINGRULETYPE]);
-}
-
-static UA_INLINE void
-UA_NamingRuleType_clear(UA_NamingRuleType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_NAMINGRULETYPE]);
-}
-
-static UA_INLINE void
-UA_NamingRuleType_delete(UA_NamingRuleType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_NAMINGRULETYPE]);
-}
-
-/* ImageBMP */
-static UA_INLINE void
-UA_ImageBMP_init(UA_ImageBMP *p) {
-    memset(p, 0, sizeof(UA_ImageBMP));
-}
-
-static UA_INLINE UA_ImageBMP *
-UA_ImageBMP_new(void) {
-    return (UA_ImageBMP*)UA_new(&UA_TYPES[UA_TYPES_IMAGEBMP]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_ImageBMP_copy(const UA_ImageBMP *src, UA_ImageBMP *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_IMAGEBMP]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_ImageBMP_deleteMembers(UA_ImageBMP *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_IMAGEBMP]);
-}
-
-static UA_INLINE void
-UA_ImageBMP_clear(UA_ImageBMP *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_IMAGEBMP]);
-}
-
-static UA_INLINE void
-UA_ImageBMP_delete(UA_ImageBMP *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_IMAGEBMP]);
-}
-
-/* ImageGIF */
-static UA_INLINE void
-UA_ImageGIF_init(UA_ImageGIF *p) {
-    memset(p, 0, sizeof(UA_ImageGIF));
-}
-
-static UA_INLINE UA_ImageGIF *
-UA_ImageGIF_new(void) {
-    return (UA_ImageGIF*)UA_new(&UA_TYPES[UA_TYPES_IMAGEGIF]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_ImageGIF_copy(const UA_ImageGIF *src, UA_ImageGIF *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_IMAGEGIF]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_ImageGIF_deleteMembers(UA_ImageGIF *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_IMAGEGIF]);
-}
-
-static UA_INLINE void
-UA_ImageGIF_clear(UA_ImageGIF *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_IMAGEGIF]);
-}
-
-static UA_INLINE void
-UA_ImageGIF_delete(UA_ImageGIF *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_IMAGEGIF]);
-}
-
-/* ImageJPG */
-static UA_INLINE void
-UA_ImageJPG_init(UA_ImageJPG *p) {
-    memset(p, 0, sizeof(UA_ImageJPG));
-}
-
-static UA_INLINE UA_ImageJPG *
-UA_ImageJPG_new(void) {
-    return (UA_ImageJPG*)UA_new(&UA_TYPES[UA_TYPES_IMAGEJPG]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_ImageJPG_copy(const UA_ImageJPG *src, UA_ImageJPG *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_IMAGEJPG]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_ImageJPG_deleteMembers(UA_ImageJPG *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_IMAGEJPG]);
-}
-
-static UA_INLINE void
-UA_ImageJPG_clear(UA_ImageJPG *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_IMAGEJPG]);
-}
-
-static UA_INLINE void
-UA_ImageJPG_delete(UA_ImageJPG *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_IMAGEJPG]);
-}
-
-/* ImagePNG */
-static UA_INLINE void
-UA_ImagePNG_init(UA_ImagePNG *p) {
-    memset(p, 0, sizeof(UA_ImagePNG));
-}
-
-static UA_INLINE UA_ImagePNG *
-UA_ImagePNG_new(void) {
-    return (UA_ImagePNG*)UA_new(&UA_TYPES[UA_TYPES_IMAGEPNG]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_ImagePNG_copy(const UA_ImagePNG *src, UA_ImagePNG *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_IMAGEPNG]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_ImagePNG_deleteMembers(UA_ImagePNG *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_IMAGEPNG]);
-}
-
-static UA_INLINE void
-UA_ImagePNG_clear(UA_ImagePNG *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_IMAGEPNG]);
-}
-
-static UA_INLINE void
-UA_ImagePNG_delete(UA_ImagePNG *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_IMAGEPNG]);
-}
-
-/* AudioDataType */
-static UA_INLINE void
-UA_AudioDataType_init(UA_AudioDataType *p) {
-    memset(p, 0, sizeof(UA_AudioDataType));
-}
-
-static UA_INLINE UA_AudioDataType *
-UA_AudioDataType_new(void) {
-    return (UA_AudioDataType*)UA_new(&UA_TYPES[UA_TYPES_AUDIODATATYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_AudioDataType_copy(const UA_AudioDataType *src, UA_AudioDataType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_AUDIODATATYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_AudioDataType_deleteMembers(UA_AudioDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_AUDIODATATYPE]);
-}
-
-static UA_INLINE void
-UA_AudioDataType_clear(UA_AudioDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_AUDIODATATYPE]);
-}
-
-static UA_INLINE void
-UA_AudioDataType_delete(UA_AudioDataType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_AUDIODATATYPE]);
-}
-
-/* BitFieldMaskDataType */
-static UA_INLINE void
-UA_BitFieldMaskDataType_init(UA_BitFieldMaskDataType *p) {
-    memset(p, 0, sizeof(UA_BitFieldMaskDataType));
-}
-
-static UA_INLINE UA_BitFieldMaskDataType *
-UA_BitFieldMaskDataType_new(void) {
-    return (UA_BitFieldMaskDataType*)UA_new(&UA_TYPES[UA_TYPES_BITFIELDMASKDATATYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_BitFieldMaskDataType_copy(const UA_BitFieldMaskDataType *src, UA_BitFieldMaskDataType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_BITFIELDMASKDATATYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_BitFieldMaskDataType_deleteMembers(UA_BitFieldMaskDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_BITFIELDMASKDATATYPE]);
-}
-
-static UA_INLINE void
-UA_BitFieldMaskDataType_clear(UA_BitFieldMaskDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_BITFIELDMASKDATATYPE]);
-}
-
-static UA_INLINE void
-UA_BitFieldMaskDataType_delete(UA_BitFieldMaskDataType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_BITFIELDMASKDATATYPE]);
-}
-
-/* KeyValuePair */
-static UA_INLINE void
-UA_KeyValuePair_init(UA_KeyValuePair *p) {
-    memset(p, 0, sizeof(UA_KeyValuePair));
-}
-
-static UA_INLINE UA_KeyValuePair *
-UA_KeyValuePair_new(void) {
-    return (UA_KeyValuePair*)UA_new(&UA_TYPES[UA_TYPES_KEYVALUEPAIR]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_KeyValuePair_copy(const UA_KeyValuePair *src, UA_KeyValuePair *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_KEYVALUEPAIR]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_KeyValuePair_deleteMembers(UA_KeyValuePair *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_KEYVALUEPAIR]);
-}
-
-static UA_INLINE void
-UA_KeyValuePair_clear(UA_KeyValuePair *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_KEYVALUEPAIR]);
-}
-
-static UA_INLINE void
-UA_KeyValuePair_delete(UA_KeyValuePair *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_KEYVALUEPAIR]);
-}
-
-/* RationalNumber */
-static UA_INLINE void
-UA_RationalNumber_init(UA_RationalNumber *p) {
-    memset(p, 0, sizeof(UA_RationalNumber));
-}
-
-static UA_INLINE UA_RationalNumber *
-UA_RationalNumber_new(void) {
-    return (UA_RationalNumber*)UA_new(&UA_TYPES[UA_TYPES_RATIONALNUMBER]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_RationalNumber_copy(const UA_RationalNumber *src, UA_RationalNumber *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_RATIONALNUMBER]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_RationalNumber_deleteMembers(UA_RationalNumber *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_RATIONALNUMBER]);
-}
-
-static UA_INLINE void
-UA_RationalNumber_clear(UA_RationalNumber *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_RATIONALNUMBER]);
-}
-
-static UA_INLINE void
-UA_RationalNumber_delete(UA_RationalNumber *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_RATIONALNUMBER]);
-}
-
-/* Vector */
-static UA_INLINE void
-UA_Vector_init(UA_Vector *p) {
-    memset(p, 0, sizeof(UA_Vector));
-}
-
-static UA_INLINE UA_Vector *
-UA_Vector_new(void) {
-    return (UA_Vector*)UA_new(&UA_TYPES[UA_TYPES_VECTOR]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_Vector_copy(const UA_Vector *src, UA_Vector *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_VECTOR]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_Vector_deleteMembers(UA_Vector *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_VECTOR]);
-}
-
-static UA_INLINE void
-UA_Vector_clear(UA_Vector *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_VECTOR]);
-}
-
-static UA_INLINE void
-UA_Vector_delete(UA_Vector *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_VECTOR]);
-}
-
-/* ThreeDVector */
-static UA_INLINE void
-UA_ThreeDVector_init(UA_ThreeDVector *p) {
-    memset(p, 0, sizeof(UA_ThreeDVector));
-}
-
-static UA_INLINE UA_ThreeDVector *
-UA_ThreeDVector_new(void) {
-    return (UA_ThreeDVector*)UA_new(&UA_TYPES[UA_TYPES_THREEDVECTOR]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_ThreeDVector_copy(const UA_ThreeDVector *src, UA_ThreeDVector *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_THREEDVECTOR]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_ThreeDVector_deleteMembers(UA_ThreeDVector *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_THREEDVECTOR]);
-}
-
-static UA_INLINE void
-UA_ThreeDVector_clear(UA_ThreeDVector *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_THREEDVECTOR]);
-}
-
-static UA_INLINE void
-UA_ThreeDVector_delete(UA_ThreeDVector *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_THREEDVECTOR]);
-}
-
-/* CartesianCoordinates */
-static UA_INLINE void
-UA_CartesianCoordinates_init(UA_CartesianCoordinates *p) {
-    memset(p, 0, sizeof(UA_CartesianCoordinates));
-}
-
-static UA_INLINE UA_CartesianCoordinates *
-UA_CartesianCoordinates_new(void) {
-    return (UA_CartesianCoordinates*)UA_new(&UA_TYPES[UA_TYPES_CARTESIANCOORDINATES]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_CartesianCoordinates_copy(const UA_CartesianCoordinates *src, UA_CartesianCoordinates *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_CARTESIANCOORDINATES]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_CartesianCoordinates_deleteMembers(UA_CartesianCoordinates *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_CARTESIANCOORDINATES]);
-}
-
-static UA_INLINE void
-UA_CartesianCoordinates_clear(UA_CartesianCoordinates *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_CARTESIANCOORDINATES]);
-}
-
-static UA_INLINE void
-UA_CartesianCoordinates_delete(UA_CartesianCoordinates *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_CARTESIANCOORDINATES]);
-}
-
-/* ThreeDCartesianCoordinates */
-static UA_INLINE void
-UA_ThreeDCartesianCoordinates_init(UA_ThreeDCartesianCoordinates *p) {
-    memset(p, 0, sizeof(UA_ThreeDCartesianCoordinates));
-}
-
-static UA_INLINE UA_ThreeDCartesianCoordinates *
-UA_ThreeDCartesianCoordinates_new(void) {
-    return (UA_ThreeDCartesianCoordinates*)UA_new(&UA_TYPES[UA_TYPES_THREEDCARTESIANCOORDINATES]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_ThreeDCartesianCoordinates_copy(const UA_ThreeDCartesianCoordinates *src, UA_ThreeDCartesianCoordinates *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_THREEDCARTESIANCOORDINATES]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_ThreeDCartesianCoordinates_deleteMembers(UA_ThreeDCartesianCoordinates *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_THREEDCARTESIANCOORDINATES]);
-}
-
-static UA_INLINE void
-UA_ThreeDCartesianCoordinates_clear(UA_ThreeDCartesianCoordinates *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_THREEDCARTESIANCOORDINATES]);
-}
-
-static UA_INLINE void
-UA_ThreeDCartesianCoordinates_delete(UA_ThreeDCartesianCoordinates *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_THREEDCARTESIANCOORDINATES]);
-}
-
-/* Orientation */
-static UA_INLINE void
-UA_Orientation_init(UA_Orientation *p) {
-    memset(p, 0, sizeof(UA_Orientation));
-}
-
-static UA_INLINE UA_Orientation *
-UA_Orientation_new(void) {
-    return (UA_Orientation*)UA_new(&UA_TYPES[UA_TYPES_ORIENTATION]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_Orientation_copy(const UA_Orientation *src, UA_Orientation *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_ORIENTATION]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_Orientation_deleteMembers(UA_Orientation *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_ORIENTATION]);
-}
-
-static UA_INLINE void
-UA_Orientation_clear(UA_Orientation *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_ORIENTATION]);
-}
-
-static UA_INLINE void
-UA_Orientation_delete(UA_Orientation *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_ORIENTATION]);
-}
-
-/* ThreeDOrientation */
-static UA_INLINE void
-UA_ThreeDOrientation_init(UA_ThreeDOrientation *p) {
-    memset(p, 0, sizeof(UA_ThreeDOrientation));
-}
-
-static UA_INLINE UA_ThreeDOrientation *
-UA_ThreeDOrientation_new(void) {
-    return (UA_ThreeDOrientation*)UA_new(&UA_TYPES[UA_TYPES_THREEDORIENTATION]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_ThreeDOrientation_copy(const UA_ThreeDOrientation *src, UA_ThreeDOrientation *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_THREEDORIENTATION]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_ThreeDOrientation_deleteMembers(UA_ThreeDOrientation *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_THREEDORIENTATION]);
-}
-
-static UA_INLINE void
-UA_ThreeDOrientation_clear(UA_ThreeDOrientation *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_THREEDORIENTATION]);
-}
-
-static UA_INLINE void
-UA_ThreeDOrientation_delete(UA_ThreeDOrientation *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_THREEDORIENTATION]);
-}
-
-/* Frame */
-static UA_INLINE void
-UA_Frame_init(UA_Frame *p) {
-    memset(p, 0, sizeof(UA_Frame));
-}
-
-static UA_INLINE UA_Frame *
-UA_Frame_new(void) {
-    return (UA_Frame*)UA_new(&UA_TYPES[UA_TYPES_FRAME]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_Frame_copy(const UA_Frame *src, UA_Frame *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_FRAME]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_Frame_deleteMembers(UA_Frame *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_FRAME]);
-}
-
-static UA_INLINE void
-UA_Frame_clear(UA_Frame *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_FRAME]);
-}
-
-static UA_INLINE void
-UA_Frame_delete(UA_Frame *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_FRAME]);
-}
-
-/* ThreeDFrame */
-static UA_INLINE void
-UA_ThreeDFrame_init(UA_ThreeDFrame *p) {
-    memset(p, 0, sizeof(UA_ThreeDFrame));
-}
-
-static UA_INLINE UA_ThreeDFrame *
-UA_ThreeDFrame_new(void) {
-    return (UA_ThreeDFrame*)UA_new(&UA_TYPES[UA_TYPES_THREEDFRAME]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_ThreeDFrame_copy(const UA_ThreeDFrame *src, UA_ThreeDFrame *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_THREEDFRAME]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_ThreeDFrame_deleteMembers(UA_ThreeDFrame *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_THREEDFRAME]);
-}
-
-static UA_INLINE void
-UA_ThreeDFrame_clear(UA_ThreeDFrame *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_THREEDFRAME]);
-}
-
-static UA_INLINE void
-UA_ThreeDFrame_delete(UA_ThreeDFrame *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_THREEDFRAME]);
-}
-
-/* OpenFileMode */
-static UA_INLINE void
-UA_OpenFileMode_init(UA_OpenFileMode *p) {
-    memset(p, 0, sizeof(UA_OpenFileMode));
-}
-
-static UA_INLINE UA_OpenFileMode *
-UA_OpenFileMode_new(void) {
-    return (UA_OpenFileMode*)UA_new(&UA_TYPES[UA_TYPES_OPENFILEMODE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_OpenFileMode_copy(const UA_OpenFileMode *src, UA_OpenFileMode *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_OPENFILEMODE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_OpenFileMode_deleteMembers(UA_OpenFileMode *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_OPENFILEMODE]);
-}
-
-static UA_INLINE void
-UA_OpenFileMode_clear(UA_OpenFileMode *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_OPENFILEMODE]);
-}
-
-static UA_INLINE void
-UA_OpenFileMode_delete(UA_OpenFileMode *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_OPENFILEMODE]);
-}
-
-/* IdentityCriteriaType */
-static UA_INLINE void
-UA_IdentityCriteriaType_init(UA_IdentityCriteriaType *p) {
-    memset(p, 0, sizeof(UA_IdentityCriteriaType));
-}
-
-static UA_INLINE UA_IdentityCriteriaType *
-UA_IdentityCriteriaType_new(void) {
-    return (UA_IdentityCriteriaType*)UA_new(&UA_TYPES[UA_TYPES_IDENTITYCRITERIATYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_IdentityCriteriaType_copy(const UA_IdentityCriteriaType *src, UA_IdentityCriteriaType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_IDENTITYCRITERIATYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_IdentityCriteriaType_deleteMembers(UA_IdentityCriteriaType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_IDENTITYCRITERIATYPE]);
-}
-
-static UA_INLINE void
-UA_IdentityCriteriaType_clear(UA_IdentityCriteriaType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_IDENTITYCRITERIATYPE]);
-}
-
-static UA_INLINE void
-UA_IdentityCriteriaType_delete(UA_IdentityCriteriaType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_IDENTITYCRITERIATYPE]);
-}
-
-/* IdentityMappingRuleType */
-static UA_INLINE void
-UA_IdentityMappingRuleType_init(UA_IdentityMappingRuleType *p) {
-    memset(p, 0, sizeof(UA_IdentityMappingRuleType));
-}
-
-static UA_INLINE UA_IdentityMappingRuleType *
-UA_IdentityMappingRuleType_new(void) {
-    return (UA_IdentityMappingRuleType*)UA_new(&UA_TYPES[UA_TYPES_IDENTITYMAPPINGRULETYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_IdentityMappingRuleType_copy(const UA_IdentityMappingRuleType *src, UA_IdentityMappingRuleType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_IDENTITYMAPPINGRULETYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_IdentityMappingRuleType_deleteMembers(UA_IdentityMappingRuleType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_IDENTITYMAPPINGRULETYPE]);
-}
-
-static UA_INLINE void
-UA_IdentityMappingRuleType_clear(UA_IdentityMappingRuleType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_IDENTITYMAPPINGRULETYPE]);
-}
-
-static UA_INLINE void
-UA_IdentityMappingRuleType_delete(UA_IdentityMappingRuleType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_IDENTITYMAPPINGRULETYPE]);
-}
-
-/* CurrencyUnitType */
-static UA_INLINE void
-UA_CurrencyUnitType_init(UA_CurrencyUnitType *p) {
-    memset(p, 0, sizeof(UA_CurrencyUnitType));
-}
-
-static UA_INLINE UA_CurrencyUnitType *
-UA_CurrencyUnitType_new(void) {
-    return (UA_CurrencyUnitType*)UA_new(&UA_TYPES[UA_TYPES_CURRENCYUNITTYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_CurrencyUnitType_copy(const UA_CurrencyUnitType *src, UA_CurrencyUnitType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_CURRENCYUNITTYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_CurrencyUnitType_deleteMembers(UA_CurrencyUnitType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_CURRENCYUNITTYPE]);
-}
-
-static UA_INLINE void
-UA_CurrencyUnitType_clear(UA_CurrencyUnitType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_CURRENCYUNITTYPE]);
-}
-
-static UA_INLINE void
-UA_CurrencyUnitType_delete(UA_CurrencyUnitType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_CURRENCYUNITTYPE]);
-}
-
-/* TrustListMasks */
-static UA_INLINE void
-UA_TrustListMasks_init(UA_TrustListMasks *p) {
-    memset(p, 0, sizeof(UA_TrustListMasks));
-}
-
-static UA_INLINE UA_TrustListMasks *
-UA_TrustListMasks_new(void) {
-    return (UA_TrustListMasks*)UA_new(&UA_TYPES[UA_TYPES_TRUSTLISTMASKS]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_TrustListMasks_copy(const UA_TrustListMasks *src, UA_TrustListMasks *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_TRUSTLISTMASKS]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_TrustListMasks_deleteMembers(UA_TrustListMasks *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_TRUSTLISTMASKS]);
-}
-
-static UA_INLINE void
-UA_TrustListMasks_clear(UA_TrustListMasks *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_TRUSTLISTMASKS]);
-}
-
-static UA_INLINE void
-UA_TrustListMasks_delete(UA_TrustListMasks *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_TRUSTLISTMASKS]);
-}
-
-/* TrustListDataType */
-static UA_INLINE void
-UA_TrustListDataType_init(UA_TrustListDataType *p) {
-    memset(p, 0, sizeof(UA_TrustListDataType));
-}
-
-static UA_INLINE UA_TrustListDataType *
-UA_TrustListDataType_new(void) {
-    return (UA_TrustListDataType*)UA_new(&UA_TYPES[UA_TYPES_TRUSTLISTDATATYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_TrustListDataType_copy(const UA_TrustListDataType *src, UA_TrustListDataType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_TRUSTLISTDATATYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_TrustListDataType_deleteMembers(UA_TrustListDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_TRUSTLISTDATATYPE]);
-}
-
-static UA_INLINE void
-UA_TrustListDataType_clear(UA_TrustListDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_TRUSTLISTDATATYPE]);
-}
-
-static UA_INLINE void
-UA_TrustListDataType_delete(UA_TrustListDataType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_TRUSTLISTDATATYPE]);
-}
-
-/* DecimalDataType */
-static UA_INLINE void
-UA_DecimalDataType_init(UA_DecimalDataType *p) {
-    memset(p, 0, sizeof(UA_DecimalDataType));
-}
-
-static UA_INLINE UA_DecimalDataType *
-UA_DecimalDataType_new(void) {
-    return (UA_DecimalDataType*)UA_new(&UA_TYPES[UA_TYPES_DECIMALDATATYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_DecimalDataType_copy(const UA_DecimalDataType *src, UA_DecimalDataType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_DECIMALDATATYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_DecimalDataType_deleteMembers(UA_DecimalDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_DECIMALDATATYPE]);
-}
-
-static UA_INLINE void
-UA_DecimalDataType_clear(UA_DecimalDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_DECIMALDATATYPE]);
-}
-
-static UA_INLINE void
-UA_DecimalDataType_delete(UA_DecimalDataType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_DECIMALDATATYPE]);
-}
-
-/* DataTypeDescription */
-static UA_INLINE void
-UA_DataTypeDescription_init(UA_DataTypeDescription *p) {
-    memset(p, 0, sizeof(UA_DataTypeDescription));
-}
-
-static UA_INLINE UA_DataTypeDescription *
-UA_DataTypeDescription_new(void) {
-    return (UA_DataTypeDescription*)UA_new(&UA_TYPES[UA_TYPES_DATATYPEDESCRIPTION]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_DataTypeDescription_copy(const UA_DataTypeDescription *src, UA_DataTypeDescription *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_DATATYPEDESCRIPTION]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_DataTypeDescription_deleteMembers(UA_DataTypeDescription *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_DATATYPEDESCRIPTION]);
-}
-
-static UA_INLINE void
-UA_DataTypeDescription_clear(UA_DataTypeDescription *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_DATATYPEDESCRIPTION]);
-}
-
-static UA_INLINE void
-UA_DataTypeDescription_delete(UA_DataTypeDescription *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_DATATYPEDESCRIPTION]);
-}
-
-/* SimpleTypeDescription */
-static UA_INLINE void
-UA_SimpleTypeDescription_init(UA_SimpleTypeDescription *p) {
-    memset(p, 0, sizeof(UA_SimpleTypeDescription));
-}
-
-static UA_INLINE UA_SimpleTypeDescription *
-UA_SimpleTypeDescription_new(void) {
-    return (UA_SimpleTypeDescription*)UA_new(&UA_TYPES[UA_TYPES_SIMPLETYPEDESCRIPTION]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_SimpleTypeDescription_copy(const UA_SimpleTypeDescription *src, UA_SimpleTypeDescription *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_SIMPLETYPEDESCRIPTION]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_SimpleTypeDescription_deleteMembers(UA_SimpleTypeDescription *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_SIMPLETYPEDESCRIPTION]);
-}
-
-static UA_INLINE void
-UA_SimpleTypeDescription_clear(UA_SimpleTypeDescription *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_SIMPLETYPEDESCRIPTION]);
-}
-
-static UA_INLINE void
-UA_SimpleTypeDescription_delete(UA_SimpleTypeDescription *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_SIMPLETYPEDESCRIPTION]);
-}
-
-/* PubSubState */
-static UA_INLINE void
-UA_PubSubState_init(UA_PubSubState *p) {
-    memset(p, 0, sizeof(UA_PubSubState));
-}
-
-static UA_INLINE UA_PubSubState *
-UA_PubSubState_new(void) {
-    return (UA_PubSubState*)UA_new(&UA_TYPES[UA_TYPES_PUBSUBSTATE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_PubSubState_copy(const UA_PubSubState *src, UA_PubSubState *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_PUBSUBSTATE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_PubSubState_deleteMembers(UA_PubSubState *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_PUBSUBSTATE]);
-}
-
-static UA_INLINE void
-UA_PubSubState_clear(UA_PubSubState *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_PUBSUBSTATE]);
-}
-
-static UA_INLINE void
-UA_PubSubState_delete(UA_PubSubState *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_PUBSUBSTATE]);
-}
-
-/* DataSetFieldFlags */
-static UA_INLINE void
-UA_DataSetFieldFlags_init(UA_DataSetFieldFlags *p) {
-    memset(p, 0, sizeof(UA_DataSetFieldFlags));
-}
-
-static UA_INLINE UA_DataSetFieldFlags *
-UA_DataSetFieldFlags_new(void) {
-    return (UA_DataSetFieldFlags*)UA_new(&UA_TYPES[UA_TYPES_DATASETFIELDFLAGS]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_DataSetFieldFlags_copy(const UA_DataSetFieldFlags *src, UA_DataSetFieldFlags *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_DATASETFIELDFLAGS]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_DataSetFieldFlags_deleteMembers(UA_DataSetFieldFlags *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_DATASETFIELDFLAGS]);
-}
-
-static UA_INLINE void
-UA_DataSetFieldFlags_clear(UA_DataSetFieldFlags *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_DATASETFIELDFLAGS]);
-}
-
-static UA_INLINE void
-UA_DataSetFieldFlags_delete(UA_DataSetFieldFlags *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_DATASETFIELDFLAGS]);
-}
-
-/* ConfigurationVersionDataType */
-static UA_INLINE void
-UA_ConfigurationVersionDataType_init(UA_ConfigurationVersionDataType *p) {
-    memset(p, 0, sizeof(UA_ConfigurationVersionDataType));
-}
-
-static UA_INLINE UA_ConfigurationVersionDataType *
-UA_ConfigurationVersionDataType_new(void) {
-    return (UA_ConfigurationVersionDataType*)UA_new(&UA_TYPES[UA_TYPES_CONFIGURATIONVERSIONDATATYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_ConfigurationVersionDataType_copy(const UA_ConfigurationVersionDataType *src, UA_ConfigurationVersionDataType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_CONFIGURATIONVERSIONDATATYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_ConfigurationVersionDataType_deleteMembers(UA_ConfigurationVersionDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_CONFIGURATIONVERSIONDATATYPE]);
-}
-
-static UA_INLINE void
-UA_ConfigurationVersionDataType_clear(UA_ConfigurationVersionDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_CONFIGURATIONVERSIONDATATYPE]);
-}
-
-static UA_INLINE void
-UA_ConfigurationVersionDataType_delete(UA_ConfigurationVersionDataType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_CONFIGURATIONVERSIONDATATYPE]);
-}
-
-/* PublishedDataSetSourceDataType */
-static UA_INLINE void
-UA_PublishedDataSetSourceDataType_init(UA_PublishedDataSetSourceDataType *p) {
-    memset(p, 0, sizeof(UA_PublishedDataSetSourceDataType));
-}
-
-static UA_INLINE UA_PublishedDataSetSourceDataType *
-UA_PublishedDataSetSourceDataType_new(void) {
-    return (UA_PublishedDataSetSourceDataType*)UA_new(&UA_TYPES[UA_TYPES_PUBLISHEDDATASETSOURCEDATATYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_PublishedDataSetSourceDataType_copy(const UA_PublishedDataSetSourceDataType *src, UA_PublishedDataSetSourceDataType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_PUBLISHEDDATASETSOURCEDATATYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_PublishedDataSetSourceDataType_deleteMembers(UA_PublishedDataSetSourceDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_PUBLISHEDDATASETSOURCEDATATYPE]);
-}
-
-static UA_INLINE void
-UA_PublishedDataSetSourceDataType_clear(UA_PublishedDataSetSourceDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_PUBLISHEDDATASETSOURCEDATATYPE]);
-}
-
-static UA_INLINE void
-UA_PublishedDataSetSourceDataType_delete(UA_PublishedDataSetSourceDataType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_PUBLISHEDDATASETSOURCEDATATYPE]);
-}
-
-/* PublishedVariableDataType */
-static UA_INLINE void
-UA_PublishedVariableDataType_init(UA_PublishedVariableDataType *p) {
-    memset(p, 0, sizeof(UA_PublishedVariableDataType));
-}
-
-static UA_INLINE UA_PublishedVariableDataType *
-UA_PublishedVariableDataType_new(void) {
-    return (UA_PublishedVariableDataType*)UA_new(&UA_TYPES[UA_TYPES_PUBLISHEDVARIABLEDATATYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_PublishedVariableDataType_copy(const UA_PublishedVariableDataType *src, UA_PublishedVariableDataType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_PUBLISHEDVARIABLEDATATYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_PublishedVariableDataType_deleteMembers(UA_PublishedVariableDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_PUBLISHEDVARIABLEDATATYPE]);
-}
-
-static UA_INLINE void
-UA_PublishedVariableDataType_clear(UA_PublishedVariableDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_PUBLISHEDVARIABLEDATATYPE]);
-}
-
-static UA_INLINE void
-UA_PublishedVariableDataType_delete(UA_PublishedVariableDataType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_PUBLISHEDVARIABLEDATATYPE]);
-}
-
-/* PublishedDataItemsDataType */
-static UA_INLINE void
-UA_PublishedDataItemsDataType_init(UA_PublishedDataItemsDataType *p) {
-    memset(p, 0, sizeof(UA_PublishedDataItemsDataType));
-}
-
-static UA_INLINE UA_PublishedDataItemsDataType *
-UA_PublishedDataItemsDataType_new(void) {
-    return (UA_PublishedDataItemsDataType*)UA_new(&UA_TYPES[UA_TYPES_PUBLISHEDDATAITEMSDATATYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_PublishedDataItemsDataType_copy(const UA_PublishedDataItemsDataType *src, UA_PublishedDataItemsDataType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_PUBLISHEDDATAITEMSDATATYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_PublishedDataItemsDataType_deleteMembers(UA_PublishedDataItemsDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_PUBLISHEDDATAITEMSDATATYPE]);
-}
-
-static UA_INLINE void
-UA_PublishedDataItemsDataType_clear(UA_PublishedDataItemsDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_PUBLISHEDDATAITEMSDATATYPE]);
-}
-
-static UA_INLINE void
-UA_PublishedDataItemsDataType_delete(UA_PublishedDataItemsDataType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_PUBLISHEDDATAITEMSDATATYPE]);
-}
-
-/* DataSetFieldContentMask */
-static UA_INLINE void
-UA_DataSetFieldContentMask_init(UA_DataSetFieldContentMask *p) {
-    memset(p, 0, sizeof(UA_DataSetFieldContentMask));
-}
-
-static UA_INLINE UA_DataSetFieldContentMask *
-UA_DataSetFieldContentMask_new(void) {
-    return (UA_DataSetFieldContentMask*)UA_new(&UA_TYPES[UA_TYPES_DATASETFIELDCONTENTMASK]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_DataSetFieldContentMask_copy(const UA_DataSetFieldContentMask *src, UA_DataSetFieldContentMask *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_DATASETFIELDCONTENTMASK]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_DataSetFieldContentMask_deleteMembers(UA_DataSetFieldContentMask *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_DATASETFIELDCONTENTMASK]);
-}
-
-static UA_INLINE void
-UA_DataSetFieldContentMask_clear(UA_DataSetFieldContentMask *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_DATASETFIELDCONTENTMASK]);
-}
-
-static UA_INLINE void
-UA_DataSetFieldContentMask_delete(UA_DataSetFieldContentMask *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_DATASETFIELDCONTENTMASK]);
-}
-
-/* DataSetWriterDataType */
-static UA_INLINE void
-UA_DataSetWriterDataType_init(UA_DataSetWriterDataType *p) {
-    memset(p, 0, sizeof(UA_DataSetWriterDataType));
-}
-
-static UA_INLINE UA_DataSetWriterDataType *
-UA_DataSetWriterDataType_new(void) {
-    return (UA_DataSetWriterDataType*)UA_new(&UA_TYPES[UA_TYPES_DATASETWRITERDATATYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_DataSetWriterDataType_copy(const UA_DataSetWriterDataType *src, UA_DataSetWriterDataType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_DATASETWRITERDATATYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_DataSetWriterDataType_deleteMembers(UA_DataSetWriterDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_DATASETWRITERDATATYPE]);
-}
-
-static UA_INLINE void
-UA_DataSetWriterDataType_clear(UA_DataSetWriterDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_DATASETWRITERDATATYPE]);
-}
-
-static UA_INLINE void
-UA_DataSetWriterDataType_delete(UA_DataSetWriterDataType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_DATASETWRITERDATATYPE]);
-}
-
-/* DataSetWriterTransportDataType */
-static UA_INLINE void
-UA_DataSetWriterTransportDataType_init(UA_DataSetWriterTransportDataType *p) {
-    memset(p, 0, sizeof(UA_DataSetWriterTransportDataType));
-}
-
-static UA_INLINE UA_DataSetWriterTransportDataType *
-UA_DataSetWriterTransportDataType_new(void) {
-    return (UA_DataSetWriterTransportDataType*)UA_new(&UA_TYPES[UA_TYPES_DATASETWRITERTRANSPORTDATATYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_DataSetWriterTransportDataType_copy(const UA_DataSetWriterTransportDataType *src, UA_DataSetWriterTransportDataType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_DATASETWRITERTRANSPORTDATATYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_DataSetWriterTransportDataType_deleteMembers(UA_DataSetWriterTransportDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_DATASETWRITERTRANSPORTDATATYPE]);
-}
-
-static UA_INLINE void
-UA_DataSetWriterTransportDataType_clear(UA_DataSetWriterTransportDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_DATASETWRITERTRANSPORTDATATYPE]);
-}
-
-static UA_INLINE void
-UA_DataSetWriterTransportDataType_delete(UA_DataSetWriterTransportDataType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_DATASETWRITERTRANSPORTDATATYPE]);
-}
-
-/* DataSetWriterMessageDataType */
-static UA_INLINE void
-UA_DataSetWriterMessageDataType_init(UA_DataSetWriterMessageDataType *p) {
-    memset(p, 0, sizeof(UA_DataSetWriterMessageDataType));
-}
-
-static UA_INLINE UA_DataSetWriterMessageDataType *
-UA_DataSetWriterMessageDataType_new(void) {
-    return (UA_DataSetWriterMessageDataType*)UA_new(&UA_TYPES[UA_TYPES_DATASETWRITERMESSAGEDATATYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_DataSetWriterMessageDataType_copy(const UA_DataSetWriterMessageDataType *src, UA_DataSetWriterMessageDataType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_DATASETWRITERMESSAGEDATATYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_DataSetWriterMessageDataType_deleteMembers(UA_DataSetWriterMessageDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_DATASETWRITERMESSAGEDATATYPE]);
-}
-
-static UA_INLINE void
-UA_DataSetWriterMessageDataType_clear(UA_DataSetWriterMessageDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_DATASETWRITERMESSAGEDATATYPE]);
-}
-
-static UA_INLINE void
-UA_DataSetWriterMessageDataType_delete(UA_DataSetWriterMessageDataType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_DATASETWRITERMESSAGEDATATYPE]);
-}
-
-/* WriterGroupTransportDataType */
-static UA_INLINE void
-UA_WriterGroupTransportDataType_init(UA_WriterGroupTransportDataType *p) {
-    memset(p, 0, sizeof(UA_WriterGroupTransportDataType));
-}
-
-static UA_INLINE UA_WriterGroupTransportDataType *
-UA_WriterGroupTransportDataType_new(void) {
-    return (UA_WriterGroupTransportDataType*)UA_new(&UA_TYPES[UA_TYPES_WRITERGROUPTRANSPORTDATATYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_WriterGroupTransportDataType_copy(const UA_WriterGroupTransportDataType *src, UA_WriterGroupTransportDataType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_WRITERGROUPTRANSPORTDATATYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_WriterGroupTransportDataType_deleteMembers(UA_WriterGroupTransportDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_WRITERGROUPTRANSPORTDATATYPE]);
-}
-
-static UA_INLINE void
-UA_WriterGroupTransportDataType_clear(UA_WriterGroupTransportDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_WRITERGROUPTRANSPORTDATATYPE]);
-}
-
-static UA_INLINE void
-UA_WriterGroupTransportDataType_delete(UA_WriterGroupTransportDataType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_WRITERGROUPTRANSPORTDATATYPE]);
-}
-
-/* WriterGroupMessageDataType */
-static UA_INLINE void
-UA_WriterGroupMessageDataType_init(UA_WriterGroupMessageDataType *p) {
-    memset(p, 0, sizeof(UA_WriterGroupMessageDataType));
-}
-
-static UA_INLINE UA_WriterGroupMessageDataType *
-UA_WriterGroupMessageDataType_new(void) {
-    return (UA_WriterGroupMessageDataType*)UA_new(&UA_TYPES[UA_TYPES_WRITERGROUPMESSAGEDATATYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_WriterGroupMessageDataType_copy(const UA_WriterGroupMessageDataType *src, UA_WriterGroupMessageDataType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_WRITERGROUPMESSAGEDATATYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_WriterGroupMessageDataType_deleteMembers(UA_WriterGroupMessageDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_WRITERGROUPMESSAGEDATATYPE]);
-}
-
-static UA_INLINE void
-UA_WriterGroupMessageDataType_clear(UA_WriterGroupMessageDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_WRITERGROUPMESSAGEDATATYPE]);
-}
-
-static UA_INLINE void
-UA_WriterGroupMessageDataType_delete(UA_WriterGroupMessageDataType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_WRITERGROUPMESSAGEDATATYPE]);
-}
-
-/* ConnectionTransportDataType */
-static UA_INLINE void
-UA_ConnectionTransportDataType_init(UA_ConnectionTransportDataType *p) {
-    memset(p, 0, sizeof(UA_ConnectionTransportDataType));
-}
-
-static UA_INLINE UA_ConnectionTransportDataType *
-UA_ConnectionTransportDataType_new(void) {
-    return (UA_ConnectionTransportDataType*)UA_new(&UA_TYPES[UA_TYPES_CONNECTIONTRANSPORTDATATYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_ConnectionTransportDataType_copy(const UA_ConnectionTransportDataType *src, UA_ConnectionTransportDataType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_CONNECTIONTRANSPORTDATATYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_ConnectionTransportDataType_deleteMembers(UA_ConnectionTransportDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_CONNECTIONTRANSPORTDATATYPE]);
-}
-
-static UA_INLINE void
-UA_ConnectionTransportDataType_clear(UA_ConnectionTransportDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_CONNECTIONTRANSPORTDATATYPE]);
-}
-
-static UA_INLINE void
-UA_ConnectionTransportDataType_delete(UA_ConnectionTransportDataType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_CONNECTIONTRANSPORTDATATYPE]);
-}
-
-/* NetworkAddressDataType */
-static UA_INLINE void
-UA_NetworkAddressDataType_init(UA_NetworkAddressDataType *p) {
-    memset(p, 0, sizeof(UA_NetworkAddressDataType));
-}
-
-static UA_INLINE UA_NetworkAddressDataType *
-UA_NetworkAddressDataType_new(void) {
-    return (UA_NetworkAddressDataType*)UA_new(&UA_TYPES[UA_TYPES_NETWORKADDRESSDATATYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_NetworkAddressDataType_copy(const UA_NetworkAddressDataType *src, UA_NetworkAddressDataType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_NETWORKADDRESSDATATYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_NetworkAddressDataType_deleteMembers(UA_NetworkAddressDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_NETWORKADDRESSDATATYPE]);
-}
-
-static UA_INLINE void
-UA_NetworkAddressDataType_clear(UA_NetworkAddressDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_NETWORKADDRESSDATATYPE]);
-}
-
-static UA_INLINE void
-UA_NetworkAddressDataType_delete(UA_NetworkAddressDataType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_NETWORKADDRESSDATATYPE]);
-}
-
-/* NetworkAddressUrlDataType */
-static UA_INLINE void
-UA_NetworkAddressUrlDataType_init(UA_NetworkAddressUrlDataType *p) {
-    memset(p, 0, sizeof(UA_NetworkAddressUrlDataType));
-}
-
-static UA_INLINE UA_NetworkAddressUrlDataType *
-UA_NetworkAddressUrlDataType_new(void) {
-    return (UA_NetworkAddressUrlDataType*)UA_new(&UA_TYPES[UA_TYPES_NETWORKADDRESSURLDATATYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_NetworkAddressUrlDataType_copy(const UA_NetworkAddressUrlDataType *src, UA_NetworkAddressUrlDataType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_NETWORKADDRESSURLDATATYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_NetworkAddressUrlDataType_deleteMembers(UA_NetworkAddressUrlDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_NETWORKADDRESSURLDATATYPE]);
-}
-
-static UA_INLINE void
-UA_NetworkAddressUrlDataType_clear(UA_NetworkAddressUrlDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_NETWORKADDRESSURLDATATYPE]);
-}
-
-static UA_INLINE void
-UA_NetworkAddressUrlDataType_delete(UA_NetworkAddressUrlDataType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_NETWORKADDRESSURLDATATYPE]);
-}
-
-/* ReaderGroupTransportDataType */
-static UA_INLINE void
-UA_ReaderGroupTransportDataType_init(UA_ReaderGroupTransportDataType *p) {
-    memset(p, 0, sizeof(UA_ReaderGroupTransportDataType));
-}
-
-static UA_INLINE UA_ReaderGroupTransportDataType *
-UA_ReaderGroupTransportDataType_new(void) {
-    return (UA_ReaderGroupTransportDataType*)UA_new(&UA_TYPES[UA_TYPES_READERGROUPTRANSPORTDATATYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_ReaderGroupTransportDataType_copy(const UA_ReaderGroupTransportDataType *src, UA_ReaderGroupTransportDataType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_READERGROUPTRANSPORTDATATYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_ReaderGroupTransportDataType_deleteMembers(UA_ReaderGroupTransportDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_READERGROUPTRANSPORTDATATYPE]);
-}
-
-static UA_INLINE void
-UA_ReaderGroupTransportDataType_clear(UA_ReaderGroupTransportDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_READERGROUPTRANSPORTDATATYPE]);
-}
-
-static UA_INLINE void
-UA_ReaderGroupTransportDataType_delete(UA_ReaderGroupTransportDataType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_READERGROUPTRANSPORTDATATYPE]);
-}
-
-/* ReaderGroupMessageDataType */
-static UA_INLINE void
-UA_ReaderGroupMessageDataType_init(UA_ReaderGroupMessageDataType *p) {
-    memset(p, 0, sizeof(UA_ReaderGroupMessageDataType));
-}
-
-static UA_INLINE UA_ReaderGroupMessageDataType *
-UA_ReaderGroupMessageDataType_new(void) {
-    return (UA_ReaderGroupMessageDataType*)UA_new(&UA_TYPES[UA_TYPES_READERGROUPMESSAGEDATATYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_ReaderGroupMessageDataType_copy(const UA_ReaderGroupMessageDataType *src, UA_ReaderGroupMessageDataType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_READERGROUPMESSAGEDATATYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_ReaderGroupMessageDataType_deleteMembers(UA_ReaderGroupMessageDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_READERGROUPMESSAGEDATATYPE]);
-}
-
-static UA_INLINE void
-UA_ReaderGroupMessageDataType_clear(UA_ReaderGroupMessageDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_READERGROUPMESSAGEDATATYPE]);
-}
-
-static UA_INLINE void
-UA_ReaderGroupMessageDataType_delete(UA_ReaderGroupMessageDataType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_READERGROUPMESSAGEDATATYPE]);
-}
-
-/* DataSetReaderTransportDataType */
-static UA_INLINE void
-UA_DataSetReaderTransportDataType_init(UA_DataSetReaderTransportDataType *p) {
-    memset(p, 0, sizeof(UA_DataSetReaderTransportDataType));
-}
-
-static UA_INLINE UA_DataSetReaderTransportDataType *
-UA_DataSetReaderTransportDataType_new(void) {
-    return (UA_DataSetReaderTransportDataType*)UA_new(&UA_TYPES[UA_TYPES_DATASETREADERTRANSPORTDATATYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_DataSetReaderTransportDataType_copy(const UA_DataSetReaderTransportDataType *src, UA_DataSetReaderTransportDataType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_DATASETREADERTRANSPORTDATATYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_DataSetReaderTransportDataType_deleteMembers(UA_DataSetReaderTransportDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_DATASETREADERTRANSPORTDATATYPE]);
-}
-
-static UA_INLINE void
-UA_DataSetReaderTransportDataType_clear(UA_DataSetReaderTransportDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_DATASETREADERTRANSPORTDATATYPE]);
-}
-
-static UA_INLINE void
-UA_DataSetReaderTransportDataType_delete(UA_DataSetReaderTransportDataType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_DATASETREADERTRANSPORTDATATYPE]);
-}
-
-/* DataSetReaderMessageDataType */
-static UA_INLINE void
-UA_DataSetReaderMessageDataType_init(UA_DataSetReaderMessageDataType *p) {
-    memset(p, 0, sizeof(UA_DataSetReaderMessageDataType));
-}
-
-static UA_INLINE UA_DataSetReaderMessageDataType *
-UA_DataSetReaderMessageDataType_new(void) {
-    return (UA_DataSetReaderMessageDataType*)UA_new(&UA_TYPES[UA_TYPES_DATASETREADERMESSAGEDATATYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_DataSetReaderMessageDataType_copy(const UA_DataSetReaderMessageDataType *src, UA_DataSetReaderMessageDataType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_DATASETREADERMESSAGEDATATYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_DataSetReaderMessageDataType_deleteMembers(UA_DataSetReaderMessageDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_DATASETREADERMESSAGEDATATYPE]);
-}
-
-static UA_INLINE void
-UA_DataSetReaderMessageDataType_clear(UA_DataSetReaderMessageDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_DATASETREADERMESSAGEDATATYPE]);
-}
-
-static UA_INLINE void
-UA_DataSetReaderMessageDataType_delete(UA_DataSetReaderMessageDataType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_DATASETREADERMESSAGEDATATYPE]);
-}
-
-/* SubscribedDataSetDataType */
-static UA_INLINE void
-UA_SubscribedDataSetDataType_init(UA_SubscribedDataSetDataType *p) {
-    memset(p, 0, sizeof(UA_SubscribedDataSetDataType));
-}
-
-static UA_INLINE UA_SubscribedDataSetDataType *
-UA_SubscribedDataSetDataType_new(void) {
-    return (UA_SubscribedDataSetDataType*)UA_new(&UA_TYPES[UA_TYPES_SUBSCRIBEDDATASETDATATYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_SubscribedDataSetDataType_copy(const UA_SubscribedDataSetDataType *src, UA_SubscribedDataSetDataType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_SUBSCRIBEDDATASETDATATYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_SubscribedDataSetDataType_deleteMembers(UA_SubscribedDataSetDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_SUBSCRIBEDDATASETDATATYPE]);
-}
-
-static UA_INLINE void
-UA_SubscribedDataSetDataType_clear(UA_SubscribedDataSetDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_SUBSCRIBEDDATASETDATATYPE]);
-}
-
-static UA_INLINE void
-UA_SubscribedDataSetDataType_delete(UA_SubscribedDataSetDataType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_SUBSCRIBEDDATASETDATATYPE]);
-}
-
-/* OverrideValueHandling */
-static UA_INLINE void
-UA_OverrideValueHandling_init(UA_OverrideValueHandling *p) {
-    memset(p, 0, sizeof(UA_OverrideValueHandling));
-}
-
-static UA_INLINE UA_OverrideValueHandling *
-UA_OverrideValueHandling_new(void) {
-    return (UA_OverrideValueHandling*)UA_new(&UA_TYPES[UA_TYPES_OVERRIDEVALUEHANDLING]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_OverrideValueHandling_copy(const UA_OverrideValueHandling *src, UA_OverrideValueHandling *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_OVERRIDEVALUEHANDLING]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_OverrideValueHandling_deleteMembers(UA_OverrideValueHandling *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_OVERRIDEVALUEHANDLING]);
-}
-
-static UA_INLINE void
-UA_OverrideValueHandling_clear(UA_OverrideValueHandling *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_OVERRIDEVALUEHANDLING]);
-}
-
-static UA_INLINE void
-UA_OverrideValueHandling_delete(UA_OverrideValueHandling *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_OVERRIDEVALUEHANDLING]);
-}
-
-/* DataSetOrderingType */
-static UA_INLINE void
-UA_DataSetOrderingType_init(UA_DataSetOrderingType *p) {
-    memset(p, 0, sizeof(UA_DataSetOrderingType));
-}
-
-static UA_INLINE UA_DataSetOrderingType *
-UA_DataSetOrderingType_new(void) {
-    return (UA_DataSetOrderingType*)UA_new(&UA_TYPES[UA_TYPES_DATASETORDERINGTYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_DataSetOrderingType_copy(const UA_DataSetOrderingType *src, UA_DataSetOrderingType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_DATASETORDERINGTYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_DataSetOrderingType_deleteMembers(UA_DataSetOrderingType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_DATASETORDERINGTYPE]);
-}
-
-static UA_INLINE void
-UA_DataSetOrderingType_clear(UA_DataSetOrderingType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_DATASETORDERINGTYPE]);
-}
-
-static UA_INLINE void
-UA_DataSetOrderingType_delete(UA_DataSetOrderingType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_DATASETORDERINGTYPE]);
-}
-
-/* UadpNetworkMessageContentMask */
-static UA_INLINE void
-UA_UadpNetworkMessageContentMask_init(UA_UadpNetworkMessageContentMask *p) {
-    memset(p, 0, sizeof(UA_UadpNetworkMessageContentMask));
-}
-
-static UA_INLINE UA_UadpNetworkMessageContentMask *
-UA_UadpNetworkMessageContentMask_new(void) {
-    return (UA_UadpNetworkMessageContentMask*)UA_new(&UA_TYPES[UA_TYPES_UADPNETWORKMESSAGECONTENTMASK]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_UadpNetworkMessageContentMask_copy(const UA_UadpNetworkMessageContentMask *src, UA_UadpNetworkMessageContentMask *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_UADPNETWORKMESSAGECONTENTMASK]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_UadpNetworkMessageContentMask_deleteMembers(UA_UadpNetworkMessageContentMask *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_UADPNETWORKMESSAGECONTENTMASK]);
-}
-
-static UA_INLINE void
-UA_UadpNetworkMessageContentMask_clear(UA_UadpNetworkMessageContentMask *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_UADPNETWORKMESSAGECONTENTMASK]);
-}
-
-static UA_INLINE void
-UA_UadpNetworkMessageContentMask_delete(UA_UadpNetworkMessageContentMask *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_UADPNETWORKMESSAGECONTENTMASK]);
-}
-
-/* UadpWriterGroupMessageDataType */
-static UA_INLINE void
-UA_UadpWriterGroupMessageDataType_init(UA_UadpWriterGroupMessageDataType *p) {
-    memset(p, 0, sizeof(UA_UadpWriterGroupMessageDataType));
-}
-
-static UA_INLINE UA_UadpWriterGroupMessageDataType *
-UA_UadpWriterGroupMessageDataType_new(void) {
-    return (UA_UadpWriterGroupMessageDataType*)UA_new(&UA_TYPES[UA_TYPES_UADPWRITERGROUPMESSAGEDATATYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_UadpWriterGroupMessageDataType_copy(const UA_UadpWriterGroupMessageDataType *src, UA_UadpWriterGroupMessageDataType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_UADPWRITERGROUPMESSAGEDATATYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_UadpWriterGroupMessageDataType_deleteMembers(UA_UadpWriterGroupMessageDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_UADPWRITERGROUPMESSAGEDATATYPE]);
-}
-
-static UA_INLINE void
-UA_UadpWriterGroupMessageDataType_clear(UA_UadpWriterGroupMessageDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_UADPWRITERGROUPMESSAGEDATATYPE]);
-}
-
-static UA_INLINE void
-UA_UadpWriterGroupMessageDataType_delete(UA_UadpWriterGroupMessageDataType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_UADPWRITERGROUPMESSAGEDATATYPE]);
-}
-
-/* UadpDataSetMessageContentMask */
-static UA_INLINE void
-UA_UadpDataSetMessageContentMask_init(UA_UadpDataSetMessageContentMask *p) {
-    memset(p, 0, sizeof(UA_UadpDataSetMessageContentMask));
-}
-
-static UA_INLINE UA_UadpDataSetMessageContentMask *
-UA_UadpDataSetMessageContentMask_new(void) {
-    return (UA_UadpDataSetMessageContentMask*)UA_new(&UA_TYPES[UA_TYPES_UADPDATASETMESSAGECONTENTMASK]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_UadpDataSetMessageContentMask_copy(const UA_UadpDataSetMessageContentMask *src, UA_UadpDataSetMessageContentMask *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_UADPDATASETMESSAGECONTENTMASK]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_UadpDataSetMessageContentMask_deleteMembers(UA_UadpDataSetMessageContentMask *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_UADPDATASETMESSAGECONTENTMASK]);
-}
-
-static UA_INLINE void
-UA_UadpDataSetMessageContentMask_clear(UA_UadpDataSetMessageContentMask *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_UADPDATASETMESSAGECONTENTMASK]);
-}
-
-static UA_INLINE void
-UA_UadpDataSetMessageContentMask_delete(UA_UadpDataSetMessageContentMask *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_UADPDATASETMESSAGECONTENTMASK]);
-}
-
-/* UadpDataSetWriterMessageDataType */
-static UA_INLINE void
-UA_UadpDataSetWriterMessageDataType_init(UA_UadpDataSetWriterMessageDataType *p) {
-    memset(p, 0, sizeof(UA_UadpDataSetWriterMessageDataType));
-}
-
-static UA_INLINE UA_UadpDataSetWriterMessageDataType *
-UA_UadpDataSetWriterMessageDataType_new(void) {
-    return (UA_UadpDataSetWriterMessageDataType*)UA_new(&UA_TYPES[UA_TYPES_UADPDATASETWRITERMESSAGEDATATYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_UadpDataSetWriterMessageDataType_copy(const UA_UadpDataSetWriterMessageDataType *src, UA_UadpDataSetWriterMessageDataType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_UADPDATASETWRITERMESSAGEDATATYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_UadpDataSetWriterMessageDataType_deleteMembers(UA_UadpDataSetWriterMessageDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_UADPDATASETWRITERMESSAGEDATATYPE]);
-}
-
-static UA_INLINE void
-UA_UadpDataSetWriterMessageDataType_clear(UA_UadpDataSetWriterMessageDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_UADPDATASETWRITERMESSAGEDATATYPE]);
-}
-
-static UA_INLINE void
-UA_UadpDataSetWriterMessageDataType_delete(UA_UadpDataSetWriterMessageDataType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_UADPDATASETWRITERMESSAGEDATATYPE]);
-}
-
-/* UadpDataSetReaderMessageDataType */
-static UA_INLINE void
-UA_UadpDataSetReaderMessageDataType_init(UA_UadpDataSetReaderMessageDataType *p) {
-    memset(p, 0, sizeof(UA_UadpDataSetReaderMessageDataType));
-}
-
-static UA_INLINE UA_UadpDataSetReaderMessageDataType *
-UA_UadpDataSetReaderMessageDataType_new(void) {
-    return (UA_UadpDataSetReaderMessageDataType*)UA_new(&UA_TYPES[UA_TYPES_UADPDATASETREADERMESSAGEDATATYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_UadpDataSetReaderMessageDataType_copy(const UA_UadpDataSetReaderMessageDataType *src, UA_UadpDataSetReaderMessageDataType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_UADPDATASETREADERMESSAGEDATATYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_UadpDataSetReaderMessageDataType_deleteMembers(UA_UadpDataSetReaderMessageDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_UADPDATASETREADERMESSAGEDATATYPE]);
-}
-
-static UA_INLINE void
-UA_UadpDataSetReaderMessageDataType_clear(UA_UadpDataSetReaderMessageDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_UADPDATASETREADERMESSAGEDATATYPE]);
-}
-
-static UA_INLINE void
-UA_UadpDataSetReaderMessageDataType_delete(UA_UadpDataSetReaderMessageDataType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_UADPDATASETREADERMESSAGEDATATYPE]);
-}
-
-/* JsonNetworkMessageContentMask */
-static UA_INLINE void
-UA_JsonNetworkMessageContentMask_init(UA_JsonNetworkMessageContentMask *p) {
-    memset(p, 0, sizeof(UA_JsonNetworkMessageContentMask));
-}
-
-static UA_INLINE UA_JsonNetworkMessageContentMask *
-UA_JsonNetworkMessageContentMask_new(void) {
-    return (UA_JsonNetworkMessageContentMask*)UA_new(&UA_TYPES[UA_TYPES_JSONNETWORKMESSAGECONTENTMASK]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_JsonNetworkMessageContentMask_copy(const UA_JsonNetworkMessageContentMask *src, UA_JsonNetworkMessageContentMask *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_JSONNETWORKMESSAGECONTENTMASK]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_JsonNetworkMessageContentMask_deleteMembers(UA_JsonNetworkMessageContentMask *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_JSONNETWORKMESSAGECONTENTMASK]);
-}
-
-static UA_INLINE void
-UA_JsonNetworkMessageContentMask_clear(UA_JsonNetworkMessageContentMask *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_JSONNETWORKMESSAGECONTENTMASK]);
-}
-
-static UA_INLINE void
-UA_JsonNetworkMessageContentMask_delete(UA_JsonNetworkMessageContentMask *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_JSONNETWORKMESSAGECONTENTMASK]);
-}
-
-/* JsonWriterGroupMessageDataType */
-static UA_INLINE void
-UA_JsonWriterGroupMessageDataType_init(UA_JsonWriterGroupMessageDataType *p) {
-    memset(p, 0, sizeof(UA_JsonWriterGroupMessageDataType));
-}
-
-static UA_INLINE UA_JsonWriterGroupMessageDataType *
-UA_JsonWriterGroupMessageDataType_new(void) {
-    return (UA_JsonWriterGroupMessageDataType*)UA_new(&UA_TYPES[UA_TYPES_JSONWRITERGROUPMESSAGEDATATYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_JsonWriterGroupMessageDataType_copy(const UA_JsonWriterGroupMessageDataType *src, UA_JsonWriterGroupMessageDataType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_JSONWRITERGROUPMESSAGEDATATYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_JsonWriterGroupMessageDataType_deleteMembers(UA_JsonWriterGroupMessageDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_JSONWRITERGROUPMESSAGEDATATYPE]);
-}
-
-static UA_INLINE void
-UA_JsonWriterGroupMessageDataType_clear(UA_JsonWriterGroupMessageDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_JSONWRITERGROUPMESSAGEDATATYPE]);
-}
-
-static UA_INLINE void
-UA_JsonWriterGroupMessageDataType_delete(UA_JsonWriterGroupMessageDataType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_JSONWRITERGROUPMESSAGEDATATYPE]);
-}
-
-/* JsonDataSetMessageContentMask */
-static UA_INLINE void
-UA_JsonDataSetMessageContentMask_init(UA_JsonDataSetMessageContentMask *p) {
-    memset(p, 0, sizeof(UA_JsonDataSetMessageContentMask));
-}
-
-static UA_INLINE UA_JsonDataSetMessageContentMask *
-UA_JsonDataSetMessageContentMask_new(void) {
-    return (UA_JsonDataSetMessageContentMask*)UA_new(&UA_TYPES[UA_TYPES_JSONDATASETMESSAGECONTENTMASK]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_JsonDataSetMessageContentMask_copy(const UA_JsonDataSetMessageContentMask *src, UA_JsonDataSetMessageContentMask *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_JSONDATASETMESSAGECONTENTMASK]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_JsonDataSetMessageContentMask_deleteMembers(UA_JsonDataSetMessageContentMask *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_JSONDATASETMESSAGECONTENTMASK]);
-}
-
-static UA_INLINE void
-UA_JsonDataSetMessageContentMask_clear(UA_JsonDataSetMessageContentMask *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_JSONDATASETMESSAGECONTENTMASK]);
-}
-
-static UA_INLINE void
-UA_JsonDataSetMessageContentMask_delete(UA_JsonDataSetMessageContentMask *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_JSONDATASETMESSAGECONTENTMASK]);
-}
-
-/* JsonDataSetWriterMessageDataType */
-static UA_INLINE void
-UA_JsonDataSetWriterMessageDataType_init(UA_JsonDataSetWriterMessageDataType *p) {
-    memset(p, 0, sizeof(UA_JsonDataSetWriterMessageDataType));
-}
-
-static UA_INLINE UA_JsonDataSetWriterMessageDataType *
-UA_JsonDataSetWriterMessageDataType_new(void) {
-    return (UA_JsonDataSetWriterMessageDataType*)UA_new(&UA_TYPES[UA_TYPES_JSONDATASETWRITERMESSAGEDATATYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_JsonDataSetWriterMessageDataType_copy(const UA_JsonDataSetWriterMessageDataType *src, UA_JsonDataSetWriterMessageDataType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_JSONDATASETWRITERMESSAGEDATATYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_JsonDataSetWriterMessageDataType_deleteMembers(UA_JsonDataSetWriterMessageDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_JSONDATASETWRITERMESSAGEDATATYPE]);
-}
-
-static UA_INLINE void
-UA_JsonDataSetWriterMessageDataType_clear(UA_JsonDataSetWriterMessageDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_JSONDATASETWRITERMESSAGEDATATYPE]);
-}
-
-static UA_INLINE void
-UA_JsonDataSetWriterMessageDataType_delete(UA_JsonDataSetWriterMessageDataType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_JSONDATASETWRITERMESSAGEDATATYPE]);
-}
-
-/* JsonDataSetReaderMessageDataType */
-static UA_INLINE void
-UA_JsonDataSetReaderMessageDataType_init(UA_JsonDataSetReaderMessageDataType *p) {
-    memset(p, 0, sizeof(UA_JsonDataSetReaderMessageDataType));
-}
-
-static UA_INLINE UA_JsonDataSetReaderMessageDataType *
-UA_JsonDataSetReaderMessageDataType_new(void) {
-    return (UA_JsonDataSetReaderMessageDataType*)UA_new(&UA_TYPES[UA_TYPES_JSONDATASETREADERMESSAGEDATATYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_JsonDataSetReaderMessageDataType_copy(const UA_JsonDataSetReaderMessageDataType *src, UA_JsonDataSetReaderMessageDataType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_JSONDATASETREADERMESSAGEDATATYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_JsonDataSetReaderMessageDataType_deleteMembers(UA_JsonDataSetReaderMessageDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_JSONDATASETREADERMESSAGEDATATYPE]);
-}
-
-static UA_INLINE void
-UA_JsonDataSetReaderMessageDataType_clear(UA_JsonDataSetReaderMessageDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_JSONDATASETREADERMESSAGEDATATYPE]);
-}
-
-static UA_INLINE void
-UA_JsonDataSetReaderMessageDataType_delete(UA_JsonDataSetReaderMessageDataType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_JSONDATASETREADERMESSAGEDATATYPE]);
-}
-
-/* DatagramConnectionTransportDataType */
-static UA_INLINE void
-UA_DatagramConnectionTransportDataType_init(UA_DatagramConnectionTransportDataType *p) {
-    memset(p, 0, sizeof(UA_DatagramConnectionTransportDataType));
-}
-
-static UA_INLINE UA_DatagramConnectionTransportDataType *
-UA_DatagramConnectionTransportDataType_new(void) {
-    return (UA_DatagramConnectionTransportDataType*)UA_new(&UA_TYPES[UA_TYPES_DATAGRAMCONNECTIONTRANSPORTDATATYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_DatagramConnectionTransportDataType_copy(const UA_DatagramConnectionTransportDataType *src, UA_DatagramConnectionTransportDataType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_DATAGRAMCONNECTIONTRANSPORTDATATYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_DatagramConnectionTransportDataType_deleteMembers(UA_DatagramConnectionTransportDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_DATAGRAMCONNECTIONTRANSPORTDATATYPE]);
-}
-
-static UA_INLINE void
-UA_DatagramConnectionTransportDataType_clear(UA_DatagramConnectionTransportDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_DATAGRAMCONNECTIONTRANSPORTDATATYPE]);
-}
-
-static UA_INLINE void
-UA_DatagramConnectionTransportDataType_delete(UA_DatagramConnectionTransportDataType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_DATAGRAMCONNECTIONTRANSPORTDATATYPE]);
-}
-
-/* DatagramWriterGroupTransportDataType */
-static UA_INLINE void
-UA_DatagramWriterGroupTransportDataType_init(UA_DatagramWriterGroupTransportDataType *p) {
-    memset(p, 0, sizeof(UA_DatagramWriterGroupTransportDataType));
-}
-
-static UA_INLINE UA_DatagramWriterGroupTransportDataType *
-UA_DatagramWriterGroupTransportDataType_new(void) {
-    return (UA_DatagramWriterGroupTransportDataType*)UA_new(&UA_TYPES[UA_TYPES_DATAGRAMWRITERGROUPTRANSPORTDATATYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_DatagramWriterGroupTransportDataType_copy(const UA_DatagramWriterGroupTransportDataType *src, UA_DatagramWriterGroupTransportDataType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_DATAGRAMWRITERGROUPTRANSPORTDATATYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_DatagramWriterGroupTransportDataType_deleteMembers(UA_DatagramWriterGroupTransportDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_DATAGRAMWRITERGROUPTRANSPORTDATATYPE]);
-}
-
-static UA_INLINE void
-UA_DatagramWriterGroupTransportDataType_clear(UA_DatagramWriterGroupTransportDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_DATAGRAMWRITERGROUPTRANSPORTDATATYPE]);
-}
-
-static UA_INLINE void
-UA_DatagramWriterGroupTransportDataType_delete(UA_DatagramWriterGroupTransportDataType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_DATAGRAMWRITERGROUPTRANSPORTDATATYPE]);
-}
-
-/* BrokerConnectionTransportDataType */
-static UA_INLINE void
-UA_BrokerConnectionTransportDataType_init(UA_BrokerConnectionTransportDataType *p) {
-    memset(p, 0, sizeof(UA_BrokerConnectionTransportDataType));
-}
-
-static UA_INLINE UA_BrokerConnectionTransportDataType *
-UA_BrokerConnectionTransportDataType_new(void) {
-    return (UA_BrokerConnectionTransportDataType*)UA_new(&UA_TYPES[UA_TYPES_BROKERCONNECTIONTRANSPORTDATATYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_BrokerConnectionTransportDataType_copy(const UA_BrokerConnectionTransportDataType *src, UA_BrokerConnectionTransportDataType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_BROKERCONNECTIONTRANSPORTDATATYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_BrokerConnectionTransportDataType_deleteMembers(UA_BrokerConnectionTransportDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_BROKERCONNECTIONTRANSPORTDATATYPE]);
-}
-
-static UA_INLINE void
-UA_BrokerConnectionTransportDataType_clear(UA_BrokerConnectionTransportDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_BROKERCONNECTIONTRANSPORTDATATYPE]);
-}
-
-static UA_INLINE void
-UA_BrokerConnectionTransportDataType_delete(UA_BrokerConnectionTransportDataType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_BROKERCONNECTIONTRANSPORTDATATYPE]);
-}
-
-/* BrokerTransportQualityOfService */
-static UA_INLINE void
-UA_BrokerTransportQualityOfService_init(UA_BrokerTransportQualityOfService *p) {
-    memset(p, 0, sizeof(UA_BrokerTransportQualityOfService));
-}
-
-static UA_INLINE UA_BrokerTransportQualityOfService *
-UA_BrokerTransportQualityOfService_new(void) {
-    return (UA_BrokerTransportQualityOfService*)UA_new(&UA_TYPES[UA_TYPES_BROKERTRANSPORTQUALITYOFSERVICE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_BrokerTransportQualityOfService_copy(const UA_BrokerTransportQualityOfService *src, UA_BrokerTransportQualityOfService *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_BROKERTRANSPORTQUALITYOFSERVICE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_BrokerTransportQualityOfService_deleteMembers(UA_BrokerTransportQualityOfService *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_BROKERTRANSPORTQUALITYOFSERVICE]);
-}
-
-static UA_INLINE void
-UA_BrokerTransportQualityOfService_clear(UA_BrokerTransportQualityOfService *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_BROKERTRANSPORTQUALITYOFSERVICE]);
-}
-
-static UA_INLINE void
-UA_BrokerTransportQualityOfService_delete(UA_BrokerTransportQualityOfService *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_BROKERTRANSPORTQUALITYOFSERVICE]);
-}
-
-/* BrokerWriterGroupTransportDataType */
-static UA_INLINE void
-UA_BrokerWriterGroupTransportDataType_init(UA_BrokerWriterGroupTransportDataType *p) {
-    memset(p, 0, sizeof(UA_BrokerWriterGroupTransportDataType));
-}
-
-static UA_INLINE UA_BrokerWriterGroupTransportDataType *
-UA_BrokerWriterGroupTransportDataType_new(void) {
-    return (UA_BrokerWriterGroupTransportDataType*)UA_new(&UA_TYPES[UA_TYPES_BROKERWRITERGROUPTRANSPORTDATATYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_BrokerWriterGroupTransportDataType_copy(const UA_BrokerWriterGroupTransportDataType *src, UA_BrokerWriterGroupTransportDataType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_BROKERWRITERGROUPTRANSPORTDATATYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_BrokerWriterGroupTransportDataType_deleteMembers(UA_BrokerWriterGroupTransportDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_BROKERWRITERGROUPTRANSPORTDATATYPE]);
-}
-
-static UA_INLINE void
-UA_BrokerWriterGroupTransportDataType_clear(UA_BrokerWriterGroupTransportDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_BROKERWRITERGROUPTRANSPORTDATATYPE]);
-}
-
-static UA_INLINE void
-UA_BrokerWriterGroupTransportDataType_delete(UA_BrokerWriterGroupTransportDataType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_BROKERWRITERGROUPTRANSPORTDATATYPE]);
-}
-
-/* BrokerDataSetWriterTransportDataType */
-static UA_INLINE void
-UA_BrokerDataSetWriterTransportDataType_init(UA_BrokerDataSetWriterTransportDataType *p) {
-    memset(p, 0, sizeof(UA_BrokerDataSetWriterTransportDataType));
-}
-
-static UA_INLINE UA_BrokerDataSetWriterTransportDataType *
-UA_BrokerDataSetWriterTransportDataType_new(void) {
-    return (UA_BrokerDataSetWriterTransportDataType*)UA_new(&UA_TYPES[UA_TYPES_BROKERDATASETWRITERTRANSPORTDATATYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_BrokerDataSetWriterTransportDataType_copy(const UA_BrokerDataSetWriterTransportDataType *src, UA_BrokerDataSetWriterTransportDataType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_BROKERDATASETWRITERTRANSPORTDATATYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_BrokerDataSetWriterTransportDataType_deleteMembers(UA_BrokerDataSetWriterTransportDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_BROKERDATASETWRITERTRANSPORTDATATYPE]);
-}
-
-static UA_INLINE void
-UA_BrokerDataSetWriterTransportDataType_clear(UA_BrokerDataSetWriterTransportDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_BROKERDATASETWRITERTRANSPORTDATATYPE]);
-}
-
-static UA_INLINE void
-UA_BrokerDataSetWriterTransportDataType_delete(UA_BrokerDataSetWriterTransportDataType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_BROKERDATASETWRITERTRANSPORTDATATYPE]);
-}
-
-/* BrokerDataSetReaderTransportDataType */
-static UA_INLINE void
-UA_BrokerDataSetReaderTransportDataType_init(UA_BrokerDataSetReaderTransportDataType *p) {
-    memset(p, 0, sizeof(UA_BrokerDataSetReaderTransportDataType));
-}
-
-static UA_INLINE UA_BrokerDataSetReaderTransportDataType *
-UA_BrokerDataSetReaderTransportDataType_new(void) {
-    return (UA_BrokerDataSetReaderTransportDataType*)UA_new(&UA_TYPES[UA_TYPES_BROKERDATASETREADERTRANSPORTDATATYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_BrokerDataSetReaderTransportDataType_copy(const UA_BrokerDataSetReaderTransportDataType *src, UA_BrokerDataSetReaderTransportDataType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_BROKERDATASETREADERTRANSPORTDATATYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_BrokerDataSetReaderTransportDataType_deleteMembers(UA_BrokerDataSetReaderTransportDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_BROKERDATASETREADERTRANSPORTDATATYPE]);
-}
-
-static UA_INLINE void
-UA_BrokerDataSetReaderTransportDataType_clear(UA_BrokerDataSetReaderTransportDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_BROKERDATASETREADERTRANSPORTDATATYPE]);
-}
-
-static UA_INLINE void
-UA_BrokerDataSetReaderTransportDataType_delete(UA_BrokerDataSetReaderTransportDataType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_BROKERDATASETREADERTRANSPORTDATATYPE]);
-}
-
-/* DiagnosticsLevel */
-static UA_INLINE void
-UA_DiagnosticsLevel_init(UA_DiagnosticsLevel *p) {
-    memset(p, 0, sizeof(UA_DiagnosticsLevel));
-}
-
-static UA_INLINE UA_DiagnosticsLevel *
-UA_DiagnosticsLevel_new(void) {
-    return (UA_DiagnosticsLevel*)UA_new(&UA_TYPES[UA_TYPES_DIAGNOSTICSLEVEL]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_DiagnosticsLevel_copy(const UA_DiagnosticsLevel *src, UA_DiagnosticsLevel *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_DIAGNOSTICSLEVEL]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_DiagnosticsLevel_deleteMembers(UA_DiagnosticsLevel *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_DIAGNOSTICSLEVEL]);
-}
-
-static UA_INLINE void
-UA_DiagnosticsLevel_clear(UA_DiagnosticsLevel *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_DIAGNOSTICSLEVEL]);
-}
-
-static UA_INLINE void
-UA_DiagnosticsLevel_delete(UA_DiagnosticsLevel *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_DIAGNOSTICSLEVEL]);
-}
-
-/* PubSubDiagnosticsCounterClassification */
-static UA_INLINE void
-UA_PubSubDiagnosticsCounterClassification_init(UA_PubSubDiagnosticsCounterClassification *p) {
-    memset(p, 0, sizeof(UA_PubSubDiagnosticsCounterClassification));
-}
-
-static UA_INLINE UA_PubSubDiagnosticsCounterClassification *
-UA_PubSubDiagnosticsCounterClassification_new(void) {
-    return (UA_PubSubDiagnosticsCounterClassification*)UA_new(&UA_TYPES[UA_TYPES_PUBSUBDIAGNOSTICSCOUNTERCLASSIFICATION]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_PubSubDiagnosticsCounterClassification_copy(const UA_PubSubDiagnosticsCounterClassification *src, UA_PubSubDiagnosticsCounterClassification *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_PUBSUBDIAGNOSTICSCOUNTERCLASSIFICATION]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_PubSubDiagnosticsCounterClassification_deleteMembers(UA_PubSubDiagnosticsCounterClassification *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_PUBSUBDIAGNOSTICSCOUNTERCLASSIFICATION]);
-}
-
-static UA_INLINE void
-UA_PubSubDiagnosticsCounterClassification_clear(UA_PubSubDiagnosticsCounterClassification *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_PUBSUBDIAGNOSTICSCOUNTERCLASSIFICATION]);
-}
-
-static UA_INLINE void
-UA_PubSubDiagnosticsCounterClassification_delete(UA_PubSubDiagnosticsCounterClassification *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_PUBSUBDIAGNOSTICSCOUNTERCLASSIFICATION]);
-}
-
-/* AliasNameDataType */
-static UA_INLINE void
-UA_AliasNameDataType_init(UA_AliasNameDataType *p) {
-    memset(p, 0, sizeof(UA_AliasNameDataType));
-}
-
-static UA_INLINE UA_AliasNameDataType *
-UA_AliasNameDataType_new(void) {
-    return (UA_AliasNameDataType*)UA_new(&UA_TYPES[UA_TYPES_ALIASNAMEDATATYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_AliasNameDataType_copy(const UA_AliasNameDataType *src, UA_AliasNameDataType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_ALIASNAMEDATATYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_AliasNameDataType_deleteMembers(UA_AliasNameDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_ALIASNAMEDATATYPE]);
-}
-
-static UA_INLINE void
-UA_AliasNameDataType_clear(UA_AliasNameDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_ALIASNAMEDATATYPE]);
-}
-
-static UA_INLINE void
-UA_AliasNameDataType_delete(UA_AliasNameDataType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_ALIASNAMEDATATYPE]);
-}
-
-/* IdType */
-static UA_INLINE void
-UA_IdType_init(UA_IdType *p) {
-    memset(p, 0, sizeof(UA_IdType));
-}
-
-static UA_INLINE UA_IdType *
-UA_IdType_new(void) {
-    return (UA_IdType*)UA_new(&UA_TYPES[UA_TYPES_IDTYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_IdType_copy(const UA_IdType *src, UA_IdType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_IDTYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_IdType_deleteMembers(UA_IdType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_IDTYPE]);
-}
-
-static UA_INLINE void
-UA_IdType_clear(UA_IdType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_IDTYPE]);
-}
-
-static UA_INLINE void
-UA_IdType_delete(UA_IdType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_IDTYPE]);
-}
-
 /* NodeClass */
 static UA_INLINE void
 UA_NodeClass_init(UA_NodeClass *p) {
@@ -25419,192 +17704,6 @@ UA_NodeClass_clear(UA_NodeClass *p) {
 static UA_INLINE void
 UA_NodeClass_delete(UA_NodeClass *p) {
     UA_delete(p, &UA_TYPES[UA_TYPES_NODECLASS]);
-}
-
-/* PermissionType */
-static UA_INLINE void
-UA_PermissionType_init(UA_PermissionType *p) {
-    memset(p, 0, sizeof(UA_PermissionType));
-}
-
-static UA_INLINE UA_PermissionType *
-UA_PermissionType_new(void) {
-    return (UA_PermissionType*)UA_new(&UA_TYPES[UA_TYPES_PERMISSIONTYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_PermissionType_copy(const UA_PermissionType *src, UA_PermissionType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_PERMISSIONTYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_PermissionType_deleteMembers(UA_PermissionType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_PERMISSIONTYPE]);
-}
-
-static UA_INLINE void
-UA_PermissionType_clear(UA_PermissionType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_PERMISSIONTYPE]);
-}
-
-static UA_INLINE void
-UA_PermissionType_delete(UA_PermissionType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_PERMISSIONTYPE]);
-}
-
-/* AccessLevelType */
-static UA_INLINE void
-UA_AccessLevelType_init(UA_AccessLevelType *p) {
-    memset(p, 0, sizeof(UA_AccessLevelType));
-}
-
-static UA_INLINE UA_AccessLevelType *
-UA_AccessLevelType_new(void) {
-    return (UA_AccessLevelType*)UA_new(&UA_TYPES[UA_TYPES_ACCESSLEVELTYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_AccessLevelType_copy(const UA_AccessLevelType *src, UA_AccessLevelType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_ACCESSLEVELTYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_AccessLevelType_deleteMembers(UA_AccessLevelType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_ACCESSLEVELTYPE]);
-}
-
-static UA_INLINE void
-UA_AccessLevelType_clear(UA_AccessLevelType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_ACCESSLEVELTYPE]);
-}
-
-static UA_INLINE void
-UA_AccessLevelType_delete(UA_AccessLevelType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_ACCESSLEVELTYPE]);
-}
-
-/* AccessLevelExType */
-static UA_INLINE void
-UA_AccessLevelExType_init(UA_AccessLevelExType *p) {
-    memset(p, 0, sizeof(UA_AccessLevelExType));
-}
-
-static UA_INLINE UA_AccessLevelExType *
-UA_AccessLevelExType_new(void) {
-    return (UA_AccessLevelExType*)UA_new(&UA_TYPES[UA_TYPES_ACCESSLEVELEXTYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_AccessLevelExType_copy(const UA_AccessLevelExType *src, UA_AccessLevelExType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_ACCESSLEVELEXTYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_AccessLevelExType_deleteMembers(UA_AccessLevelExType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_ACCESSLEVELEXTYPE]);
-}
-
-static UA_INLINE void
-UA_AccessLevelExType_clear(UA_AccessLevelExType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_ACCESSLEVELEXTYPE]);
-}
-
-static UA_INLINE void
-UA_AccessLevelExType_delete(UA_AccessLevelExType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_ACCESSLEVELEXTYPE]);
-}
-
-/* EventNotifierType */
-static UA_INLINE void
-UA_EventNotifierType_init(UA_EventNotifierType *p) {
-    memset(p, 0, sizeof(UA_EventNotifierType));
-}
-
-static UA_INLINE UA_EventNotifierType *
-UA_EventNotifierType_new(void) {
-    return (UA_EventNotifierType*)UA_new(&UA_TYPES[UA_TYPES_EVENTNOTIFIERTYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_EventNotifierType_copy(const UA_EventNotifierType *src, UA_EventNotifierType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_EVENTNOTIFIERTYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_EventNotifierType_deleteMembers(UA_EventNotifierType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_EVENTNOTIFIERTYPE]);
-}
-
-static UA_INLINE void
-UA_EventNotifierType_clear(UA_EventNotifierType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_EVENTNOTIFIERTYPE]);
-}
-
-static UA_INLINE void
-UA_EventNotifierType_delete(UA_EventNotifierType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_EVENTNOTIFIERTYPE]);
-}
-
-/* AccessRestrictionType */
-static UA_INLINE void
-UA_AccessRestrictionType_init(UA_AccessRestrictionType *p) {
-    memset(p, 0, sizeof(UA_AccessRestrictionType));
-}
-
-static UA_INLINE UA_AccessRestrictionType *
-UA_AccessRestrictionType_new(void) {
-    return (UA_AccessRestrictionType*)UA_new(&UA_TYPES[UA_TYPES_ACCESSRESTRICTIONTYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_AccessRestrictionType_copy(const UA_AccessRestrictionType *src, UA_AccessRestrictionType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_ACCESSRESTRICTIONTYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_AccessRestrictionType_deleteMembers(UA_AccessRestrictionType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_ACCESSRESTRICTIONTYPE]);
-}
-
-static UA_INLINE void
-UA_AccessRestrictionType_clear(UA_AccessRestrictionType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_ACCESSRESTRICTIONTYPE]);
-}
-
-static UA_INLINE void
-UA_AccessRestrictionType_delete(UA_AccessRestrictionType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_ACCESSRESTRICTIONTYPE]);
-}
-
-/* RolePermissionType */
-static UA_INLINE void
-UA_RolePermissionType_init(UA_RolePermissionType *p) {
-    memset(p, 0, sizeof(UA_RolePermissionType));
-}
-
-static UA_INLINE UA_RolePermissionType *
-UA_RolePermissionType_new(void) {
-    return (UA_RolePermissionType*)UA_new(&UA_TYPES[UA_TYPES_ROLEPERMISSIONTYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_RolePermissionType_copy(const UA_RolePermissionType *src, UA_RolePermissionType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_ROLEPERMISSIONTYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_RolePermissionType_deleteMembers(UA_RolePermissionType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_ROLEPERMISSIONTYPE]);
-}
-
-static UA_INLINE void
-UA_RolePermissionType_clear(UA_RolePermissionType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_ROLEPERMISSIONTYPE]);
-}
-
-static UA_INLINE void
-UA_RolePermissionType_delete(UA_RolePermissionType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_ROLEPERMISSIONTYPE]);
 }
 
 /* StructureType */
@@ -25700,37 +17799,6 @@ UA_StructureDefinition_delete(UA_StructureDefinition *p) {
     UA_delete(p, &UA_TYPES[UA_TYPES_STRUCTUREDEFINITION]);
 }
 
-/* ReferenceNode */
-static UA_INLINE void
-UA_ReferenceNode_init(UA_ReferenceNode *p) {
-    memset(p, 0, sizeof(UA_ReferenceNode));
-}
-
-static UA_INLINE UA_ReferenceNode *
-UA_ReferenceNode_new(void) {
-    return (UA_ReferenceNode*)UA_new(&UA_TYPES[UA_TYPES_REFERENCENODE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_ReferenceNode_copy(const UA_ReferenceNode *src, UA_ReferenceNode *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_REFERENCENODE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_ReferenceNode_deleteMembers(UA_ReferenceNode *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_REFERENCENODE]);
-}
-
-static UA_INLINE void
-UA_ReferenceNode_clear(UA_ReferenceNode *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_REFERENCENODE]);
-}
-
-static UA_INLINE void
-UA_ReferenceNode_delete(UA_ReferenceNode *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_REFERENCENODE]);
-}
-
 /* Argument */
 static UA_INLINE void
 UA_Argument_init(UA_Argument *p) {
@@ -25824,223 +17892,6 @@ UA_EnumField_delete(UA_EnumField *p) {
     UA_delete(p, &UA_TYPES[UA_TYPES_ENUMFIELD]);
 }
 
-/* OptionSet */
-static UA_INLINE void
-UA_OptionSet_init(UA_OptionSet *p) {
-    memset(p, 0, sizeof(UA_OptionSet));
-}
-
-static UA_INLINE UA_OptionSet *
-UA_OptionSet_new(void) {
-    return (UA_OptionSet*)UA_new(&UA_TYPES[UA_TYPES_OPTIONSET]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_OptionSet_copy(const UA_OptionSet *src, UA_OptionSet *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_OPTIONSET]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_OptionSet_deleteMembers(UA_OptionSet *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_OPTIONSET]);
-}
-
-static UA_INLINE void
-UA_OptionSet_clear(UA_OptionSet *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_OPTIONSET]);
-}
-
-static UA_INLINE void
-UA_OptionSet_delete(UA_OptionSet *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_OPTIONSET]);
-}
-
-/* Union */
-static UA_INLINE void
-UA_Union_init(UA_Union *p) {
-    memset(p, 0, sizeof(UA_Union));
-}
-
-static UA_INLINE UA_Union *
-UA_Union_new(void) {
-    return (UA_Union*)UA_new(&UA_TYPES[UA_TYPES_UNION]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_Union_copy(const UA_Union *src, UA_Union *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_UNION]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_Union_deleteMembers(UA_Union *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_UNION]);
-}
-
-static UA_INLINE void
-UA_Union_clear(UA_Union *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_UNION]);
-}
-
-static UA_INLINE void
-UA_Union_delete(UA_Union *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_UNION]);
-}
-
-/* NormalizedString */
-static UA_INLINE void
-UA_NormalizedString_init(UA_NormalizedString *p) {
-    memset(p, 0, sizeof(UA_NormalizedString));
-}
-
-static UA_INLINE UA_NormalizedString *
-UA_NormalizedString_new(void) {
-    return (UA_NormalizedString*)UA_new(&UA_TYPES[UA_TYPES_NORMALIZEDSTRING]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_NormalizedString_copy(const UA_NormalizedString *src, UA_NormalizedString *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_NORMALIZEDSTRING]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_NormalizedString_deleteMembers(UA_NormalizedString *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_NORMALIZEDSTRING]);
-}
-
-static UA_INLINE void
-UA_NormalizedString_clear(UA_NormalizedString *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_NORMALIZEDSTRING]);
-}
-
-static UA_INLINE void
-UA_NormalizedString_delete(UA_NormalizedString *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_NORMALIZEDSTRING]);
-}
-
-/* DecimalString */
-static UA_INLINE void
-UA_DecimalString_init(UA_DecimalString *p) {
-    memset(p, 0, sizeof(UA_DecimalString));
-}
-
-static UA_INLINE UA_DecimalString *
-UA_DecimalString_new(void) {
-    return (UA_DecimalString*)UA_new(&UA_TYPES[UA_TYPES_DECIMALSTRING]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_DecimalString_copy(const UA_DecimalString *src, UA_DecimalString *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_DECIMALSTRING]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_DecimalString_deleteMembers(UA_DecimalString *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_DECIMALSTRING]);
-}
-
-static UA_INLINE void
-UA_DecimalString_clear(UA_DecimalString *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_DECIMALSTRING]);
-}
-
-static UA_INLINE void
-UA_DecimalString_delete(UA_DecimalString *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_DECIMALSTRING]);
-}
-
-/* DurationString */
-static UA_INLINE void
-UA_DurationString_init(UA_DurationString *p) {
-    memset(p, 0, sizeof(UA_DurationString));
-}
-
-static UA_INLINE UA_DurationString *
-UA_DurationString_new(void) {
-    return (UA_DurationString*)UA_new(&UA_TYPES[UA_TYPES_DURATIONSTRING]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_DurationString_copy(const UA_DurationString *src, UA_DurationString *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_DURATIONSTRING]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_DurationString_deleteMembers(UA_DurationString *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_DURATIONSTRING]);
-}
-
-static UA_INLINE void
-UA_DurationString_clear(UA_DurationString *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_DURATIONSTRING]);
-}
-
-static UA_INLINE void
-UA_DurationString_delete(UA_DurationString *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_DURATIONSTRING]);
-}
-
-/* TimeString */
-static UA_INLINE void
-UA_TimeString_init(UA_TimeString *p) {
-    memset(p, 0, sizeof(UA_TimeString));
-}
-
-static UA_INLINE UA_TimeString *
-UA_TimeString_new(void) {
-    return (UA_TimeString*)UA_new(&UA_TYPES[UA_TYPES_TIMESTRING]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_TimeString_copy(const UA_TimeString *src, UA_TimeString *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_TIMESTRING]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_TimeString_deleteMembers(UA_TimeString *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_TIMESTRING]);
-}
-
-static UA_INLINE void
-UA_TimeString_clear(UA_TimeString *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_TIMESTRING]);
-}
-
-static UA_INLINE void
-UA_TimeString_delete(UA_TimeString *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_TIMESTRING]);
-}
-
-/* DateString */
-static UA_INLINE void
-UA_DateString_init(UA_DateString *p) {
-    memset(p, 0, sizeof(UA_DateString));
-}
-
-static UA_INLINE UA_DateString *
-UA_DateString_new(void) {
-    return (UA_DateString*)UA_new(&UA_TYPES[UA_TYPES_DATESTRING]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_DateString_copy(const UA_DateString *src, UA_DateString *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_DATESTRING]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_DateString_deleteMembers(UA_DateString *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_DATESTRING]);
-}
-
-static UA_INLINE void
-UA_DateString_clear(UA_DateString *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_DATESTRING]);
-}
-
-static UA_INLINE void
-UA_DateString_delete(UA_DateString *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_DATESTRING]);
-}
-
 /* Duration */
 static UA_INLINE void
 UA_Duration_init(UA_Duration *p) {
@@ -26132,99 +17983,6 @@ UA_LocaleId_clear(UA_LocaleId *p) {
 static UA_INLINE void
 UA_LocaleId_delete(UA_LocaleId *p) {
     UA_delete(p, &UA_TYPES[UA_TYPES_LOCALEID]);
-}
-
-/* TimeZoneDataType */
-static UA_INLINE void
-UA_TimeZoneDataType_init(UA_TimeZoneDataType *p) {
-    memset(p, 0, sizeof(UA_TimeZoneDataType));
-}
-
-static UA_INLINE UA_TimeZoneDataType *
-UA_TimeZoneDataType_new(void) {
-    return (UA_TimeZoneDataType*)UA_new(&UA_TYPES[UA_TYPES_TIMEZONEDATATYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_TimeZoneDataType_copy(const UA_TimeZoneDataType *src, UA_TimeZoneDataType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_TIMEZONEDATATYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_TimeZoneDataType_deleteMembers(UA_TimeZoneDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_TIMEZONEDATATYPE]);
-}
-
-static UA_INLINE void
-UA_TimeZoneDataType_clear(UA_TimeZoneDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_TIMEZONEDATATYPE]);
-}
-
-static UA_INLINE void
-UA_TimeZoneDataType_delete(UA_TimeZoneDataType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_TIMEZONEDATATYPE]);
-}
-
-/* Index */
-static UA_INLINE void
-UA_Index_init(UA_Index *p) {
-    memset(p, 0, sizeof(UA_Index));
-}
-
-static UA_INLINE UA_Index *
-UA_Index_new(void) {
-    return (UA_Index*)UA_new(&UA_TYPES[UA_TYPES_INDEX]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_Index_copy(const UA_Index *src, UA_Index *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_INDEX]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_Index_deleteMembers(UA_Index *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_INDEX]);
-}
-
-static UA_INLINE void
-UA_Index_clear(UA_Index *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_INDEX]);
-}
-
-static UA_INLINE void
-UA_Index_delete(UA_Index *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_INDEX]);
-}
-
-/* IntegerId */
-static UA_INLINE void
-UA_IntegerId_init(UA_IntegerId *p) {
-    memset(p, 0, sizeof(UA_IntegerId));
-}
-
-static UA_INLINE UA_IntegerId *
-UA_IntegerId_new(void) {
-    return (UA_IntegerId*)UA_new(&UA_TYPES[UA_TYPES_INTEGERID]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_IntegerId_copy(const UA_IntegerId *src, UA_IntegerId *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_INTEGERID]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_IntegerId_deleteMembers(UA_IntegerId *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_INTEGERID]);
-}
-
-static UA_INLINE void
-UA_IntegerId_clear(UA_IntegerId *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_INTEGERID]);
-}
-
-static UA_INLINE void
-UA_IntegerId_delete(UA_IntegerId *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_INTEGERID]);
 }
 
 /* ApplicationType */
@@ -26351,37 +18109,6 @@ UA_ResponseHeader_delete(UA_ResponseHeader *p) {
     UA_delete(p, &UA_TYPES[UA_TYPES_RESPONSEHEADER]);
 }
 
-/* VersionTime */
-static UA_INLINE void
-UA_VersionTime_init(UA_VersionTime *p) {
-    memset(p, 0, sizeof(UA_VersionTime));
-}
-
-static UA_INLINE UA_VersionTime *
-UA_VersionTime_new(void) {
-    return (UA_VersionTime*)UA_new(&UA_TYPES[UA_TYPES_VERSIONTIME]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_VersionTime_copy(const UA_VersionTime *src, UA_VersionTime *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_VERSIONTIME]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_VersionTime_deleteMembers(UA_VersionTime *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_VERSIONTIME]);
-}
-
-static UA_INLINE void
-UA_VersionTime_clear(UA_VersionTime *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_VERSIONTIME]);
-}
-
-static UA_INLINE void
-UA_VersionTime_delete(UA_VersionTime *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_VERSIONTIME]);
-}
-
 /* ServiceFault */
 static UA_INLINE void
 UA_ServiceFault_init(UA_ServiceFault *p) {
@@ -26411,68 +18138,6 @@ UA_ServiceFault_clear(UA_ServiceFault *p) {
 static UA_INLINE void
 UA_ServiceFault_delete(UA_ServiceFault *p) {
     UA_delete(p, &UA_TYPES[UA_TYPES_SERVICEFAULT]);
-}
-
-/* SessionlessInvokeRequestType */
-static UA_INLINE void
-UA_SessionlessInvokeRequestType_init(UA_SessionlessInvokeRequestType *p) {
-    memset(p, 0, sizeof(UA_SessionlessInvokeRequestType));
-}
-
-static UA_INLINE UA_SessionlessInvokeRequestType *
-UA_SessionlessInvokeRequestType_new(void) {
-    return (UA_SessionlessInvokeRequestType*)UA_new(&UA_TYPES[UA_TYPES_SESSIONLESSINVOKEREQUESTTYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_SessionlessInvokeRequestType_copy(const UA_SessionlessInvokeRequestType *src, UA_SessionlessInvokeRequestType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_SESSIONLESSINVOKEREQUESTTYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_SessionlessInvokeRequestType_deleteMembers(UA_SessionlessInvokeRequestType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_SESSIONLESSINVOKEREQUESTTYPE]);
-}
-
-static UA_INLINE void
-UA_SessionlessInvokeRequestType_clear(UA_SessionlessInvokeRequestType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_SESSIONLESSINVOKEREQUESTTYPE]);
-}
-
-static UA_INLINE void
-UA_SessionlessInvokeRequestType_delete(UA_SessionlessInvokeRequestType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_SESSIONLESSINVOKEREQUESTTYPE]);
-}
-
-/* SessionlessInvokeResponseType */
-static UA_INLINE void
-UA_SessionlessInvokeResponseType_init(UA_SessionlessInvokeResponseType *p) {
-    memset(p, 0, sizeof(UA_SessionlessInvokeResponseType));
-}
-
-static UA_INLINE UA_SessionlessInvokeResponseType *
-UA_SessionlessInvokeResponseType_new(void) {
-    return (UA_SessionlessInvokeResponseType*)UA_new(&UA_TYPES[UA_TYPES_SESSIONLESSINVOKERESPONSETYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_SessionlessInvokeResponseType_copy(const UA_SessionlessInvokeResponseType *src, UA_SessionlessInvokeResponseType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_SESSIONLESSINVOKERESPONSETYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_SessionlessInvokeResponseType_deleteMembers(UA_SessionlessInvokeResponseType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_SESSIONLESSINVOKERESPONSETYPE]);
-}
-
-static UA_INLINE void
-UA_SessionlessInvokeResponseType_clear(UA_SessionlessInvokeResponseType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_SESSIONLESSINVOKERESPONSETYPE]);
-}
-
-static UA_INLINE void
-UA_SessionlessInvokeResponseType_delete(UA_SessionlessInvokeResponseType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_SESSIONLESSINVOKERESPONSETYPE]);
 }
 
 /* FindServersRequest */
@@ -26535,130 +18200,6 @@ UA_FindServersResponse_clear(UA_FindServersResponse *p) {
 static UA_INLINE void
 UA_FindServersResponse_delete(UA_FindServersResponse *p) {
     UA_delete(p, &UA_TYPES[UA_TYPES_FINDSERVERSRESPONSE]);
-}
-
-/* ServerOnNetwork */
-static UA_INLINE void
-UA_ServerOnNetwork_init(UA_ServerOnNetwork *p) {
-    memset(p, 0, sizeof(UA_ServerOnNetwork));
-}
-
-static UA_INLINE UA_ServerOnNetwork *
-UA_ServerOnNetwork_new(void) {
-    return (UA_ServerOnNetwork*)UA_new(&UA_TYPES[UA_TYPES_SERVERONNETWORK]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_ServerOnNetwork_copy(const UA_ServerOnNetwork *src, UA_ServerOnNetwork *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_SERVERONNETWORK]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_ServerOnNetwork_deleteMembers(UA_ServerOnNetwork *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_SERVERONNETWORK]);
-}
-
-static UA_INLINE void
-UA_ServerOnNetwork_clear(UA_ServerOnNetwork *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_SERVERONNETWORK]);
-}
-
-static UA_INLINE void
-UA_ServerOnNetwork_delete(UA_ServerOnNetwork *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_SERVERONNETWORK]);
-}
-
-/* FindServersOnNetworkRequest */
-static UA_INLINE void
-UA_FindServersOnNetworkRequest_init(UA_FindServersOnNetworkRequest *p) {
-    memset(p, 0, sizeof(UA_FindServersOnNetworkRequest));
-}
-
-static UA_INLINE UA_FindServersOnNetworkRequest *
-UA_FindServersOnNetworkRequest_new(void) {
-    return (UA_FindServersOnNetworkRequest*)UA_new(&UA_TYPES[UA_TYPES_FINDSERVERSONNETWORKREQUEST]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_FindServersOnNetworkRequest_copy(const UA_FindServersOnNetworkRequest *src, UA_FindServersOnNetworkRequest *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_FINDSERVERSONNETWORKREQUEST]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_FindServersOnNetworkRequest_deleteMembers(UA_FindServersOnNetworkRequest *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_FINDSERVERSONNETWORKREQUEST]);
-}
-
-static UA_INLINE void
-UA_FindServersOnNetworkRequest_clear(UA_FindServersOnNetworkRequest *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_FINDSERVERSONNETWORKREQUEST]);
-}
-
-static UA_INLINE void
-UA_FindServersOnNetworkRequest_delete(UA_FindServersOnNetworkRequest *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_FINDSERVERSONNETWORKREQUEST]);
-}
-
-/* FindServersOnNetworkResponse */
-static UA_INLINE void
-UA_FindServersOnNetworkResponse_init(UA_FindServersOnNetworkResponse *p) {
-    memset(p, 0, sizeof(UA_FindServersOnNetworkResponse));
-}
-
-static UA_INLINE UA_FindServersOnNetworkResponse *
-UA_FindServersOnNetworkResponse_new(void) {
-    return (UA_FindServersOnNetworkResponse*)UA_new(&UA_TYPES[UA_TYPES_FINDSERVERSONNETWORKRESPONSE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_FindServersOnNetworkResponse_copy(const UA_FindServersOnNetworkResponse *src, UA_FindServersOnNetworkResponse *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_FINDSERVERSONNETWORKRESPONSE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_FindServersOnNetworkResponse_deleteMembers(UA_FindServersOnNetworkResponse *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_FINDSERVERSONNETWORKRESPONSE]);
-}
-
-static UA_INLINE void
-UA_FindServersOnNetworkResponse_clear(UA_FindServersOnNetworkResponse *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_FINDSERVERSONNETWORKRESPONSE]);
-}
-
-static UA_INLINE void
-UA_FindServersOnNetworkResponse_delete(UA_FindServersOnNetworkResponse *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_FINDSERVERSONNETWORKRESPONSE]);
-}
-
-/* ApplicationInstanceCertificate */
-static UA_INLINE void
-UA_ApplicationInstanceCertificate_init(UA_ApplicationInstanceCertificate *p) {
-    memset(p, 0, sizeof(UA_ApplicationInstanceCertificate));
-}
-
-static UA_INLINE UA_ApplicationInstanceCertificate *
-UA_ApplicationInstanceCertificate_new(void) {
-    return (UA_ApplicationInstanceCertificate*)UA_new(&UA_TYPES[UA_TYPES_APPLICATIONINSTANCECERTIFICATE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_ApplicationInstanceCertificate_copy(const UA_ApplicationInstanceCertificate *src, UA_ApplicationInstanceCertificate *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_APPLICATIONINSTANCECERTIFICATE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_ApplicationInstanceCertificate_deleteMembers(UA_ApplicationInstanceCertificate *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_APPLICATIONINSTANCECERTIFICATE]);
-}
-
-static UA_INLINE void
-UA_ApplicationInstanceCertificate_clear(UA_ApplicationInstanceCertificate *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_APPLICATIONINSTANCECERTIFICATE]);
-}
-
-static UA_INLINE void
-UA_ApplicationInstanceCertificate_delete(UA_ApplicationInstanceCertificate *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_APPLICATIONINSTANCECERTIFICATE]);
 }
 
 /* MessageSecurityMode */
@@ -26845,223 +18386,6 @@ UA_GetEndpointsResponse_clear(UA_GetEndpointsResponse *p) {
 static UA_INLINE void
 UA_GetEndpointsResponse_delete(UA_GetEndpointsResponse *p) {
     UA_delete(p, &UA_TYPES[UA_TYPES_GETENDPOINTSRESPONSE]);
-}
-
-/* RegisteredServer */
-static UA_INLINE void
-UA_RegisteredServer_init(UA_RegisteredServer *p) {
-    memset(p, 0, sizeof(UA_RegisteredServer));
-}
-
-static UA_INLINE UA_RegisteredServer *
-UA_RegisteredServer_new(void) {
-    return (UA_RegisteredServer*)UA_new(&UA_TYPES[UA_TYPES_REGISTEREDSERVER]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_RegisteredServer_copy(const UA_RegisteredServer *src, UA_RegisteredServer *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_REGISTEREDSERVER]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_RegisteredServer_deleteMembers(UA_RegisteredServer *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_REGISTEREDSERVER]);
-}
-
-static UA_INLINE void
-UA_RegisteredServer_clear(UA_RegisteredServer *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_REGISTEREDSERVER]);
-}
-
-static UA_INLINE void
-UA_RegisteredServer_delete(UA_RegisteredServer *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_REGISTEREDSERVER]);
-}
-
-/* RegisterServerRequest */
-static UA_INLINE void
-UA_RegisterServerRequest_init(UA_RegisterServerRequest *p) {
-    memset(p, 0, sizeof(UA_RegisterServerRequest));
-}
-
-static UA_INLINE UA_RegisterServerRequest *
-UA_RegisterServerRequest_new(void) {
-    return (UA_RegisterServerRequest*)UA_new(&UA_TYPES[UA_TYPES_REGISTERSERVERREQUEST]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_RegisterServerRequest_copy(const UA_RegisterServerRequest *src, UA_RegisterServerRequest *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_REGISTERSERVERREQUEST]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_RegisterServerRequest_deleteMembers(UA_RegisterServerRequest *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_REGISTERSERVERREQUEST]);
-}
-
-static UA_INLINE void
-UA_RegisterServerRequest_clear(UA_RegisterServerRequest *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_REGISTERSERVERREQUEST]);
-}
-
-static UA_INLINE void
-UA_RegisterServerRequest_delete(UA_RegisterServerRequest *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_REGISTERSERVERREQUEST]);
-}
-
-/* RegisterServerResponse */
-static UA_INLINE void
-UA_RegisterServerResponse_init(UA_RegisterServerResponse *p) {
-    memset(p, 0, sizeof(UA_RegisterServerResponse));
-}
-
-static UA_INLINE UA_RegisterServerResponse *
-UA_RegisterServerResponse_new(void) {
-    return (UA_RegisterServerResponse*)UA_new(&UA_TYPES[UA_TYPES_REGISTERSERVERRESPONSE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_RegisterServerResponse_copy(const UA_RegisterServerResponse *src, UA_RegisterServerResponse *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_REGISTERSERVERRESPONSE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_RegisterServerResponse_deleteMembers(UA_RegisterServerResponse *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_REGISTERSERVERRESPONSE]);
-}
-
-static UA_INLINE void
-UA_RegisterServerResponse_clear(UA_RegisterServerResponse *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_REGISTERSERVERRESPONSE]);
-}
-
-static UA_INLINE void
-UA_RegisterServerResponse_delete(UA_RegisterServerResponse *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_REGISTERSERVERRESPONSE]);
-}
-
-/* DiscoveryConfiguration */
-static UA_INLINE void
-UA_DiscoveryConfiguration_init(UA_DiscoveryConfiguration *p) {
-    memset(p, 0, sizeof(UA_DiscoveryConfiguration));
-}
-
-static UA_INLINE UA_DiscoveryConfiguration *
-UA_DiscoveryConfiguration_new(void) {
-    return (UA_DiscoveryConfiguration*)UA_new(&UA_TYPES[UA_TYPES_DISCOVERYCONFIGURATION]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_DiscoveryConfiguration_copy(const UA_DiscoveryConfiguration *src, UA_DiscoveryConfiguration *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_DISCOVERYCONFIGURATION]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_DiscoveryConfiguration_deleteMembers(UA_DiscoveryConfiguration *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_DISCOVERYCONFIGURATION]);
-}
-
-static UA_INLINE void
-UA_DiscoveryConfiguration_clear(UA_DiscoveryConfiguration *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_DISCOVERYCONFIGURATION]);
-}
-
-static UA_INLINE void
-UA_DiscoveryConfiguration_delete(UA_DiscoveryConfiguration *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_DISCOVERYCONFIGURATION]);
-}
-
-/* MdnsDiscoveryConfiguration */
-static UA_INLINE void
-UA_MdnsDiscoveryConfiguration_init(UA_MdnsDiscoveryConfiguration *p) {
-    memset(p, 0, sizeof(UA_MdnsDiscoveryConfiguration));
-}
-
-static UA_INLINE UA_MdnsDiscoveryConfiguration *
-UA_MdnsDiscoveryConfiguration_new(void) {
-    return (UA_MdnsDiscoveryConfiguration*)UA_new(&UA_TYPES[UA_TYPES_MDNSDISCOVERYCONFIGURATION]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_MdnsDiscoveryConfiguration_copy(const UA_MdnsDiscoveryConfiguration *src, UA_MdnsDiscoveryConfiguration *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_MDNSDISCOVERYCONFIGURATION]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_MdnsDiscoveryConfiguration_deleteMembers(UA_MdnsDiscoveryConfiguration *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_MDNSDISCOVERYCONFIGURATION]);
-}
-
-static UA_INLINE void
-UA_MdnsDiscoveryConfiguration_clear(UA_MdnsDiscoveryConfiguration *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_MDNSDISCOVERYCONFIGURATION]);
-}
-
-static UA_INLINE void
-UA_MdnsDiscoveryConfiguration_delete(UA_MdnsDiscoveryConfiguration *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_MDNSDISCOVERYCONFIGURATION]);
-}
-
-/* RegisterServer2Request */
-static UA_INLINE void
-UA_RegisterServer2Request_init(UA_RegisterServer2Request *p) {
-    memset(p, 0, sizeof(UA_RegisterServer2Request));
-}
-
-static UA_INLINE UA_RegisterServer2Request *
-UA_RegisterServer2Request_new(void) {
-    return (UA_RegisterServer2Request*)UA_new(&UA_TYPES[UA_TYPES_REGISTERSERVER2REQUEST]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_RegisterServer2Request_copy(const UA_RegisterServer2Request *src, UA_RegisterServer2Request *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_REGISTERSERVER2REQUEST]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_RegisterServer2Request_deleteMembers(UA_RegisterServer2Request *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_REGISTERSERVER2REQUEST]);
-}
-
-static UA_INLINE void
-UA_RegisterServer2Request_clear(UA_RegisterServer2Request *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_REGISTERSERVER2REQUEST]);
-}
-
-static UA_INLINE void
-UA_RegisterServer2Request_delete(UA_RegisterServer2Request *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_REGISTERSERVER2REQUEST]);
-}
-
-/* RegisterServer2Response */
-static UA_INLINE void
-UA_RegisterServer2Response_init(UA_RegisterServer2Response *p) {
-    memset(p, 0, sizeof(UA_RegisterServer2Response));
-}
-
-static UA_INLINE UA_RegisterServer2Response *
-UA_RegisterServer2Response_new(void) {
-    return (UA_RegisterServer2Response*)UA_new(&UA_TYPES[UA_TYPES_REGISTERSERVER2RESPONSE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_RegisterServer2Response_copy(const UA_RegisterServer2Response *src, UA_RegisterServer2Response *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_REGISTERSERVER2RESPONSE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_RegisterServer2Response_deleteMembers(UA_RegisterServer2Response *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_REGISTERSERVER2RESPONSE]);
-}
-
-static UA_INLINE void
-UA_RegisterServer2Response_clear(UA_RegisterServer2Response *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_REGISTERSERVER2RESPONSE]);
-}
-
-static UA_INLINE void
-UA_RegisterServer2Response_delete(UA_RegisterServer2Response *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_REGISTERSERVER2RESPONSE]);
 }
 
 /* SecurityTokenRequestType */
@@ -27279,37 +18603,6 @@ UA_SignedSoftwareCertificate_clear(UA_SignedSoftwareCertificate *p) {
 static UA_INLINE void
 UA_SignedSoftwareCertificate_delete(UA_SignedSoftwareCertificate *p) {
     UA_delete(p, &UA_TYPES[UA_TYPES_SIGNEDSOFTWARECERTIFICATE]);
-}
-
-/* SessionAuthenticationToken */
-static UA_INLINE void
-UA_SessionAuthenticationToken_init(UA_SessionAuthenticationToken *p) {
-    memset(p, 0, sizeof(UA_SessionAuthenticationToken));
-}
-
-static UA_INLINE UA_SessionAuthenticationToken *
-UA_SessionAuthenticationToken_new(void) {
-    return (UA_SessionAuthenticationToken*)UA_new(&UA_TYPES[UA_TYPES_SESSIONAUTHENTICATIONTOKEN]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_SessionAuthenticationToken_copy(const UA_SessionAuthenticationToken *src, UA_SessionAuthenticationToken *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_SESSIONAUTHENTICATIONTOKEN]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_SessionAuthenticationToken_deleteMembers(UA_SessionAuthenticationToken *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_SESSIONAUTHENTICATIONTOKEN]);
-}
-
-static UA_INLINE void
-UA_SessionAuthenticationToken_clear(UA_SessionAuthenticationToken *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_SESSIONAUTHENTICATIONTOKEN]);
-}
-
-static UA_INLINE void
-UA_SessionAuthenticationToken_delete(UA_SessionAuthenticationToken *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_SESSIONAUTHENTICATIONTOKEN]);
 }
 
 /* SignatureData */
@@ -27560,37 +18853,6 @@ UA_IssuedIdentityToken_delete(UA_IssuedIdentityToken *p) {
     UA_delete(p, &UA_TYPES[UA_TYPES_ISSUEDIDENTITYTOKEN]);
 }
 
-/* RsaEncryptedSecret */
-static UA_INLINE void
-UA_RsaEncryptedSecret_init(UA_RsaEncryptedSecret *p) {
-    memset(p, 0, sizeof(UA_RsaEncryptedSecret));
-}
-
-static UA_INLINE UA_RsaEncryptedSecret *
-UA_RsaEncryptedSecret_new(void) {
-    return (UA_RsaEncryptedSecret*)UA_new(&UA_TYPES[UA_TYPES_RSAENCRYPTEDSECRET]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_RsaEncryptedSecret_copy(const UA_RsaEncryptedSecret *src, UA_RsaEncryptedSecret *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_RSAENCRYPTEDSECRET]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_RsaEncryptedSecret_deleteMembers(UA_RsaEncryptedSecret *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_RSAENCRYPTEDSECRET]);
-}
-
-static UA_INLINE void
-UA_RsaEncryptedSecret_clear(UA_RsaEncryptedSecret *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_RSAENCRYPTEDSECRET]);
-}
-
-static UA_INLINE void
-UA_RsaEncryptedSecret_delete(UA_RsaEncryptedSecret *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_RSAENCRYPTEDSECRET]);
-}
-
 /* ActivateSessionRequest */
 static UA_INLINE void
 UA_ActivateSessionRequest_init(UA_ActivateSessionRequest *p) {
@@ -27713,68 +18975,6 @@ UA_CloseSessionResponse_clear(UA_CloseSessionResponse *p) {
 static UA_INLINE void
 UA_CloseSessionResponse_delete(UA_CloseSessionResponse *p) {
     UA_delete(p, &UA_TYPES[UA_TYPES_CLOSESESSIONRESPONSE]);
-}
-
-/* CancelRequest */
-static UA_INLINE void
-UA_CancelRequest_init(UA_CancelRequest *p) {
-    memset(p, 0, sizeof(UA_CancelRequest));
-}
-
-static UA_INLINE UA_CancelRequest *
-UA_CancelRequest_new(void) {
-    return (UA_CancelRequest*)UA_new(&UA_TYPES[UA_TYPES_CANCELREQUEST]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_CancelRequest_copy(const UA_CancelRequest *src, UA_CancelRequest *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_CANCELREQUEST]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_CancelRequest_deleteMembers(UA_CancelRequest *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_CANCELREQUEST]);
-}
-
-static UA_INLINE void
-UA_CancelRequest_clear(UA_CancelRequest *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_CANCELREQUEST]);
-}
-
-static UA_INLINE void
-UA_CancelRequest_delete(UA_CancelRequest *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_CANCELREQUEST]);
-}
-
-/* CancelResponse */
-static UA_INLINE void
-UA_CancelResponse_init(UA_CancelResponse *p) {
-    memset(p, 0, sizeof(UA_CancelResponse));
-}
-
-static UA_INLINE UA_CancelResponse *
-UA_CancelResponse_new(void) {
-    return (UA_CancelResponse*)UA_new(&UA_TYPES[UA_TYPES_CANCELRESPONSE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_CancelResponse_copy(const UA_CancelResponse *src, UA_CancelResponse *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_CANCELRESPONSE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_CancelResponse_deleteMembers(UA_CancelResponse *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_CANCELRESPONSE]);
-}
-
-static UA_INLINE void
-UA_CancelResponse_clear(UA_CancelResponse *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_CANCELRESPONSE]);
-}
-
-static UA_INLINE void
-UA_CancelResponse_delete(UA_CancelResponse *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_CANCELRESPONSE]);
 }
 
 /* NodeAttributesMask */
@@ -28085,68 +19285,6 @@ UA_ViewAttributes_clear(UA_ViewAttributes *p) {
 static UA_INLINE void
 UA_ViewAttributes_delete(UA_ViewAttributes *p) {
     UA_delete(p, &UA_TYPES[UA_TYPES_VIEWATTRIBUTES]);
-}
-
-/* GenericAttributeValue */
-static UA_INLINE void
-UA_GenericAttributeValue_init(UA_GenericAttributeValue *p) {
-    memset(p, 0, sizeof(UA_GenericAttributeValue));
-}
-
-static UA_INLINE UA_GenericAttributeValue *
-UA_GenericAttributeValue_new(void) {
-    return (UA_GenericAttributeValue*)UA_new(&UA_TYPES[UA_TYPES_GENERICATTRIBUTEVALUE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_GenericAttributeValue_copy(const UA_GenericAttributeValue *src, UA_GenericAttributeValue *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_GENERICATTRIBUTEVALUE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_GenericAttributeValue_deleteMembers(UA_GenericAttributeValue *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_GENERICATTRIBUTEVALUE]);
-}
-
-static UA_INLINE void
-UA_GenericAttributeValue_clear(UA_GenericAttributeValue *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_GENERICATTRIBUTEVALUE]);
-}
-
-static UA_INLINE void
-UA_GenericAttributeValue_delete(UA_GenericAttributeValue *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_GENERICATTRIBUTEVALUE]);
-}
-
-/* GenericAttributes */
-static UA_INLINE void
-UA_GenericAttributes_init(UA_GenericAttributes *p) {
-    memset(p, 0, sizeof(UA_GenericAttributes));
-}
-
-static UA_INLINE UA_GenericAttributes *
-UA_GenericAttributes_new(void) {
-    return (UA_GenericAttributes*)UA_new(&UA_TYPES[UA_TYPES_GENERICATTRIBUTES]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_GenericAttributes_copy(const UA_GenericAttributes *src, UA_GenericAttributes *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_GENERICATTRIBUTES]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_GenericAttributes_deleteMembers(UA_GenericAttributes *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_GENERICATTRIBUTES]);
-}
-
-static UA_INLINE void
-UA_GenericAttributes_clear(UA_GenericAttributes *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_GENERICATTRIBUTES]);
-}
-
-static UA_INLINE void
-UA_GenericAttributes_delete(UA_GenericAttributes *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_GENERICATTRIBUTES]);
 }
 
 /* AddNodesItem */
@@ -28552,37 +19690,6 @@ UA_DeleteReferencesResponse_delete(UA_DeleteReferencesResponse *p) {
     UA_delete(p, &UA_TYPES[UA_TYPES_DELETEREFERENCESRESPONSE]);
 }
 
-/* AttributeWriteMask */
-static UA_INLINE void
-UA_AttributeWriteMask_init(UA_AttributeWriteMask *p) {
-    memset(p, 0, sizeof(UA_AttributeWriteMask));
-}
-
-static UA_INLINE UA_AttributeWriteMask *
-UA_AttributeWriteMask_new(void) {
-    return (UA_AttributeWriteMask*)UA_new(&UA_TYPES[UA_TYPES_ATTRIBUTEWRITEMASK]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_AttributeWriteMask_copy(const UA_AttributeWriteMask *src, UA_AttributeWriteMask *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_ATTRIBUTEWRITEMASK]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_AttributeWriteMask_deleteMembers(UA_AttributeWriteMask *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_ATTRIBUTEWRITEMASK]);
-}
-
-static UA_INLINE void
-UA_AttributeWriteMask_clear(UA_AttributeWriteMask *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_ATTRIBUTEWRITEMASK]);
-}
-
-static UA_INLINE void
-UA_AttributeWriteMask_delete(UA_AttributeWriteMask *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_ATTRIBUTEWRITEMASK]);
-}
-
 /* BrowseDirection */
 static UA_INLINE void
 UA_BrowseDirection_init(UA_BrowseDirection *p) {
@@ -28736,37 +19843,6 @@ UA_ReferenceDescription_clear(UA_ReferenceDescription *p) {
 static UA_INLINE void
 UA_ReferenceDescription_delete(UA_ReferenceDescription *p) {
     UA_delete(p, &UA_TYPES[UA_TYPES_REFERENCEDESCRIPTION]);
-}
-
-/* ContinuationPoint */
-static UA_INLINE void
-UA_ContinuationPoint_init(UA_ContinuationPoint *p) {
-    memset(p, 0, sizeof(UA_ContinuationPoint));
-}
-
-static UA_INLINE UA_ContinuationPoint *
-UA_ContinuationPoint_new(void) {
-    return (UA_ContinuationPoint*)UA_new(&UA_TYPES[UA_TYPES_CONTINUATIONPOINT]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_ContinuationPoint_copy(const UA_ContinuationPoint *src, UA_ContinuationPoint *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_CONTINUATIONPOINT]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_ContinuationPoint_deleteMembers(UA_ContinuationPoint *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_CONTINUATIONPOINT]);
-}
-
-static UA_INLINE void
-UA_ContinuationPoint_clear(UA_ContinuationPoint *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_CONTINUATIONPOINT]);
-}
-
-static UA_INLINE void
-UA_ContinuationPoint_delete(UA_ContinuationPoint *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_CONTINUATIONPOINT]);
 }
 
 /* BrowseResult */
@@ -29265,223 +20341,6 @@ UA_UnregisterNodesResponse_delete(UA_UnregisterNodesResponse *p) {
     UA_delete(p, &UA_TYPES[UA_TYPES_UNREGISTERNODESRESPONSE]);
 }
 
-/* Counter */
-static UA_INLINE void
-UA_Counter_init(UA_Counter *p) {
-    memset(p, 0, sizeof(UA_Counter));
-}
-
-static UA_INLINE UA_Counter *
-UA_Counter_new(void) {
-    return (UA_Counter*)UA_new(&UA_TYPES[UA_TYPES_COUNTER]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_Counter_copy(const UA_Counter *src, UA_Counter *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_COUNTER]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_Counter_deleteMembers(UA_Counter *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_COUNTER]);
-}
-
-static UA_INLINE void
-UA_Counter_clear(UA_Counter *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_COUNTER]);
-}
-
-static UA_INLINE void
-UA_Counter_delete(UA_Counter *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_COUNTER]);
-}
-
-/* OpaqueNumericRange */
-static UA_INLINE void
-UA_OpaqueNumericRange_init(UA_OpaqueNumericRange *p) {
-    memset(p, 0, sizeof(UA_OpaqueNumericRange));
-}
-
-static UA_INLINE UA_OpaqueNumericRange *
-UA_OpaqueNumericRange_new(void) {
-    return (UA_OpaqueNumericRange*)UA_new(&UA_TYPES[UA_TYPES_OPAQUENUMERICRANGE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_OpaqueNumericRange_copy(const UA_OpaqueNumericRange *src, UA_OpaqueNumericRange *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_OPAQUENUMERICRANGE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_OpaqueNumericRange_deleteMembers(UA_OpaqueNumericRange *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_OPAQUENUMERICRANGE]);
-}
-
-static UA_INLINE void
-UA_OpaqueNumericRange_clear(UA_OpaqueNumericRange *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_OPAQUENUMERICRANGE]);
-}
-
-static UA_INLINE void
-UA_OpaqueNumericRange_delete(UA_OpaqueNumericRange *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_OPAQUENUMERICRANGE]);
-}
-
-/* Time */
-static UA_INLINE void
-UA_Time_init(UA_Time *p) {
-    memset(p, 0, sizeof(UA_Time));
-}
-
-static UA_INLINE UA_Time *
-UA_Time_new(void) {
-    return (UA_Time*)UA_new(&UA_TYPES[UA_TYPES_TIME]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_Time_copy(const UA_Time *src, UA_Time *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_TIME]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_Time_deleteMembers(UA_Time *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_TIME]);
-}
-
-static UA_INLINE void
-UA_Time_clear(UA_Time *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_TIME]);
-}
-
-static UA_INLINE void
-UA_Time_delete(UA_Time *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_TIME]);
-}
-
-/* Date */
-static UA_INLINE void
-UA_Date_init(UA_Date *p) {
-    memset(p, 0, sizeof(UA_Date));
-}
-
-static UA_INLINE UA_Date *
-UA_Date_new(void) {
-    return (UA_Date*)UA_new(&UA_TYPES[UA_TYPES_DATE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_Date_copy(const UA_Date *src, UA_Date *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_DATE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_Date_deleteMembers(UA_Date *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_DATE]);
-}
-
-static UA_INLINE void
-UA_Date_clear(UA_Date *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_DATE]);
-}
-
-static UA_INLINE void
-UA_Date_delete(UA_Date *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_DATE]);
-}
-
-/* EndpointConfiguration */
-static UA_INLINE void
-UA_EndpointConfiguration_init(UA_EndpointConfiguration *p) {
-    memset(p, 0, sizeof(UA_EndpointConfiguration));
-}
-
-static UA_INLINE UA_EndpointConfiguration *
-UA_EndpointConfiguration_new(void) {
-    return (UA_EndpointConfiguration*)UA_new(&UA_TYPES[UA_TYPES_ENDPOINTCONFIGURATION]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_EndpointConfiguration_copy(const UA_EndpointConfiguration *src, UA_EndpointConfiguration *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_ENDPOINTCONFIGURATION]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_EndpointConfiguration_deleteMembers(UA_EndpointConfiguration *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_ENDPOINTCONFIGURATION]);
-}
-
-static UA_INLINE void
-UA_EndpointConfiguration_clear(UA_EndpointConfiguration *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_ENDPOINTCONFIGURATION]);
-}
-
-static UA_INLINE void
-UA_EndpointConfiguration_delete(UA_EndpointConfiguration *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_ENDPOINTCONFIGURATION]);
-}
-
-/* QueryDataDescription */
-static UA_INLINE void
-UA_QueryDataDescription_init(UA_QueryDataDescription *p) {
-    memset(p, 0, sizeof(UA_QueryDataDescription));
-}
-
-static UA_INLINE UA_QueryDataDescription *
-UA_QueryDataDescription_new(void) {
-    return (UA_QueryDataDescription*)UA_new(&UA_TYPES[UA_TYPES_QUERYDATADESCRIPTION]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_QueryDataDescription_copy(const UA_QueryDataDescription *src, UA_QueryDataDescription *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_QUERYDATADESCRIPTION]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_QueryDataDescription_deleteMembers(UA_QueryDataDescription *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_QUERYDATADESCRIPTION]);
-}
-
-static UA_INLINE void
-UA_QueryDataDescription_clear(UA_QueryDataDescription *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_QUERYDATADESCRIPTION]);
-}
-
-static UA_INLINE void
-UA_QueryDataDescription_delete(UA_QueryDataDescription *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_QUERYDATADESCRIPTION]);
-}
-
-/* NodeTypeDescription */
-static UA_INLINE void
-UA_NodeTypeDescription_init(UA_NodeTypeDescription *p) {
-    memset(p, 0, sizeof(UA_NodeTypeDescription));
-}
-
-static UA_INLINE UA_NodeTypeDescription *
-UA_NodeTypeDescription_new(void) {
-    return (UA_NodeTypeDescription*)UA_new(&UA_TYPES[UA_TYPES_NODETYPEDESCRIPTION]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_NodeTypeDescription_copy(const UA_NodeTypeDescription *src, UA_NodeTypeDescription *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_NODETYPEDESCRIPTION]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_NodeTypeDescription_deleteMembers(UA_NodeTypeDescription *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_NODETYPEDESCRIPTION]);
-}
-
-static UA_INLINE void
-UA_NodeTypeDescription_clear(UA_NodeTypeDescription *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_NODETYPEDESCRIPTION]);
-}
-
-static UA_INLINE void
-UA_NodeTypeDescription_delete(UA_NodeTypeDescription *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_NODETYPEDESCRIPTION]);
-}
-
 /* FilterOperator */
 static UA_INLINE void
 UA_FilterOperator_init(UA_FilterOperator *p) {
@@ -29511,68 +20370,6 @@ UA_FilterOperator_clear(UA_FilterOperator *p) {
 static UA_INLINE void
 UA_FilterOperator_delete(UA_FilterOperator *p) {
     UA_delete(p, &UA_TYPES[UA_TYPES_FILTEROPERATOR]);
-}
-
-/* QueryDataSet */
-static UA_INLINE void
-UA_QueryDataSet_init(UA_QueryDataSet *p) {
-    memset(p, 0, sizeof(UA_QueryDataSet));
-}
-
-static UA_INLINE UA_QueryDataSet *
-UA_QueryDataSet_new(void) {
-    return (UA_QueryDataSet*)UA_new(&UA_TYPES[UA_TYPES_QUERYDATASET]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_QueryDataSet_copy(const UA_QueryDataSet *src, UA_QueryDataSet *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_QUERYDATASET]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_QueryDataSet_deleteMembers(UA_QueryDataSet *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_QUERYDATASET]);
-}
-
-static UA_INLINE void
-UA_QueryDataSet_clear(UA_QueryDataSet *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_QUERYDATASET]);
-}
-
-static UA_INLINE void
-UA_QueryDataSet_delete(UA_QueryDataSet *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_QUERYDATASET]);
-}
-
-/* NodeReference */
-static UA_INLINE void
-UA_NodeReference_init(UA_NodeReference *p) {
-    memset(p, 0, sizeof(UA_NodeReference));
-}
-
-static UA_INLINE UA_NodeReference *
-UA_NodeReference_new(void) {
-    return (UA_NodeReference*)UA_new(&UA_TYPES[UA_TYPES_NODEREFERENCE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_NodeReference_copy(const UA_NodeReference *src, UA_NodeReference *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_NODEREFERENCE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_NodeReference_deleteMembers(UA_NodeReference *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_NODEREFERENCE]);
-}
-
-static UA_INLINE void
-UA_NodeReference_clear(UA_NodeReference *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_NODEREFERENCE]);
-}
-
-static UA_INLINE void
-UA_NodeReference_delete(UA_NodeReference *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_NODEREFERENCE]);
 }
 
 /* ContentFilterElement */
@@ -29854,161 +20651,6 @@ UA_ContentFilterResult_delete(UA_ContentFilterResult *p) {
     UA_delete(p, &UA_TYPES[UA_TYPES_CONTENTFILTERRESULT]);
 }
 
-/* ParsingResult */
-static UA_INLINE void
-UA_ParsingResult_init(UA_ParsingResult *p) {
-    memset(p, 0, sizeof(UA_ParsingResult));
-}
-
-static UA_INLINE UA_ParsingResult *
-UA_ParsingResult_new(void) {
-    return (UA_ParsingResult*)UA_new(&UA_TYPES[UA_TYPES_PARSINGRESULT]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_ParsingResult_copy(const UA_ParsingResult *src, UA_ParsingResult *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_PARSINGRESULT]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_ParsingResult_deleteMembers(UA_ParsingResult *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_PARSINGRESULT]);
-}
-
-static UA_INLINE void
-UA_ParsingResult_clear(UA_ParsingResult *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_PARSINGRESULT]);
-}
-
-static UA_INLINE void
-UA_ParsingResult_delete(UA_ParsingResult *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_PARSINGRESULT]);
-}
-
-/* QueryFirstRequest */
-static UA_INLINE void
-UA_QueryFirstRequest_init(UA_QueryFirstRequest *p) {
-    memset(p, 0, sizeof(UA_QueryFirstRequest));
-}
-
-static UA_INLINE UA_QueryFirstRequest *
-UA_QueryFirstRequest_new(void) {
-    return (UA_QueryFirstRequest*)UA_new(&UA_TYPES[UA_TYPES_QUERYFIRSTREQUEST]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_QueryFirstRequest_copy(const UA_QueryFirstRequest *src, UA_QueryFirstRequest *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_QUERYFIRSTREQUEST]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_QueryFirstRequest_deleteMembers(UA_QueryFirstRequest *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_QUERYFIRSTREQUEST]);
-}
-
-static UA_INLINE void
-UA_QueryFirstRequest_clear(UA_QueryFirstRequest *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_QUERYFIRSTREQUEST]);
-}
-
-static UA_INLINE void
-UA_QueryFirstRequest_delete(UA_QueryFirstRequest *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_QUERYFIRSTREQUEST]);
-}
-
-/* QueryFirstResponse */
-static UA_INLINE void
-UA_QueryFirstResponse_init(UA_QueryFirstResponse *p) {
-    memset(p, 0, sizeof(UA_QueryFirstResponse));
-}
-
-static UA_INLINE UA_QueryFirstResponse *
-UA_QueryFirstResponse_new(void) {
-    return (UA_QueryFirstResponse*)UA_new(&UA_TYPES[UA_TYPES_QUERYFIRSTRESPONSE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_QueryFirstResponse_copy(const UA_QueryFirstResponse *src, UA_QueryFirstResponse *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_QUERYFIRSTRESPONSE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_QueryFirstResponse_deleteMembers(UA_QueryFirstResponse *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_QUERYFIRSTRESPONSE]);
-}
-
-static UA_INLINE void
-UA_QueryFirstResponse_clear(UA_QueryFirstResponse *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_QUERYFIRSTRESPONSE]);
-}
-
-static UA_INLINE void
-UA_QueryFirstResponse_delete(UA_QueryFirstResponse *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_QUERYFIRSTRESPONSE]);
-}
-
-/* QueryNextRequest */
-static UA_INLINE void
-UA_QueryNextRequest_init(UA_QueryNextRequest *p) {
-    memset(p, 0, sizeof(UA_QueryNextRequest));
-}
-
-static UA_INLINE UA_QueryNextRequest *
-UA_QueryNextRequest_new(void) {
-    return (UA_QueryNextRequest*)UA_new(&UA_TYPES[UA_TYPES_QUERYNEXTREQUEST]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_QueryNextRequest_copy(const UA_QueryNextRequest *src, UA_QueryNextRequest *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_QUERYNEXTREQUEST]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_QueryNextRequest_deleteMembers(UA_QueryNextRequest *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_QUERYNEXTREQUEST]);
-}
-
-static UA_INLINE void
-UA_QueryNextRequest_clear(UA_QueryNextRequest *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_QUERYNEXTREQUEST]);
-}
-
-static UA_INLINE void
-UA_QueryNextRequest_delete(UA_QueryNextRequest *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_QUERYNEXTREQUEST]);
-}
-
-/* QueryNextResponse */
-static UA_INLINE void
-UA_QueryNextResponse_init(UA_QueryNextResponse *p) {
-    memset(p, 0, sizeof(UA_QueryNextResponse));
-}
-
-static UA_INLINE UA_QueryNextResponse *
-UA_QueryNextResponse_new(void) {
-    return (UA_QueryNextResponse*)UA_new(&UA_TYPES[UA_TYPES_QUERYNEXTRESPONSE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_QueryNextResponse_copy(const UA_QueryNextResponse *src, UA_QueryNextResponse *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_QUERYNEXTRESPONSE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_QueryNextResponse_deleteMembers(UA_QueryNextResponse *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_QUERYNEXTRESPONSE]);
-}
-
-static UA_INLINE void
-UA_QueryNextResponse_clear(UA_QueryNextResponse *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_QUERYNEXTRESPONSE]);
-}
-
-static UA_INLINE void
-UA_QueryNextResponse_delete(UA_QueryNextResponse *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_QUERYNEXTRESPONSE]);
-}
-
 /* TimestampsToReturn */
 static UA_INLINE void
 UA_TimestampsToReturn_init(UA_TimestampsToReturn *p) {
@@ -30133,285 +20775,6 @@ UA_ReadResponse_delete(UA_ReadResponse *p) {
     UA_delete(p, &UA_TYPES[UA_TYPES_READRESPONSE]);
 }
 
-/* HistoryReadValueId */
-static UA_INLINE void
-UA_HistoryReadValueId_init(UA_HistoryReadValueId *p) {
-    memset(p, 0, sizeof(UA_HistoryReadValueId));
-}
-
-static UA_INLINE UA_HistoryReadValueId *
-UA_HistoryReadValueId_new(void) {
-    return (UA_HistoryReadValueId*)UA_new(&UA_TYPES[UA_TYPES_HISTORYREADVALUEID]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_HistoryReadValueId_copy(const UA_HistoryReadValueId *src, UA_HistoryReadValueId *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_HISTORYREADVALUEID]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_HistoryReadValueId_deleteMembers(UA_HistoryReadValueId *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_HISTORYREADVALUEID]);
-}
-
-static UA_INLINE void
-UA_HistoryReadValueId_clear(UA_HistoryReadValueId *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_HISTORYREADVALUEID]);
-}
-
-static UA_INLINE void
-UA_HistoryReadValueId_delete(UA_HistoryReadValueId *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_HISTORYREADVALUEID]);
-}
-
-/* HistoryReadResult */
-static UA_INLINE void
-UA_HistoryReadResult_init(UA_HistoryReadResult *p) {
-    memset(p, 0, sizeof(UA_HistoryReadResult));
-}
-
-static UA_INLINE UA_HistoryReadResult *
-UA_HistoryReadResult_new(void) {
-    return (UA_HistoryReadResult*)UA_new(&UA_TYPES[UA_TYPES_HISTORYREADRESULT]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_HistoryReadResult_copy(const UA_HistoryReadResult *src, UA_HistoryReadResult *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_HISTORYREADRESULT]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_HistoryReadResult_deleteMembers(UA_HistoryReadResult *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_HISTORYREADRESULT]);
-}
-
-static UA_INLINE void
-UA_HistoryReadResult_clear(UA_HistoryReadResult *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_HISTORYREADRESULT]);
-}
-
-static UA_INLINE void
-UA_HistoryReadResult_delete(UA_HistoryReadResult *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_HISTORYREADRESULT]);
-}
-
-/* HistoryReadDetails */
-static UA_INLINE void
-UA_HistoryReadDetails_init(UA_HistoryReadDetails *p) {
-    memset(p, 0, sizeof(UA_HistoryReadDetails));
-}
-
-static UA_INLINE UA_HistoryReadDetails *
-UA_HistoryReadDetails_new(void) {
-    return (UA_HistoryReadDetails*)UA_new(&UA_TYPES[UA_TYPES_HISTORYREADDETAILS]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_HistoryReadDetails_copy(const UA_HistoryReadDetails *src, UA_HistoryReadDetails *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_HISTORYREADDETAILS]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_HistoryReadDetails_deleteMembers(UA_HistoryReadDetails *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_HISTORYREADDETAILS]);
-}
-
-static UA_INLINE void
-UA_HistoryReadDetails_clear(UA_HistoryReadDetails *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_HISTORYREADDETAILS]);
-}
-
-static UA_INLINE void
-UA_HistoryReadDetails_delete(UA_HistoryReadDetails *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_HISTORYREADDETAILS]);
-}
-
-/* ReadRawModifiedDetails */
-static UA_INLINE void
-UA_ReadRawModifiedDetails_init(UA_ReadRawModifiedDetails *p) {
-    memset(p, 0, sizeof(UA_ReadRawModifiedDetails));
-}
-
-static UA_INLINE UA_ReadRawModifiedDetails *
-UA_ReadRawModifiedDetails_new(void) {
-    return (UA_ReadRawModifiedDetails*)UA_new(&UA_TYPES[UA_TYPES_READRAWMODIFIEDDETAILS]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_ReadRawModifiedDetails_copy(const UA_ReadRawModifiedDetails *src, UA_ReadRawModifiedDetails *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_READRAWMODIFIEDDETAILS]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_ReadRawModifiedDetails_deleteMembers(UA_ReadRawModifiedDetails *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_READRAWMODIFIEDDETAILS]);
-}
-
-static UA_INLINE void
-UA_ReadRawModifiedDetails_clear(UA_ReadRawModifiedDetails *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_READRAWMODIFIEDDETAILS]);
-}
-
-static UA_INLINE void
-UA_ReadRawModifiedDetails_delete(UA_ReadRawModifiedDetails *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_READRAWMODIFIEDDETAILS]);
-}
-
-/* ReadAtTimeDetails */
-static UA_INLINE void
-UA_ReadAtTimeDetails_init(UA_ReadAtTimeDetails *p) {
-    memset(p, 0, sizeof(UA_ReadAtTimeDetails));
-}
-
-static UA_INLINE UA_ReadAtTimeDetails *
-UA_ReadAtTimeDetails_new(void) {
-    return (UA_ReadAtTimeDetails*)UA_new(&UA_TYPES[UA_TYPES_READATTIMEDETAILS]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_ReadAtTimeDetails_copy(const UA_ReadAtTimeDetails *src, UA_ReadAtTimeDetails *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_READATTIMEDETAILS]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_ReadAtTimeDetails_deleteMembers(UA_ReadAtTimeDetails *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_READATTIMEDETAILS]);
-}
-
-static UA_INLINE void
-UA_ReadAtTimeDetails_clear(UA_ReadAtTimeDetails *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_READATTIMEDETAILS]);
-}
-
-static UA_INLINE void
-UA_ReadAtTimeDetails_delete(UA_ReadAtTimeDetails *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_READATTIMEDETAILS]);
-}
-
-/* ReadAnnotationDataDetails */
-static UA_INLINE void
-UA_ReadAnnotationDataDetails_init(UA_ReadAnnotationDataDetails *p) {
-    memset(p, 0, sizeof(UA_ReadAnnotationDataDetails));
-}
-
-static UA_INLINE UA_ReadAnnotationDataDetails *
-UA_ReadAnnotationDataDetails_new(void) {
-    return (UA_ReadAnnotationDataDetails*)UA_new(&UA_TYPES[UA_TYPES_READANNOTATIONDATADETAILS]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_ReadAnnotationDataDetails_copy(const UA_ReadAnnotationDataDetails *src, UA_ReadAnnotationDataDetails *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_READANNOTATIONDATADETAILS]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_ReadAnnotationDataDetails_deleteMembers(UA_ReadAnnotationDataDetails *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_READANNOTATIONDATADETAILS]);
-}
-
-static UA_INLINE void
-UA_ReadAnnotationDataDetails_clear(UA_ReadAnnotationDataDetails *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_READANNOTATIONDATADETAILS]);
-}
-
-static UA_INLINE void
-UA_ReadAnnotationDataDetails_delete(UA_ReadAnnotationDataDetails *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_READANNOTATIONDATADETAILS]);
-}
-
-/* HistoryData */
-static UA_INLINE void
-UA_HistoryData_init(UA_HistoryData *p) {
-    memset(p, 0, sizeof(UA_HistoryData));
-}
-
-static UA_INLINE UA_HistoryData *
-UA_HistoryData_new(void) {
-    return (UA_HistoryData*)UA_new(&UA_TYPES[UA_TYPES_HISTORYDATA]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_HistoryData_copy(const UA_HistoryData *src, UA_HistoryData *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_HISTORYDATA]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_HistoryData_deleteMembers(UA_HistoryData *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_HISTORYDATA]);
-}
-
-static UA_INLINE void
-UA_HistoryData_clear(UA_HistoryData *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_HISTORYDATA]);
-}
-
-static UA_INLINE void
-UA_HistoryData_delete(UA_HistoryData *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_HISTORYDATA]);
-}
-
-/* HistoryReadRequest */
-static UA_INLINE void
-UA_HistoryReadRequest_init(UA_HistoryReadRequest *p) {
-    memset(p, 0, sizeof(UA_HistoryReadRequest));
-}
-
-static UA_INLINE UA_HistoryReadRequest *
-UA_HistoryReadRequest_new(void) {
-    return (UA_HistoryReadRequest*)UA_new(&UA_TYPES[UA_TYPES_HISTORYREADREQUEST]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_HistoryReadRequest_copy(const UA_HistoryReadRequest *src, UA_HistoryReadRequest *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_HISTORYREADREQUEST]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_HistoryReadRequest_deleteMembers(UA_HistoryReadRequest *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_HISTORYREADREQUEST]);
-}
-
-static UA_INLINE void
-UA_HistoryReadRequest_clear(UA_HistoryReadRequest *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_HISTORYREADREQUEST]);
-}
-
-static UA_INLINE void
-UA_HistoryReadRequest_delete(UA_HistoryReadRequest *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_HISTORYREADREQUEST]);
-}
-
-/* HistoryReadResponse */
-static UA_INLINE void
-UA_HistoryReadResponse_init(UA_HistoryReadResponse *p) {
-    memset(p, 0, sizeof(UA_HistoryReadResponse));
-}
-
-static UA_INLINE UA_HistoryReadResponse *
-UA_HistoryReadResponse_new(void) {
-    return (UA_HistoryReadResponse*)UA_new(&UA_TYPES[UA_TYPES_HISTORYREADRESPONSE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_HistoryReadResponse_copy(const UA_HistoryReadResponse *src, UA_HistoryReadResponse *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_HISTORYREADRESPONSE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_HistoryReadResponse_deleteMembers(UA_HistoryReadResponse *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_HISTORYREADRESPONSE]);
-}
-
-static UA_INLINE void
-UA_HistoryReadResponse_clear(UA_HistoryReadResponse *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_HISTORYREADRESPONSE]);
-}
-
-static UA_INLINE void
-UA_HistoryReadResponse_delete(UA_HistoryReadResponse *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_HISTORYREADRESPONSE]);
-}
-
 /* WriteValue */
 static UA_INLINE void
 UA_WriteValue_init(UA_WriteValue *p) {
@@ -30503,347 +20866,6 @@ UA_WriteResponse_clear(UA_WriteResponse *p) {
 static UA_INLINE void
 UA_WriteResponse_delete(UA_WriteResponse *p) {
     UA_delete(p, &UA_TYPES[UA_TYPES_WRITERESPONSE]);
-}
-
-/* HistoryUpdateDetails */
-static UA_INLINE void
-UA_HistoryUpdateDetails_init(UA_HistoryUpdateDetails *p) {
-    memset(p, 0, sizeof(UA_HistoryUpdateDetails));
-}
-
-static UA_INLINE UA_HistoryUpdateDetails *
-UA_HistoryUpdateDetails_new(void) {
-    return (UA_HistoryUpdateDetails*)UA_new(&UA_TYPES[UA_TYPES_HISTORYUPDATEDETAILS]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_HistoryUpdateDetails_copy(const UA_HistoryUpdateDetails *src, UA_HistoryUpdateDetails *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_HISTORYUPDATEDETAILS]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_HistoryUpdateDetails_deleteMembers(UA_HistoryUpdateDetails *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_HISTORYUPDATEDETAILS]);
-}
-
-static UA_INLINE void
-UA_HistoryUpdateDetails_clear(UA_HistoryUpdateDetails *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_HISTORYUPDATEDETAILS]);
-}
-
-static UA_INLINE void
-UA_HistoryUpdateDetails_delete(UA_HistoryUpdateDetails *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_HISTORYUPDATEDETAILS]);
-}
-
-/* HistoryUpdateType */
-static UA_INLINE void
-UA_HistoryUpdateType_init(UA_HistoryUpdateType *p) {
-    memset(p, 0, sizeof(UA_HistoryUpdateType));
-}
-
-static UA_INLINE UA_HistoryUpdateType *
-UA_HistoryUpdateType_new(void) {
-    return (UA_HistoryUpdateType*)UA_new(&UA_TYPES[UA_TYPES_HISTORYUPDATETYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_HistoryUpdateType_copy(const UA_HistoryUpdateType *src, UA_HistoryUpdateType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_HISTORYUPDATETYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_HistoryUpdateType_deleteMembers(UA_HistoryUpdateType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_HISTORYUPDATETYPE]);
-}
-
-static UA_INLINE void
-UA_HistoryUpdateType_clear(UA_HistoryUpdateType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_HISTORYUPDATETYPE]);
-}
-
-static UA_INLINE void
-UA_HistoryUpdateType_delete(UA_HistoryUpdateType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_HISTORYUPDATETYPE]);
-}
-
-/* PerformUpdateType */
-static UA_INLINE void
-UA_PerformUpdateType_init(UA_PerformUpdateType *p) {
-    memset(p, 0, sizeof(UA_PerformUpdateType));
-}
-
-static UA_INLINE UA_PerformUpdateType *
-UA_PerformUpdateType_new(void) {
-    return (UA_PerformUpdateType*)UA_new(&UA_TYPES[UA_TYPES_PERFORMUPDATETYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_PerformUpdateType_copy(const UA_PerformUpdateType *src, UA_PerformUpdateType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_PERFORMUPDATETYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_PerformUpdateType_deleteMembers(UA_PerformUpdateType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_PERFORMUPDATETYPE]);
-}
-
-static UA_INLINE void
-UA_PerformUpdateType_clear(UA_PerformUpdateType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_PERFORMUPDATETYPE]);
-}
-
-static UA_INLINE void
-UA_PerformUpdateType_delete(UA_PerformUpdateType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_PERFORMUPDATETYPE]);
-}
-
-/* UpdateDataDetails */
-static UA_INLINE void
-UA_UpdateDataDetails_init(UA_UpdateDataDetails *p) {
-    memset(p, 0, sizeof(UA_UpdateDataDetails));
-}
-
-static UA_INLINE UA_UpdateDataDetails *
-UA_UpdateDataDetails_new(void) {
-    return (UA_UpdateDataDetails*)UA_new(&UA_TYPES[UA_TYPES_UPDATEDATADETAILS]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_UpdateDataDetails_copy(const UA_UpdateDataDetails *src, UA_UpdateDataDetails *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_UPDATEDATADETAILS]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_UpdateDataDetails_deleteMembers(UA_UpdateDataDetails *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_UPDATEDATADETAILS]);
-}
-
-static UA_INLINE void
-UA_UpdateDataDetails_clear(UA_UpdateDataDetails *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_UPDATEDATADETAILS]);
-}
-
-static UA_INLINE void
-UA_UpdateDataDetails_delete(UA_UpdateDataDetails *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_UPDATEDATADETAILS]);
-}
-
-/* UpdateStructureDataDetails */
-static UA_INLINE void
-UA_UpdateStructureDataDetails_init(UA_UpdateStructureDataDetails *p) {
-    memset(p, 0, sizeof(UA_UpdateStructureDataDetails));
-}
-
-static UA_INLINE UA_UpdateStructureDataDetails *
-UA_UpdateStructureDataDetails_new(void) {
-    return (UA_UpdateStructureDataDetails*)UA_new(&UA_TYPES[UA_TYPES_UPDATESTRUCTUREDATADETAILS]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_UpdateStructureDataDetails_copy(const UA_UpdateStructureDataDetails *src, UA_UpdateStructureDataDetails *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_UPDATESTRUCTUREDATADETAILS]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_UpdateStructureDataDetails_deleteMembers(UA_UpdateStructureDataDetails *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_UPDATESTRUCTUREDATADETAILS]);
-}
-
-static UA_INLINE void
-UA_UpdateStructureDataDetails_clear(UA_UpdateStructureDataDetails *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_UPDATESTRUCTUREDATADETAILS]);
-}
-
-static UA_INLINE void
-UA_UpdateStructureDataDetails_delete(UA_UpdateStructureDataDetails *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_UPDATESTRUCTUREDATADETAILS]);
-}
-
-/* DeleteRawModifiedDetails */
-static UA_INLINE void
-UA_DeleteRawModifiedDetails_init(UA_DeleteRawModifiedDetails *p) {
-    memset(p, 0, sizeof(UA_DeleteRawModifiedDetails));
-}
-
-static UA_INLINE UA_DeleteRawModifiedDetails *
-UA_DeleteRawModifiedDetails_new(void) {
-    return (UA_DeleteRawModifiedDetails*)UA_new(&UA_TYPES[UA_TYPES_DELETERAWMODIFIEDDETAILS]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_DeleteRawModifiedDetails_copy(const UA_DeleteRawModifiedDetails *src, UA_DeleteRawModifiedDetails *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_DELETERAWMODIFIEDDETAILS]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_DeleteRawModifiedDetails_deleteMembers(UA_DeleteRawModifiedDetails *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_DELETERAWMODIFIEDDETAILS]);
-}
-
-static UA_INLINE void
-UA_DeleteRawModifiedDetails_clear(UA_DeleteRawModifiedDetails *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_DELETERAWMODIFIEDDETAILS]);
-}
-
-static UA_INLINE void
-UA_DeleteRawModifiedDetails_delete(UA_DeleteRawModifiedDetails *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_DELETERAWMODIFIEDDETAILS]);
-}
-
-/* DeleteAtTimeDetails */
-static UA_INLINE void
-UA_DeleteAtTimeDetails_init(UA_DeleteAtTimeDetails *p) {
-    memset(p, 0, sizeof(UA_DeleteAtTimeDetails));
-}
-
-static UA_INLINE UA_DeleteAtTimeDetails *
-UA_DeleteAtTimeDetails_new(void) {
-    return (UA_DeleteAtTimeDetails*)UA_new(&UA_TYPES[UA_TYPES_DELETEATTIMEDETAILS]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_DeleteAtTimeDetails_copy(const UA_DeleteAtTimeDetails *src, UA_DeleteAtTimeDetails *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_DELETEATTIMEDETAILS]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_DeleteAtTimeDetails_deleteMembers(UA_DeleteAtTimeDetails *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_DELETEATTIMEDETAILS]);
-}
-
-static UA_INLINE void
-UA_DeleteAtTimeDetails_clear(UA_DeleteAtTimeDetails *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_DELETEATTIMEDETAILS]);
-}
-
-static UA_INLINE void
-UA_DeleteAtTimeDetails_delete(UA_DeleteAtTimeDetails *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_DELETEATTIMEDETAILS]);
-}
-
-/* DeleteEventDetails */
-static UA_INLINE void
-UA_DeleteEventDetails_init(UA_DeleteEventDetails *p) {
-    memset(p, 0, sizeof(UA_DeleteEventDetails));
-}
-
-static UA_INLINE UA_DeleteEventDetails *
-UA_DeleteEventDetails_new(void) {
-    return (UA_DeleteEventDetails*)UA_new(&UA_TYPES[UA_TYPES_DELETEEVENTDETAILS]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_DeleteEventDetails_copy(const UA_DeleteEventDetails *src, UA_DeleteEventDetails *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_DELETEEVENTDETAILS]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_DeleteEventDetails_deleteMembers(UA_DeleteEventDetails *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_DELETEEVENTDETAILS]);
-}
-
-static UA_INLINE void
-UA_DeleteEventDetails_clear(UA_DeleteEventDetails *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_DELETEEVENTDETAILS]);
-}
-
-static UA_INLINE void
-UA_DeleteEventDetails_delete(UA_DeleteEventDetails *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_DELETEEVENTDETAILS]);
-}
-
-/* HistoryUpdateResult */
-static UA_INLINE void
-UA_HistoryUpdateResult_init(UA_HistoryUpdateResult *p) {
-    memset(p, 0, sizeof(UA_HistoryUpdateResult));
-}
-
-static UA_INLINE UA_HistoryUpdateResult *
-UA_HistoryUpdateResult_new(void) {
-    return (UA_HistoryUpdateResult*)UA_new(&UA_TYPES[UA_TYPES_HISTORYUPDATERESULT]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_HistoryUpdateResult_copy(const UA_HistoryUpdateResult *src, UA_HistoryUpdateResult *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_HISTORYUPDATERESULT]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_HistoryUpdateResult_deleteMembers(UA_HistoryUpdateResult *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_HISTORYUPDATERESULT]);
-}
-
-static UA_INLINE void
-UA_HistoryUpdateResult_clear(UA_HistoryUpdateResult *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_HISTORYUPDATERESULT]);
-}
-
-static UA_INLINE void
-UA_HistoryUpdateResult_delete(UA_HistoryUpdateResult *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_HISTORYUPDATERESULT]);
-}
-
-/* HistoryUpdateRequest */
-static UA_INLINE void
-UA_HistoryUpdateRequest_init(UA_HistoryUpdateRequest *p) {
-    memset(p, 0, sizeof(UA_HistoryUpdateRequest));
-}
-
-static UA_INLINE UA_HistoryUpdateRequest *
-UA_HistoryUpdateRequest_new(void) {
-    return (UA_HistoryUpdateRequest*)UA_new(&UA_TYPES[UA_TYPES_HISTORYUPDATEREQUEST]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_HistoryUpdateRequest_copy(const UA_HistoryUpdateRequest *src, UA_HistoryUpdateRequest *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_HISTORYUPDATEREQUEST]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_HistoryUpdateRequest_deleteMembers(UA_HistoryUpdateRequest *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_HISTORYUPDATEREQUEST]);
-}
-
-static UA_INLINE void
-UA_HistoryUpdateRequest_clear(UA_HistoryUpdateRequest *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_HISTORYUPDATEREQUEST]);
-}
-
-static UA_INLINE void
-UA_HistoryUpdateRequest_delete(UA_HistoryUpdateRequest *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_HISTORYUPDATEREQUEST]);
-}
-
-/* HistoryUpdateResponse */
-static UA_INLINE void
-UA_HistoryUpdateResponse_init(UA_HistoryUpdateResponse *p) {
-    memset(p, 0, sizeof(UA_HistoryUpdateResponse));
-}
-
-static UA_INLINE UA_HistoryUpdateResponse *
-UA_HistoryUpdateResponse_new(void) {
-    return (UA_HistoryUpdateResponse*)UA_new(&UA_TYPES[UA_TYPES_HISTORYUPDATERESPONSE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_HistoryUpdateResponse_copy(const UA_HistoryUpdateResponse *src, UA_HistoryUpdateResponse *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_HISTORYUPDATERESPONSE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_HistoryUpdateResponse_deleteMembers(UA_HistoryUpdateResponse *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_HISTORYUPDATERESPONSE]);
-}
-
-static UA_INLINE void
-UA_HistoryUpdateResponse_clear(UA_HistoryUpdateResponse *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_HISTORYUPDATERESPONSE]);
-}
-
-static UA_INLINE void
-UA_HistoryUpdateResponse_delete(UA_HistoryUpdateResponse *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_HISTORYUPDATERESPONSE]);
 }
 
 /* CallMethodRequest */
@@ -31063,37 +21085,6 @@ UA_DeadbandType_delete(UA_DeadbandType *p) {
     UA_delete(p, &UA_TYPES[UA_TYPES_DEADBANDTYPE]);
 }
 
-/* MonitoringFilter */
-static UA_INLINE void
-UA_MonitoringFilter_init(UA_MonitoringFilter *p) {
-    memset(p, 0, sizeof(UA_MonitoringFilter));
-}
-
-static UA_INLINE UA_MonitoringFilter *
-UA_MonitoringFilter_new(void) {
-    return (UA_MonitoringFilter*)UA_new(&UA_TYPES[UA_TYPES_MONITORINGFILTER]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_MonitoringFilter_copy(const UA_MonitoringFilter *src, UA_MonitoringFilter *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_MONITORINGFILTER]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_MonitoringFilter_deleteMembers(UA_MonitoringFilter *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_MONITORINGFILTER]);
-}
-
-static UA_INLINE void
-UA_MonitoringFilter_clear(UA_MonitoringFilter *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_MONITORINGFILTER]);
-}
-
-static UA_INLINE void
-UA_MonitoringFilter_delete(UA_MonitoringFilter *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_MONITORINGFILTER]);
-}
-
 /* DataChangeFilter */
 static UA_INLINE void
 UA_DataChangeFilter_init(UA_DataChangeFilter *p) {
@@ -31218,37 +21209,6 @@ UA_AggregateFilter_delete(UA_AggregateFilter *p) {
     UA_delete(p, &UA_TYPES[UA_TYPES_AGGREGATEFILTER]);
 }
 
-/* MonitoringFilterResult */
-static UA_INLINE void
-UA_MonitoringFilterResult_init(UA_MonitoringFilterResult *p) {
-    memset(p, 0, sizeof(UA_MonitoringFilterResult));
-}
-
-static UA_INLINE UA_MonitoringFilterResult *
-UA_MonitoringFilterResult_new(void) {
-    return (UA_MonitoringFilterResult*)UA_new(&UA_TYPES[UA_TYPES_MONITORINGFILTERRESULT]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_MonitoringFilterResult_copy(const UA_MonitoringFilterResult *src, UA_MonitoringFilterResult *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_MONITORINGFILTERRESULT]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_MonitoringFilterResult_deleteMembers(UA_MonitoringFilterResult *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_MONITORINGFILTERRESULT]);
-}
-
-static UA_INLINE void
-UA_MonitoringFilterResult_clear(UA_MonitoringFilterResult *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_MONITORINGFILTERRESULT]);
-}
-
-static UA_INLINE void
-UA_MonitoringFilterResult_delete(UA_MonitoringFilterResult *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_MONITORINGFILTERRESULT]);
-}
-
 /* EventFilterResult */
 static UA_INLINE void
 UA_EventFilterResult_init(UA_EventFilterResult *p) {
@@ -31278,37 +21238,6 @@ UA_EventFilterResult_clear(UA_EventFilterResult *p) {
 static UA_INLINE void
 UA_EventFilterResult_delete(UA_EventFilterResult *p) {
     UA_delete(p, &UA_TYPES[UA_TYPES_EVENTFILTERRESULT]);
-}
-
-/* AggregateFilterResult */
-static UA_INLINE void
-UA_AggregateFilterResult_init(UA_AggregateFilterResult *p) {
-    memset(p, 0, sizeof(UA_AggregateFilterResult));
-}
-
-static UA_INLINE UA_AggregateFilterResult *
-UA_AggregateFilterResult_new(void) {
-    return (UA_AggregateFilterResult*)UA_new(&UA_TYPES[UA_TYPES_AGGREGATEFILTERRESULT]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_AggregateFilterResult_copy(const UA_AggregateFilterResult *src, UA_AggregateFilterResult *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_AGGREGATEFILTERRESULT]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_AggregateFilterResult_deleteMembers(UA_AggregateFilterResult *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_AGGREGATEFILTERRESULT]);
-}
-
-static UA_INLINE void
-UA_AggregateFilterResult_clear(UA_AggregateFilterResult *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_AGGREGATEFILTERRESULT]);
-}
-
-static UA_INLINE void
-UA_AggregateFilterResult_delete(UA_AggregateFilterResult *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_AGGREGATEFILTERRESULT]);
 }
 
 /* MonitoringParameters */
@@ -31993,37 +21922,6 @@ UA_NotificationMessage_delete(UA_NotificationMessage *p) {
     UA_delete(p, &UA_TYPES[UA_TYPES_NOTIFICATIONMESSAGE]);
 }
 
-/* NotificationData */
-static UA_INLINE void
-UA_NotificationData_init(UA_NotificationData *p) {
-    memset(p, 0, sizeof(UA_NotificationData));
-}
-
-static UA_INLINE UA_NotificationData *
-UA_NotificationData_new(void) {
-    return (UA_NotificationData*)UA_new(&UA_TYPES[UA_TYPES_NOTIFICATIONDATA]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_NotificationData_copy(const UA_NotificationData *src, UA_NotificationData *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_NOTIFICATIONDATA]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_NotificationData_deleteMembers(UA_NotificationData *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_NOTIFICATIONDATA]);
-}
-
-static UA_INLINE void
-UA_NotificationData_clear(UA_NotificationData *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_NOTIFICATIONDATA]);
-}
-
-static UA_INLINE void
-UA_NotificationData_delete(UA_NotificationData *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_NOTIFICATIONDATA]);
-}
-
 /* MonitoredItemNotification */
 static UA_INLINE void
 UA_MonitoredItemNotification_init(UA_MonitoredItemNotification *p) {
@@ -32084,37 +21982,6 @@ UA_EventFieldList_clear(UA_EventFieldList *p) {
 static UA_INLINE void
 UA_EventFieldList_delete(UA_EventFieldList *p) {
     UA_delete(p, &UA_TYPES[UA_TYPES_EVENTFIELDLIST]);
-}
-
-/* HistoryEventFieldList */
-static UA_INLINE void
-UA_HistoryEventFieldList_init(UA_HistoryEventFieldList *p) {
-    memset(p, 0, sizeof(UA_HistoryEventFieldList));
-}
-
-static UA_INLINE UA_HistoryEventFieldList *
-UA_HistoryEventFieldList_new(void) {
-    return (UA_HistoryEventFieldList*)UA_new(&UA_TYPES[UA_TYPES_HISTORYEVENTFIELDLIST]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_HistoryEventFieldList_copy(const UA_HistoryEventFieldList *src, UA_HistoryEventFieldList *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_HISTORYEVENTFIELDLIST]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_HistoryEventFieldList_deleteMembers(UA_HistoryEventFieldList *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_HISTORYEVENTFIELDLIST]);
-}
-
-static UA_INLINE void
-UA_HistoryEventFieldList_clear(UA_HistoryEventFieldList *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_HISTORYEVENTFIELDLIST]);
-}
-
-static UA_INLINE void
-UA_HistoryEventFieldList_delete(UA_HistoryEventFieldList *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_HISTORYEVENTFIELDLIST]);
 }
 
 /* StatusChangeNotification */
@@ -32551,130 +22418,6 @@ UA_ServerState_delete(UA_ServerState *p) {
     UA_delete(p, &UA_TYPES[UA_TYPES_SERVERSTATE]);
 }
 
-/* RedundantServerDataType */
-static UA_INLINE void
-UA_RedundantServerDataType_init(UA_RedundantServerDataType *p) {
-    memset(p, 0, sizeof(UA_RedundantServerDataType));
-}
-
-static UA_INLINE UA_RedundantServerDataType *
-UA_RedundantServerDataType_new(void) {
-    return (UA_RedundantServerDataType*)UA_new(&UA_TYPES[UA_TYPES_REDUNDANTSERVERDATATYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_RedundantServerDataType_copy(const UA_RedundantServerDataType *src, UA_RedundantServerDataType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_REDUNDANTSERVERDATATYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_RedundantServerDataType_deleteMembers(UA_RedundantServerDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_REDUNDANTSERVERDATATYPE]);
-}
-
-static UA_INLINE void
-UA_RedundantServerDataType_clear(UA_RedundantServerDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_REDUNDANTSERVERDATATYPE]);
-}
-
-static UA_INLINE void
-UA_RedundantServerDataType_delete(UA_RedundantServerDataType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_REDUNDANTSERVERDATATYPE]);
-}
-
-/* EndpointUrlListDataType */
-static UA_INLINE void
-UA_EndpointUrlListDataType_init(UA_EndpointUrlListDataType *p) {
-    memset(p, 0, sizeof(UA_EndpointUrlListDataType));
-}
-
-static UA_INLINE UA_EndpointUrlListDataType *
-UA_EndpointUrlListDataType_new(void) {
-    return (UA_EndpointUrlListDataType*)UA_new(&UA_TYPES[UA_TYPES_ENDPOINTURLLISTDATATYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_EndpointUrlListDataType_copy(const UA_EndpointUrlListDataType *src, UA_EndpointUrlListDataType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_ENDPOINTURLLISTDATATYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_EndpointUrlListDataType_deleteMembers(UA_EndpointUrlListDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_ENDPOINTURLLISTDATATYPE]);
-}
-
-static UA_INLINE void
-UA_EndpointUrlListDataType_clear(UA_EndpointUrlListDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_ENDPOINTURLLISTDATATYPE]);
-}
-
-static UA_INLINE void
-UA_EndpointUrlListDataType_delete(UA_EndpointUrlListDataType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_ENDPOINTURLLISTDATATYPE]);
-}
-
-/* NetworkGroupDataType */
-static UA_INLINE void
-UA_NetworkGroupDataType_init(UA_NetworkGroupDataType *p) {
-    memset(p, 0, sizeof(UA_NetworkGroupDataType));
-}
-
-static UA_INLINE UA_NetworkGroupDataType *
-UA_NetworkGroupDataType_new(void) {
-    return (UA_NetworkGroupDataType*)UA_new(&UA_TYPES[UA_TYPES_NETWORKGROUPDATATYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_NetworkGroupDataType_copy(const UA_NetworkGroupDataType *src, UA_NetworkGroupDataType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_NETWORKGROUPDATATYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_NetworkGroupDataType_deleteMembers(UA_NetworkGroupDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_NETWORKGROUPDATATYPE]);
-}
-
-static UA_INLINE void
-UA_NetworkGroupDataType_clear(UA_NetworkGroupDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_NETWORKGROUPDATATYPE]);
-}
-
-static UA_INLINE void
-UA_NetworkGroupDataType_delete(UA_NetworkGroupDataType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_NETWORKGROUPDATATYPE]);
-}
-
-/* SamplingIntervalDiagnosticsDataType */
-static UA_INLINE void
-UA_SamplingIntervalDiagnosticsDataType_init(UA_SamplingIntervalDiagnosticsDataType *p) {
-    memset(p, 0, sizeof(UA_SamplingIntervalDiagnosticsDataType));
-}
-
-static UA_INLINE UA_SamplingIntervalDiagnosticsDataType *
-UA_SamplingIntervalDiagnosticsDataType_new(void) {
-    return (UA_SamplingIntervalDiagnosticsDataType*)UA_new(&UA_TYPES[UA_TYPES_SAMPLINGINTERVALDIAGNOSTICSDATATYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_SamplingIntervalDiagnosticsDataType_copy(const UA_SamplingIntervalDiagnosticsDataType *src, UA_SamplingIntervalDiagnosticsDataType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_SAMPLINGINTERVALDIAGNOSTICSDATATYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_SamplingIntervalDiagnosticsDataType_deleteMembers(UA_SamplingIntervalDiagnosticsDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_SAMPLINGINTERVALDIAGNOSTICSDATATYPE]);
-}
-
-static UA_INLINE void
-UA_SamplingIntervalDiagnosticsDataType_clear(UA_SamplingIntervalDiagnosticsDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_SAMPLINGINTERVALDIAGNOSTICSDATATYPE]);
-}
-
-static UA_INLINE void
-UA_SamplingIntervalDiagnosticsDataType_delete(UA_SamplingIntervalDiagnosticsDataType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_SAMPLINGINTERVALDIAGNOSTICSDATATYPE]);
-}
-
 /* ServerDiagnosticsSummaryDataType */
 static UA_INLINE void
 UA_ServerDiagnosticsSummaryDataType_init(UA_ServerDiagnosticsSummaryDataType *p) {
@@ -32735,223 +22478,6 @@ UA_ServerStatusDataType_clear(UA_ServerStatusDataType *p) {
 static UA_INLINE void
 UA_ServerStatusDataType_delete(UA_ServerStatusDataType *p) {
     UA_delete(p, &UA_TYPES[UA_TYPES_SERVERSTATUSDATATYPE]);
-}
-
-/* SessionSecurityDiagnosticsDataType */
-static UA_INLINE void
-UA_SessionSecurityDiagnosticsDataType_init(UA_SessionSecurityDiagnosticsDataType *p) {
-    memset(p, 0, sizeof(UA_SessionSecurityDiagnosticsDataType));
-}
-
-static UA_INLINE UA_SessionSecurityDiagnosticsDataType *
-UA_SessionSecurityDiagnosticsDataType_new(void) {
-    return (UA_SessionSecurityDiagnosticsDataType*)UA_new(&UA_TYPES[UA_TYPES_SESSIONSECURITYDIAGNOSTICSDATATYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_SessionSecurityDiagnosticsDataType_copy(const UA_SessionSecurityDiagnosticsDataType *src, UA_SessionSecurityDiagnosticsDataType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_SESSIONSECURITYDIAGNOSTICSDATATYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_SessionSecurityDiagnosticsDataType_deleteMembers(UA_SessionSecurityDiagnosticsDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_SESSIONSECURITYDIAGNOSTICSDATATYPE]);
-}
-
-static UA_INLINE void
-UA_SessionSecurityDiagnosticsDataType_clear(UA_SessionSecurityDiagnosticsDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_SESSIONSECURITYDIAGNOSTICSDATATYPE]);
-}
-
-static UA_INLINE void
-UA_SessionSecurityDiagnosticsDataType_delete(UA_SessionSecurityDiagnosticsDataType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_SESSIONSECURITYDIAGNOSTICSDATATYPE]);
-}
-
-/* ServiceCounterDataType */
-static UA_INLINE void
-UA_ServiceCounterDataType_init(UA_ServiceCounterDataType *p) {
-    memset(p, 0, sizeof(UA_ServiceCounterDataType));
-}
-
-static UA_INLINE UA_ServiceCounterDataType *
-UA_ServiceCounterDataType_new(void) {
-    return (UA_ServiceCounterDataType*)UA_new(&UA_TYPES[UA_TYPES_SERVICECOUNTERDATATYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_ServiceCounterDataType_copy(const UA_ServiceCounterDataType *src, UA_ServiceCounterDataType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_SERVICECOUNTERDATATYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_ServiceCounterDataType_deleteMembers(UA_ServiceCounterDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_SERVICECOUNTERDATATYPE]);
-}
-
-static UA_INLINE void
-UA_ServiceCounterDataType_clear(UA_ServiceCounterDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_SERVICECOUNTERDATATYPE]);
-}
-
-static UA_INLINE void
-UA_ServiceCounterDataType_delete(UA_ServiceCounterDataType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_SERVICECOUNTERDATATYPE]);
-}
-
-/* StatusResult */
-static UA_INLINE void
-UA_StatusResult_init(UA_StatusResult *p) {
-    memset(p, 0, sizeof(UA_StatusResult));
-}
-
-static UA_INLINE UA_StatusResult *
-UA_StatusResult_new(void) {
-    return (UA_StatusResult*)UA_new(&UA_TYPES[UA_TYPES_STATUSRESULT]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_StatusResult_copy(const UA_StatusResult *src, UA_StatusResult *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_STATUSRESULT]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_StatusResult_deleteMembers(UA_StatusResult *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_STATUSRESULT]);
-}
-
-static UA_INLINE void
-UA_StatusResult_clear(UA_StatusResult *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_STATUSRESULT]);
-}
-
-static UA_INLINE void
-UA_StatusResult_delete(UA_StatusResult *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_STATUSRESULT]);
-}
-
-/* SubscriptionDiagnosticsDataType */
-static UA_INLINE void
-UA_SubscriptionDiagnosticsDataType_init(UA_SubscriptionDiagnosticsDataType *p) {
-    memset(p, 0, sizeof(UA_SubscriptionDiagnosticsDataType));
-}
-
-static UA_INLINE UA_SubscriptionDiagnosticsDataType *
-UA_SubscriptionDiagnosticsDataType_new(void) {
-    return (UA_SubscriptionDiagnosticsDataType*)UA_new(&UA_TYPES[UA_TYPES_SUBSCRIPTIONDIAGNOSTICSDATATYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_SubscriptionDiagnosticsDataType_copy(const UA_SubscriptionDiagnosticsDataType *src, UA_SubscriptionDiagnosticsDataType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_SUBSCRIPTIONDIAGNOSTICSDATATYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_SubscriptionDiagnosticsDataType_deleteMembers(UA_SubscriptionDiagnosticsDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_SUBSCRIPTIONDIAGNOSTICSDATATYPE]);
-}
-
-static UA_INLINE void
-UA_SubscriptionDiagnosticsDataType_clear(UA_SubscriptionDiagnosticsDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_SUBSCRIPTIONDIAGNOSTICSDATATYPE]);
-}
-
-static UA_INLINE void
-UA_SubscriptionDiagnosticsDataType_delete(UA_SubscriptionDiagnosticsDataType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_SUBSCRIPTIONDIAGNOSTICSDATATYPE]);
-}
-
-/* ModelChangeStructureVerbMask */
-static UA_INLINE void
-UA_ModelChangeStructureVerbMask_init(UA_ModelChangeStructureVerbMask *p) {
-    memset(p, 0, sizeof(UA_ModelChangeStructureVerbMask));
-}
-
-static UA_INLINE UA_ModelChangeStructureVerbMask *
-UA_ModelChangeStructureVerbMask_new(void) {
-    return (UA_ModelChangeStructureVerbMask*)UA_new(&UA_TYPES[UA_TYPES_MODELCHANGESTRUCTUREVERBMASK]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_ModelChangeStructureVerbMask_copy(const UA_ModelChangeStructureVerbMask *src, UA_ModelChangeStructureVerbMask *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_MODELCHANGESTRUCTUREVERBMASK]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_ModelChangeStructureVerbMask_deleteMembers(UA_ModelChangeStructureVerbMask *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_MODELCHANGESTRUCTUREVERBMASK]);
-}
-
-static UA_INLINE void
-UA_ModelChangeStructureVerbMask_clear(UA_ModelChangeStructureVerbMask *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_MODELCHANGESTRUCTUREVERBMASK]);
-}
-
-static UA_INLINE void
-UA_ModelChangeStructureVerbMask_delete(UA_ModelChangeStructureVerbMask *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_MODELCHANGESTRUCTUREVERBMASK]);
-}
-
-/* ModelChangeStructureDataType */
-static UA_INLINE void
-UA_ModelChangeStructureDataType_init(UA_ModelChangeStructureDataType *p) {
-    memset(p, 0, sizeof(UA_ModelChangeStructureDataType));
-}
-
-static UA_INLINE UA_ModelChangeStructureDataType *
-UA_ModelChangeStructureDataType_new(void) {
-    return (UA_ModelChangeStructureDataType*)UA_new(&UA_TYPES[UA_TYPES_MODELCHANGESTRUCTUREDATATYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_ModelChangeStructureDataType_copy(const UA_ModelChangeStructureDataType *src, UA_ModelChangeStructureDataType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_MODELCHANGESTRUCTUREDATATYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_ModelChangeStructureDataType_deleteMembers(UA_ModelChangeStructureDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_MODELCHANGESTRUCTUREDATATYPE]);
-}
-
-static UA_INLINE void
-UA_ModelChangeStructureDataType_clear(UA_ModelChangeStructureDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_MODELCHANGESTRUCTUREDATATYPE]);
-}
-
-static UA_INLINE void
-UA_ModelChangeStructureDataType_delete(UA_ModelChangeStructureDataType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_MODELCHANGESTRUCTUREDATATYPE]);
-}
-
-/* SemanticChangeStructureDataType */
-static UA_INLINE void
-UA_SemanticChangeStructureDataType_init(UA_SemanticChangeStructureDataType *p) {
-    memset(p, 0, sizeof(UA_SemanticChangeStructureDataType));
-}
-
-static UA_INLINE UA_SemanticChangeStructureDataType *
-UA_SemanticChangeStructureDataType_new(void) {
-    return (UA_SemanticChangeStructureDataType*)UA_new(&UA_TYPES[UA_TYPES_SEMANTICCHANGESTRUCTUREDATATYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_SemanticChangeStructureDataType_copy(const UA_SemanticChangeStructureDataType *src, UA_SemanticChangeStructureDataType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_SEMANTICCHANGESTRUCTUREDATATYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_SemanticChangeStructureDataType_deleteMembers(UA_SemanticChangeStructureDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_SEMANTICCHANGESTRUCTUREDATATYPE]);
-}
-
-static UA_INLINE void
-UA_SemanticChangeStructureDataType_clear(UA_SemanticChangeStructureDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_SEMANTICCHANGESTRUCTUREDATATYPE]);
-}
-
-static UA_INLINE void
-UA_SemanticChangeStructureDataType_delete(UA_SemanticChangeStructureDataType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_SEMANTICCHANGESTRUCTUREDATATYPE]);
 }
 
 /* Range */
@@ -33171,378 +22697,6 @@ UA_XVType_delete(UA_XVType *p) {
     UA_delete(p, &UA_TYPES[UA_TYPES_XVTYPE]);
 }
 
-/* ProgramDiagnosticDataType */
-static UA_INLINE void
-UA_ProgramDiagnosticDataType_init(UA_ProgramDiagnosticDataType *p) {
-    memset(p, 0, sizeof(UA_ProgramDiagnosticDataType));
-}
-
-static UA_INLINE UA_ProgramDiagnosticDataType *
-UA_ProgramDiagnosticDataType_new(void) {
-    return (UA_ProgramDiagnosticDataType*)UA_new(&UA_TYPES[UA_TYPES_PROGRAMDIAGNOSTICDATATYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_ProgramDiagnosticDataType_copy(const UA_ProgramDiagnosticDataType *src, UA_ProgramDiagnosticDataType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_PROGRAMDIAGNOSTICDATATYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_ProgramDiagnosticDataType_deleteMembers(UA_ProgramDiagnosticDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_PROGRAMDIAGNOSTICDATATYPE]);
-}
-
-static UA_INLINE void
-UA_ProgramDiagnosticDataType_clear(UA_ProgramDiagnosticDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_PROGRAMDIAGNOSTICDATATYPE]);
-}
-
-static UA_INLINE void
-UA_ProgramDiagnosticDataType_delete(UA_ProgramDiagnosticDataType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_PROGRAMDIAGNOSTICDATATYPE]);
-}
-
-/* ProgramDiagnostic2DataType */
-static UA_INLINE void
-UA_ProgramDiagnostic2DataType_init(UA_ProgramDiagnostic2DataType *p) {
-    memset(p, 0, sizeof(UA_ProgramDiagnostic2DataType));
-}
-
-static UA_INLINE UA_ProgramDiagnostic2DataType *
-UA_ProgramDiagnostic2DataType_new(void) {
-    return (UA_ProgramDiagnostic2DataType*)UA_new(&UA_TYPES[UA_TYPES_PROGRAMDIAGNOSTIC2DATATYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_ProgramDiagnostic2DataType_copy(const UA_ProgramDiagnostic2DataType *src, UA_ProgramDiagnostic2DataType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_PROGRAMDIAGNOSTIC2DATATYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_ProgramDiagnostic2DataType_deleteMembers(UA_ProgramDiagnostic2DataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_PROGRAMDIAGNOSTIC2DATATYPE]);
-}
-
-static UA_INLINE void
-UA_ProgramDiagnostic2DataType_clear(UA_ProgramDiagnostic2DataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_PROGRAMDIAGNOSTIC2DATATYPE]);
-}
-
-static UA_INLINE void
-UA_ProgramDiagnostic2DataType_delete(UA_ProgramDiagnostic2DataType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_PROGRAMDIAGNOSTIC2DATATYPE]);
-}
-
-/* Annotation */
-static UA_INLINE void
-UA_Annotation_init(UA_Annotation *p) {
-    memset(p, 0, sizeof(UA_Annotation));
-}
-
-static UA_INLINE UA_Annotation *
-UA_Annotation_new(void) {
-    return (UA_Annotation*)UA_new(&UA_TYPES[UA_TYPES_ANNOTATION]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_Annotation_copy(const UA_Annotation *src, UA_Annotation *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_ANNOTATION]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_Annotation_deleteMembers(UA_Annotation *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_ANNOTATION]);
-}
-
-static UA_INLINE void
-UA_Annotation_clear(UA_Annotation *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_ANNOTATION]);
-}
-
-static UA_INLINE void
-UA_Annotation_delete(UA_Annotation *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_ANNOTATION]);
-}
-
-/* ExceptionDeviationFormat */
-static UA_INLINE void
-UA_ExceptionDeviationFormat_init(UA_ExceptionDeviationFormat *p) {
-    memset(p, 0, sizeof(UA_ExceptionDeviationFormat));
-}
-
-static UA_INLINE UA_ExceptionDeviationFormat *
-UA_ExceptionDeviationFormat_new(void) {
-    return (UA_ExceptionDeviationFormat*)UA_new(&UA_TYPES[UA_TYPES_EXCEPTIONDEVIATIONFORMAT]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_ExceptionDeviationFormat_copy(const UA_ExceptionDeviationFormat *src, UA_ExceptionDeviationFormat *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_EXCEPTIONDEVIATIONFORMAT]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_ExceptionDeviationFormat_deleteMembers(UA_ExceptionDeviationFormat *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_EXCEPTIONDEVIATIONFORMAT]);
-}
-
-static UA_INLINE void
-UA_ExceptionDeviationFormat_clear(UA_ExceptionDeviationFormat *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_EXCEPTIONDEVIATIONFORMAT]);
-}
-
-static UA_INLINE void
-UA_ExceptionDeviationFormat_delete(UA_ExceptionDeviationFormat *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_EXCEPTIONDEVIATIONFORMAT]);
-}
-
-/* EndpointType */
-static UA_INLINE void
-UA_EndpointType_init(UA_EndpointType *p) {
-    memset(p, 0, sizeof(UA_EndpointType));
-}
-
-static UA_INLINE UA_EndpointType *
-UA_EndpointType_new(void) {
-    return (UA_EndpointType*)UA_new(&UA_TYPES[UA_TYPES_ENDPOINTTYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_EndpointType_copy(const UA_EndpointType *src, UA_EndpointType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_ENDPOINTTYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_EndpointType_deleteMembers(UA_EndpointType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_ENDPOINTTYPE]);
-}
-
-static UA_INLINE void
-UA_EndpointType_clear(UA_EndpointType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_ENDPOINTTYPE]);
-}
-
-static UA_INLINE void
-UA_EndpointType_delete(UA_EndpointType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_ENDPOINTTYPE]);
-}
-
-/* StructureDescription */
-static UA_INLINE void
-UA_StructureDescription_init(UA_StructureDescription *p) {
-    memset(p, 0, sizeof(UA_StructureDescription));
-}
-
-static UA_INLINE UA_StructureDescription *
-UA_StructureDescription_new(void) {
-    return (UA_StructureDescription*)UA_new(&UA_TYPES[UA_TYPES_STRUCTUREDESCRIPTION]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_StructureDescription_copy(const UA_StructureDescription *src, UA_StructureDescription *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_STRUCTUREDESCRIPTION]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_StructureDescription_deleteMembers(UA_StructureDescription *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_STRUCTUREDESCRIPTION]);
-}
-
-static UA_INLINE void
-UA_StructureDescription_clear(UA_StructureDescription *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_STRUCTUREDESCRIPTION]);
-}
-
-static UA_INLINE void
-UA_StructureDescription_delete(UA_StructureDescription *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_STRUCTUREDESCRIPTION]);
-}
-
-/* FieldMetaData */
-static UA_INLINE void
-UA_FieldMetaData_init(UA_FieldMetaData *p) {
-    memset(p, 0, sizeof(UA_FieldMetaData));
-}
-
-static UA_INLINE UA_FieldMetaData *
-UA_FieldMetaData_new(void) {
-    return (UA_FieldMetaData*)UA_new(&UA_TYPES[UA_TYPES_FIELDMETADATA]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_FieldMetaData_copy(const UA_FieldMetaData *src, UA_FieldMetaData *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_FIELDMETADATA]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_FieldMetaData_deleteMembers(UA_FieldMetaData *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_FIELDMETADATA]);
-}
-
-static UA_INLINE void
-UA_FieldMetaData_clear(UA_FieldMetaData *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_FIELDMETADATA]);
-}
-
-static UA_INLINE void
-UA_FieldMetaData_delete(UA_FieldMetaData *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_FIELDMETADATA]);
-}
-
-/* PublishedEventsDataType */
-static UA_INLINE void
-UA_PublishedEventsDataType_init(UA_PublishedEventsDataType *p) {
-    memset(p, 0, sizeof(UA_PublishedEventsDataType));
-}
-
-static UA_INLINE UA_PublishedEventsDataType *
-UA_PublishedEventsDataType_new(void) {
-    return (UA_PublishedEventsDataType*)UA_new(&UA_TYPES[UA_TYPES_PUBLISHEDEVENTSDATATYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_PublishedEventsDataType_copy(const UA_PublishedEventsDataType *src, UA_PublishedEventsDataType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_PUBLISHEDEVENTSDATATYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_PublishedEventsDataType_deleteMembers(UA_PublishedEventsDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_PUBLISHEDEVENTSDATATYPE]);
-}
-
-static UA_INLINE void
-UA_PublishedEventsDataType_clear(UA_PublishedEventsDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_PUBLISHEDEVENTSDATATYPE]);
-}
-
-static UA_INLINE void
-UA_PublishedEventsDataType_delete(UA_PublishedEventsDataType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_PUBLISHEDEVENTSDATATYPE]);
-}
-
-/* PubSubGroupDataType */
-static UA_INLINE void
-UA_PubSubGroupDataType_init(UA_PubSubGroupDataType *p) {
-    memset(p, 0, sizeof(UA_PubSubGroupDataType));
-}
-
-static UA_INLINE UA_PubSubGroupDataType *
-UA_PubSubGroupDataType_new(void) {
-    return (UA_PubSubGroupDataType*)UA_new(&UA_TYPES[UA_TYPES_PUBSUBGROUPDATATYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_PubSubGroupDataType_copy(const UA_PubSubGroupDataType *src, UA_PubSubGroupDataType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_PUBSUBGROUPDATATYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_PubSubGroupDataType_deleteMembers(UA_PubSubGroupDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_PUBSUBGROUPDATATYPE]);
-}
-
-static UA_INLINE void
-UA_PubSubGroupDataType_clear(UA_PubSubGroupDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_PUBSUBGROUPDATATYPE]);
-}
-
-static UA_INLINE void
-UA_PubSubGroupDataType_delete(UA_PubSubGroupDataType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_PUBSUBGROUPDATATYPE]);
-}
-
-/* WriterGroupDataType */
-static UA_INLINE void
-UA_WriterGroupDataType_init(UA_WriterGroupDataType *p) {
-    memset(p, 0, sizeof(UA_WriterGroupDataType));
-}
-
-static UA_INLINE UA_WriterGroupDataType *
-UA_WriterGroupDataType_new(void) {
-    return (UA_WriterGroupDataType*)UA_new(&UA_TYPES[UA_TYPES_WRITERGROUPDATATYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_WriterGroupDataType_copy(const UA_WriterGroupDataType *src, UA_WriterGroupDataType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_WRITERGROUPDATATYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_WriterGroupDataType_deleteMembers(UA_WriterGroupDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_WRITERGROUPDATATYPE]);
-}
-
-static UA_INLINE void
-UA_WriterGroupDataType_clear(UA_WriterGroupDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_WRITERGROUPDATATYPE]);
-}
-
-static UA_INLINE void
-UA_WriterGroupDataType_delete(UA_WriterGroupDataType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_WRITERGROUPDATATYPE]);
-}
-
-/* FieldTargetDataType */
-static UA_INLINE void
-UA_FieldTargetDataType_init(UA_FieldTargetDataType *p) {
-    memset(p, 0, sizeof(UA_FieldTargetDataType));
-}
-
-static UA_INLINE UA_FieldTargetDataType *
-UA_FieldTargetDataType_new(void) {
-    return (UA_FieldTargetDataType*)UA_new(&UA_TYPES[UA_TYPES_FIELDTARGETDATATYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_FieldTargetDataType_copy(const UA_FieldTargetDataType *src, UA_FieldTargetDataType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_FIELDTARGETDATATYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_FieldTargetDataType_deleteMembers(UA_FieldTargetDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_FIELDTARGETDATATYPE]);
-}
-
-static UA_INLINE void
-UA_FieldTargetDataType_clear(UA_FieldTargetDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_FIELDTARGETDATATYPE]);
-}
-
-static UA_INLINE void
-UA_FieldTargetDataType_delete(UA_FieldTargetDataType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_FIELDTARGETDATATYPE]);
-}
-
-/* SubscribedDataSetMirrorDataType */
-static UA_INLINE void
-UA_SubscribedDataSetMirrorDataType_init(UA_SubscribedDataSetMirrorDataType *p) {
-    memset(p, 0, sizeof(UA_SubscribedDataSetMirrorDataType));
-}
-
-static UA_INLINE UA_SubscribedDataSetMirrorDataType *
-UA_SubscribedDataSetMirrorDataType_new(void) {
-    return (UA_SubscribedDataSetMirrorDataType*)UA_new(&UA_TYPES[UA_TYPES_SUBSCRIBEDDATASETMIRRORDATATYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_SubscribedDataSetMirrorDataType_copy(const UA_SubscribedDataSetMirrorDataType *src, UA_SubscribedDataSetMirrorDataType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_SUBSCRIBEDDATASETMIRRORDATATYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_SubscribedDataSetMirrorDataType_deleteMembers(UA_SubscribedDataSetMirrorDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_SUBSCRIBEDDATASETMIRRORDATATYPE]);
-}
-
-static UA_INLINE void
-UA_SubscribedDataSetMirrorDataType_clear(UA_SubscribedDataSetMirrorDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_SUBSCRIBEDDATASETMIRRORDATATYPE]);
-}
-
-static UA_INLINE void
-UA_SubscribedDataSetMirrorDataType_delete(UA_SubscribedDataSetMirrorDataType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_SUBSCRIBEDDATASETMIRRORDATATYPE]);
-}
-
 /* EnumDefinition */
 static UA_INLINE void
 UA_EnumDefinition_init(UA_EnumDefinition *p) {
@@ -33572,192 +22726,6 @@ UA_EnumDefinition_clear(UA_EnumDefinition *p) {
 static UA_INLINE void
 UA_EnumDefinition_delete(UA_EnumDefinition *p) {
     UA_delete(p, &UA_TYPES[UA_TYPES_ENUMDEFINITION]);
-}
-
-/* ReadEventDetails */
-static UA_INLINE void
-UA_ReadEventDetails_init(UA_ReadEventDetails *p) {
-    memset(p, 0, sizeof(UA_ReadEventDetails));
-}
-
-static UA_INLINE UA_ReadEventDetails *
-UA_ReadEventDetails_new(void) {
-    return (UA_ReadEventDetails*)UA_new(&UA_TYPES[UA_TYPES_READEVENTDETAILS]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_ReadEventDetails_copy(const UA_ReadEventDetails *src, UA_ReadEventDetails *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_READEVENTDETAILS]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_ReadEventDetails_deleteMembers(UA_ReadEventDetails *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_READEVENTDETAILS]);
-}
-
-static UA_INLINE void
-UA_ReadEventDetails_clear(UA_ReadEventDetails *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_READEVENTDETAILS]);
-}
-
-static UA_INLINE void
-UA_ReadEventDetails_delete(UA_ReadEventDetails *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_READEVENTDETAILS]);
-}
-
-/* ReadProcessedDetails */
-static UA_INLINE void
-UA_ReadProcessedDetails_init(UA_ReadProcessedDetails *p) {
-    memset(p, 0, sizeof(UA_ReadProcessedDetails));
-}
-
-static UA_INLINE UA_ReadProcessedDetails *
-UA_ReadProcessedDetails_new(void) {
-    return (UA_ReadProcessedDetails*)UA_new(&UA_TYPES[UA_TYPES_READPROCESSEDDETAILS]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_ReadProcessedDetails_copy(const UA_ReadProcessedDetails *src, UA_ReadProcessedDetails *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_READPROCESSEDDETAILS]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_ReadProcessedDetails_deleteMembers(UA_ReadProcessedDetails *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_READPROCESSEDDETAILS]);
-}
-
-static UA_INLINE void
-UA_ReadProcessedDetails_clear(UA_ReadProcessedDetails *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_READPROCESSEDDETAILS]);
-}
-
-static UA_INLINE void
-UA_ReadProcessedDetails_delete(UA_ReadProcessedDetails *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_READPROCESSEDDETAILS]);
-}
-
-/* ModificationInfo */
-static UA_INLINE void
-UA_ModificationInfo_init(UA_ModificationInfo *p) {
-    memset(p, 0, sizeof(UA_ModificationInfo));
-}
-
-static UA_INLINE UA_ModificationInfo *
-UA_ModificationInfo_new(void) {
-    return (UA_ModificationInfo*)UA_new(&UA_TYPES[UA_TYPES_MODIFICATIONINFO]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_ModificationInfo_copy(const UA_ModificationInfo *src, UA_ModificationInfo *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_MODIFICATIONINFO]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_ModificationInfo_deleteMembers(UA_ModificationInfo *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_MODIFICATIONINFO]);
-}
-
-static UA_INLINE void
-UA_ModificationInfo_clear(UA_ModificationInfo *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_MODIFICATIONINFO]);
-}
-
-static UA_INLINE void
-UA_ModificationInfo_delete(UA_ModificationInfo *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_MODIFICATIONINFO]);
-}
-
-/* HistoryModifiedData */
-static UA_INLINE void
-UA_HistoryModifiedData_init(UA_HistoryModifiedData *p) {
-    memset(p, 0, sizeof(UA_HistoryModifiedData));
-}
-
-static UA_INLINE UA_HistoryModifiedData *
-UA_HistoryModifiedData_new(void) {
-    return (UA_HistoryModifiedData*)UA_new(&UA_TYPES[UA_TYPES_HISTORYMODIFIEDDATA]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_HistoryModifiedData_copy(const UA_HistoryModifiedData *src, UA_HistoryModifiedData *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_HISTORYMODIFIEDDATA]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_HistoryModifiedData_deleteMembers(UA_HistoryModifiedData *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_HISTORYMODIFIEDDATA]);
-}
-
-static UA_INLINE void
-UA_HistoryModifiedData_clear(UA_HistoryModifiedData *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_HISTORYMODIFIEDDATA]);
-}
-
-static UA_INLINE void
-UA_HistoryModifiedData_delete(UA_HistoryModifiedData *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_HISTORYMODIFIEDDATA]);
-}
-
-/* HistoryEvent */
-static UA_INLINE void
-UA_HistoryEvent_init(UA_HistoryEvent *p) {
-    memset(p, 0, sizeof(UA_HistoryEvent));
-}
-
-static UA_INLINE UA_HistoryEvent *
-UA_HistoryEvent_new(void) {
-    return (UA_HistoryEvent*)UA_new(&UA_TYPES[UA_TYPES_HISTORYEVENT]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_HistoryEvent_copy(const UA_HistoryEvent *src, UA_HistoryEvent *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_HISTORYEVENT]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_HistoryEvent_deleteMembers(UA_HistoryEvent *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_HISTORYEVENT]);
-}
-
-static UA_INLINE void
-UA_HistoryEvent_clear(UA_HistoryEvent *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_HISTORYEVENT]);
-}
-
-static UA_INLINE void
-UA_HistoryEvent_delete(UA_HistoryEvent *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_HISTORYEVENT]);
-}
-
-/* UpdateEventDetails */
-static UA_INLINE void
-UA_UpdateEventDetails_init(UA_UpdateEventDetails *p) {
-    memset(p, 0, sizeof(UA_UpdateEventDetails));
-}
-
-static UA_INLINE UA_UpdateEventDetails *
-UA_UpdateEventDetails_new(void) {
-    return (UA_UpdateEventDetails*)UA_new(&UA_TYPES[UA_TYPES_UPDATEEVENTDETAILS]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_UpdateEventDetails_copy(const UA_UpdateEventDetails *src, UA_UpdateEventDetails *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_UPDATEEVENTDETAILS]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_UpdateEventDetails_deleteMembers(UA_UpdateEventDetails *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_UPDATEEVENTDETAILS]);
-}
-
-static UA_INLINE void
-UA_UpdateEventDetails_clear(UA_UpdateEventDetails *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_UPDATEEVENTDETAILS]);
-}
-
-static UA_INLINE void
-UA_UpdateEventDetails_delete(UA_UpdateEventDetails *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_UPDATEEVENTDETAILS]);
 }
 
 /* DataChangeNotification */
@@ -33822,347 +22790,6 @@ UA_EventNotificationList_delete(UA_EventNotificationList *p) {
     UA_delete(p, &UA_TYPES[UA_TYPES_EVENTNOTIFICATIONLIST]);
 }
 
-/* SessionDiagnosticsDataType */
-static UA_INLINE void
-UA_SessionDiagnosticsDataType_init(UA_SessionDiagnosticsDataType *p) {
-    memset(p, 0, sizeof(UA_SessionDiagnosticsDataType));
-}
-
-static UA_INLINE UA_SessionDiagnosticsDataType *
-UA_SessionDiagnosticsDataType_new(void) {
-    return (UA_SessionDiagnosticsDataType*)UA_new(&UA_TYPES[UA_TYPES_SESSIONDIAGNOSTICSDATATYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_SessionDiagnosticsDataType_copy(const UA_SessionDiagnosticsDataType *src, UA_SessionDiagnosticsDataType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_SESSIONDIAGNOSTICSDATATYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_SessionDiagnosticsDataType_deleteMembers(UA_SessionDiagnosticsDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_SESSIONDIAGNOSTICSDATATYPE]);
-}
-
-static UA_INLINE void
-UA_SessionDiagnosticsDataType_clear(UA_SessionDiagnosticsDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_SESSIONDIAGNOSTICSDATATYPE]);
-}
-
-static UA_INLINE void
-UA_SessionDiagnosticsDataType_delete(UA_SessionDiagnosticsDataType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_SESSIONDIAGNOSTICSDATATYPE]);
-}
-
-/* EnumDescription */
-static UA_INLINE void
-UA_EnumDescription_init(UA_EnumDescription *p) {
-    memset(p, 0, sizeof(UA_EnumDescription));
-}
-
-static UA_INLINE UA_EnumDescription *
-UA_EnumDescription_new(void) {
-    return (UA_EnumDescription*)UA_new(&UA_TYPES[UA_TYPES_ENUMDESCRIPTION]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_EnumDescription_copy(const UA_EnumDescription *src, UA_EnumDescription *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_ENUMDESCRIPTION]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_EnumDescription_deleteMembers(UA_EnumDescription *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_ENUMDESCRIPTION]);
-}
-
-static UA_INLINE void
-UA_EnumDescription_clear(UA_EnumDescription *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_ENUMDESCRIPTION]);
-}
-
-static UA_INLINE void
-UA_EnumDescription_delete(UA_EnumDescription *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_ENUMDESCRIPTION]);
-}
-
-/* UABinaryFileDataType */
-static UA_INLINE void
-UA_UABinaryFileDataType_init(UA_UABinaryFileDataType *p) {
-    memset(p, 0, sizeof(UA_UABinaryFileDataType));
-}
-
-static UA_INLINE UA_UABinaryFileDataType *
-UA_UABinaryFileDataType_new(void) {
-    return (UA_UABinaryFileDataType*)UA_new(&UA_TYPES[UA_TYPES_UABINARYFILEDATATYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_UABinaryFileDataType_copy(const UA_UABinaryFileDataType *src, UA_UABinaryFileDataType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_UABINARYFILEDATATYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_UABinaryFileDataType_deleteMembers(UA_UABinaryFileDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_UABINARYFILEDATATYPE]);
-}
-
-static UA_INLINE void
-UA_UABinaryFileDataType_clear(UA_UABinaryFileDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_UABINARYFILEDATATYPE]);
-}
-
-static UA_INLINE void
-UA_UABinaryFileDataType_delete(UA_UABinaryFileDataType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_UABINARYFILEDATATYPE]);
-}
-
-/* DataSetMetaDataType */
-static UA_INLINE void
-UA_DataSetMetaDataType_init(UA_DataSetMetaDataType *p) {
-    memset(p, 0, sizeof(UA_DataSetMetaDataType));
-}
-
-static UA_INLINE UA_DataSetMetaDataType *
-UA_DataSetMetaDataType_new(void) {
-    return (UA_DataSetMetaDataType*)UA_new(&UA_TYPES[UA_TYPES_DATASETMETADATATYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_DataSetMetaDataType_copy(const UA_DataSetMetaDataType *src, UA_DataSetMetaDataType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_DATASETMETADATATYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_DataSetMetaDataType_deleteMembers(UA_DataSetMetaDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_DATASETMETADATATYPE]);
-}
-
-static UA_INLINE void
-UA_DataSetMetaDataType_clear(UA_DataSetMetaDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_DATASETMETADATATYPE]);
-}
-
-static UA_INLINE void
-UA_DataSetMetaDataType_delete(UA_DataSetMetaDataType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_DATASETMETADATATYPE]);
-}
-
-/* PublishedDataSetDataType */
-static UA_INLINE void
-UA_PublishedDataSetDataType_init(UA_PublishedDataSetDataType *p) {
-    memset(p, 0, sizeof(UA_PublishedDataSetDataType));
-}
-
-static UA_INLINE UA_PublishedDataSetDataType *
-UA_PublishedDataSetDataType_new(void) {
-    return (UA_PublishedDataSetDataType*)UA_new(&UA_TYPES[UA_TYPES_PUBLISHEDDATASETDATATYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_PublishedDataSetDataType_copy(const UA_PublishedDataSetDataType *src, UA_PublishedDataSetDataType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_PUBLISHEDDATASETDATATYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_PublishedDataSetDataType_deleteMembers(UA_PublishedDataSetDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_PUBLISHEDDATASETDATATYPE]);
-}
-
-static UA_INLINE void
-UA_PublishedDataSetDataType_clear(UA_PublishedDataSetDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_PUBLISHEDDATASETDATATYPE]);
-}
-
-static UA_INLINE void
-UA_PublishedDataSetDataType_delete(UA_PublishedDataSetDataType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_PUBLISHEDDATASETDATATYPE]);
-}
-
-/* DataSetReaderDataType */
-static UA_INLINE void
-UA_DataSetReaderDataType_init(UA_DataSetReaderDataType *p) {
-    memset(p, 0, sizeof(UA_DataSetReaderDataType));
-}
-
-static UA_INLINE UA_DataSetReaderDataType *
-UA_DataSetReaderDataType_new(void) {
-    return (UA_DataSetReaderDataType*)UA_new(&UA_TYPES[UA_TYPES_DATASETREADERDATATYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_DataSetReaderDataType_copy(const UA_DataSetReaderDataType *src, UA_DataSetReaderDataType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_DATASETREADERDATATYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_DataSetReaderDataType_deleteMembers(UA_DataSetReaderDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_DATASETREADERDATATYPE]);
-}
-
-static UA_INLINE void
-UA_DataSetReaderDataType_clear(UA_DataSetReaderDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_DATASETREADERDATATYPE]);
-}
-
-static UA_INLINE void
-UA_DataSetReaderDataType_delete(UA_DataSetReaderDataType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_DATASETREADERDATATYPE]);
-}
-
-/* TargetVariablesDataType */
-static UA_INLINE void
-UA_TargetVariablesDataType_init(UA_TargetVariablesDataType *p) {
-    memset(p, 0, sizeof(UA_TargetVariablesDataType));
-}
-
-static UA_INLINE UA_TargetVariablesDataType *
-UA_TargetVariablesDataType_new(void) {
-    return (UA_TargetVariablesDataType*)UA_new(&UA_TYPES[UA_TYPES_TARGETVARIABLESDATATYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_TargetVariablesDataType_copy(const UA_TargetVariablesDataType *src, UA_TargetVariablesDataType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_TARGETVARIABLESDATATYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_TargetVariablesDataType_deleteMembers(UA_TargetVariablesDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_TARGETVARIABLESDATATYPE]);
-}
-
-static UA_INLINE void
-UA_TargetVariablesDataType_clear(UA_TargetVariablesDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_TARGETVARIABLESDATATYPE]);
-}
-
-static UA_INLINE void
-UA_TargetVariablesDataType_delete(UA_TargetVariablesDataType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_TARGETVARIABLESDATATYPE]);
-}
-
-/* DataTypeSchemaHeader */
-static UA_INLINE void
-UA_DataTypeSchemaHeader_init(UA_DataTypeSchemaHeader *p) {
-    memset(p, 0, sizeof(UA_DataTypeSchemaHeader));
-}
-
-static UA_INLINE UA_DataTypeSchemaHeader *
-UA_DataTypeSchemaHeader_new(void) {
-    return (UA_DataTypeSchemaHeader*)UA_new(&UA_TYPES[UA_TYPES_DATATYPESCHEMAHEADER]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_DataTypeSchemaHeader_copy(const UA_DataTypeSchemaHeader *src, UA_DataTypeSchemaHeader *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_DATATYPESCHEMAHEADER]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_DataTypeSchemaHeader_deleteMembers(UA_DataTypeSchemaHeader *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_DATATYPESCHEMAHEADER]);
-}
-
-static UA_INLINE void
-UA_DataTypeSchemaHeader_clear(UA_DataTypeSchemaHeader *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_DATATYPESCHEMAHEADER]);
-}
-
-static UA_INLINE void
-UA_DataTypeSchemaHeader_delete(UA_DataTypeSchemaHeader *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_DATATYPESCHEMAHEADER]);
-}
-
-/* ReaderGroupDataType */
-static UA_INLINE void
-UA_ReaderGroupDataType_init(UA_ReaderGroupDataType *p) {
-    memset(p, 0, sizeof(UA_ReaderGroupDataType));
-}
-
-static UA_INLINE UA_ReaderGroupDataType *
-UA_ReaderGroupDataType_new(void) {
-    return (UA_ReaderGroupDataType*)UA_new(&UA_TYPES[UA_TYPES_READERGROUPDATATYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_ReaderGroupDataType_copy(const UA_ReaderGroupDataType *src, UA_ReaderGroupDataType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_READERGROUPDATATYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_ReaderGroupDataType_deleteMembers(UA_ReaderGroupDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_READERGROUPDATATYPE]);
-}
-
-static UA_INLINE void
-UA_ReaderGroupDataType_clear(UA_ReaderGroupDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_READERGROUPDATATYPE]);
-}
-
-static UA_INLINE void
-UA_ReaderGroupDataType_delete(UA_ReaderGroupDataType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_READERGROUPDATATYPE]);
-}
-
-/* PubSubConnectionDataType */
-static UA_INLINE void
-UA_PubSubConnectionDataType_init(UA_PubSubConnectionDataType *p) {
-    memset(p, 0, sizeof(UA_PubSubConnectionDataType));
-}
-
-static UA_INLINE UA_PubSubConnectionDataType *
-UA_PubSubConnectionDataType_new(void) {
-    return (UA_PubSubConnectionDataType*)UA_new(&UA_TYPES[UA_TYPES_PUBSUBCONNECTIONDATATYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_PubSubConnectionDataType_copy(const UA_PubSubConnectionDataType *src, UA_PubSubConnectionDataType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_PUBSUBCONNECTIONDATATYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_PubSubConnectionDataType_deleteMembers(UA_PubSubConnectionDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_PUBSUBCONNECTIONDATATYPE]);
-}
-
-static UA_INLINE void
-UA_PubSubConnectionDataType_clear(UA_PubSubConnectionDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_PUBSUBCONNECTIONDATATYPE]);
-}
-
-static UA_INLINE void
-UA_PubSubConnectionDataType_delete(UA_PubSubConnectionDataType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_PUBSUBCONNECTIONDATATYPE]);
-}
-
-/* PubSubConfigurationDataType */
-static UA_INLINE void
-UA_PubSubConfigurationDataType_init(UA_PubSubConfigurationDataType *p) {
-    memset(p, 0, sizeof(UA_PubSubConfigurationDataType));
-}
-
-static UA_INLINE UA_PubSubConfigurationDataType *
-UA_PubSubConfigurationDataType_new(void) {
-    return (UA_PubSubConfigurationDataType*)UA_new(&UA_TYPES[UA_TYPES_PUBSUBCONFIGURATIONDATATYPE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_PubSubConfigurationDataType_copy(const UA_PubSubConfigurationDataType *src, UA_PubSubConfigurationDataType *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_PUBSUBCONFIGURATIONDATATYPE]);
-}
-
-UA_DEPRECATED static UA_INLINE void
-UA_PubSubConfigurationDataType_deleteMembers(UA_PubSubConfigurationDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_PUBSUBCONFIGURATIONDATATYPE]);
-}
-
-static UA_INLINE void
-UA_PubSubConfigurationDataType_clear(UA_PubSubConfigurationDataType *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_PUBSUBCONFIGURATIONDATATYPE]);
-}
-
-static UA_INLINE void
-UA_PubSubConfigurationDataType_delete(UA_PubSubConfigurationDataType *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_PUBSUBCONFIGURATIONDATATYPE]);
-}
-
 #if defined(__GNUC__) && __GNUC__ >= 4 && __GNUC_MINOR__ >= 6
 # pragma GCC diagnostic pop
 #endif
@@ -34170,7 +22797,7 @@ UA_PubSubConfigurationDataType_delete(UA_PubSubConfigurationDataType *p) {
 _UA_END_DECLS
 
 
-/*********************************** amalgamated original file "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/include/open62541/util.h" ***********************************/
+/*********************************** amalgamated original file "C:/Projects/open62541Upstream/include/open62541/util.h" ***********************************/
 
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -34194,8 +22821,16 @@ typedef struct UA_Server UA_Server;
 struct UA_ServerConfig;
 typedef struct UA_ServerConfig UA_ServerConfig;
 
+typedef void (*UA_ServerCallback)(UA_Server *server, void *data);
+
 struct UA_Client;
 typedef struct UA_Client UA_Client;
+
+/* Timer policy to handle cycle misses */
+typedef enum {
+    UA_TIMER_HANDLE_CYCLEMISS_WITH_CURRENTTIME,
+    UA_TIMER_HANDLE_CYCLEMISS_WITH_BASETIME
+} UA_TimerPolicy;
 
 /**
  * Endpoint URL Parser
@@ -34250,11 +22885,11 @@ UA_readNumberWithBase(const UA_Byte *buf, size_t buflen,
                       UA_UInt32 *number, UA_Byte base);
 
 #ifndef UA_MIN
-#define UA_MIN(A,B) (A > B ? B : A)
+#define UA_MIN(A, B) ((A) > (B) ? (B) : (A))
 #endif
 
 #ifndef UA_MAX
-#define UA_MAX(A,B) (A > B ? A : B)
+#define UA_MAX(A, B) ((A) > (B) ? (A) : (B))
 #endif
 
 /**
@@ -34349,7 +22984,7 @@ UA_constantTimeEqual(const void *ptr1, const void *ptr2, size_t length) {
 _UA_END_DECLS
 
 
-/*********************************** amalgamated original file "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/include/open62541/plugin/log.h" ***********************************/
+/*********************************** amalgamated original file "C:/Projects/open62541Upstream/include/open62541/plugin/log.h" ***********************************/
 
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -34503,7 +23138,7 @@ UA_LOG_FATAL(const UA_Logger *logger, UA_LogCategory category, const char *msg, 
 _UA_END_DECLS
 
 
-/*********************************** amalgamated original file "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/include/open62541/plugin/network.h" ***********************************/
+/*********************************** amalgamated original file "C:/Projects/open62541Upstream/include/open62541/plugin/network.h" ***********************************/
 
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -34710,7 +23345,7 @@ typedef UA_Connection
 _UA_END_DECLS
 
 
-/*********************************** amalgamated original file "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/include/open62541/plugin/accesscontrol.h" ***********************************/
+/*********************************** amalgamated original file "C:/Projects/open62541Upstream/include/open62541/plugin/accesscontrol.h" ***********************************/
 
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -34839,7 +23474,7 @@ struct UA_AccessControl {
 _UA_END_DECLS
 
 
-/*********************************** amalgamated original file "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/include/open62541/plugin/pki.h" ***********************************/
+/*********************************** amalgamated original file "C:/Projects/open62541Upstream/include/open62541/plugin/pki.h" ***********************************/
 
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -34890,7 +23525,7 @@ struct UA_CertificateVerification {
 _UA_END_DECLS
 
 
-/*********************************** amalgamated original file "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/include/open62541/plugin/securitypolicy.h" ***********************************/
+/*********************************** amalgamated original file "C:/Projects/open62541Upstream/include/open62541/plugin/securitypolicy.h" ***********************************/
 
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -34919,19 +23554,16 @@ typedef struct {
 
     /* Verifies the signature of the message using the provided keys in the context.
      *
-     * @param securityPolicy the securityPolicy the function is invoked on.
      * @param channelContext the channelContext that contains the key to verify
      *                       the supplied message with.
      * @param message the message to which the signature is supposed to belong.
      * @param signature the signature of the message, that should be verified. */
-    UA_StatusCode (*verify)(const UA_SecurityPolicy *securityPolicy,
-                            void *channelContext, const UA_ByteString *message,
+    UA_StatusCode (*verify)(void *channelContext, const UA_ByteString *message,
                             const UA_ByteString *signature) UA_FUNC_ATTR_WARN_UNUSED_RESULT;
 
     /* Signs the given message using this policys signing algorithm and the
      * provided keys in the context.
      *
-     * @param securityPolicy the securityPolicy the function is invoked on.
      * @param channelContext the channelContext that contains the key to sign
      *                       the supplied message with.
      * @param message the message to sign.
@@ -34939,126 +23571,94 @@ typedef struct {
      *                  buffer needs to be allocated by the caller. The
      *                  necessary size can be acquired with the signatureSize
      *                  attribute of this module. */
-    UA_StatusCode (*sign)(const UA_SecurityPolicy *securityPolicy,
-                          void *channelContext, const UA_ByteString *message,
+    UA_StatusCode (*sign)(void *channelContext, const UA_ByteString *message,
                           UA_ByteString *signature) UA_FUNC_ATTR_WARN_UNUSED_RESULT;
 
     /* Gets the signature size that depends on the local (private) key.
      *
-     * @param securityPolicy the securityPolicy the function is invoked on.
      * @param channelContext the channelContext that contains the
      *                       certificate/key.
      * @return the size of the local signature. Returns 0 if no local
      *         certificate was set. */
-    size_t (*getLocalSignatureSize)(const UA_SecurityPolicy *securityPolicy,
-                                    const void *channelContext);
+    size_t (*getLocalSignatureSize)(const void *channelContext);
 
     /* Gets the signature size that depends on the remote (public) key.
      *
-     * @param securityPolicy the securityPolicy the function is invoked on.
      * @param channelContext the context to retrieve data from.
      * @return the size of the remote signature. Returns 0 if no
      *         remote certificate was set previousely. */
-    size_t (*getRemoteSignatureSize)(const UA_SecurityPolicy *securityPolicy,
-                                     const void *channelContext);
+    size_t (*getRemoteSignatureSize)(const void *channelContext);
 
     /* Gets the local signing key length.
      *
-     * @param securityPolicy the securityPolicy the function is invoked on.
      * @param channelContext the context to retrieve data from.
      * @return the length of the signing key in bytes. Returns 0 if no length can be found.
      */
-    size_t (*getLocalKeyLength)(const UA_SecurityPolicy *securityPolicy,
-                                const void *channelContext);
+    size_t (*getLocalKeyLength)(const void *channelContext);
 
     /* Gets the local signing key length.
      *
-     * @param securityPolicy the securityPolicy the function is invoked on.
      * @param channelContext the context to retrieve data from.
      * @return the length of the signing key in bytes. Returns 0 if no length can be found.
      */
-    size_t (*getRemoteKeyLength)(const UA_SecurityPolicy *securityPolicy,
-                                 const void *channelContext);
+    size_t (*getRemoteKeyLength)(const void *channelContext);
 } UA_SecurityPolicySignatureAlgorithm;
 
 typedef struct {
     UA_String uri;
 
-    /* Encrypt the given data in place using an asymmetric algorithm and keys.
+    /* Encrypt the given data in place. For asymmetric encryption, the block
+     * size for plaintext and cypher depend on the remote key (certificate).
      *
-     * @param securityPolicy the securityPolicy the function is invoked on.
      * @param channelContext the channelContext which contains information about
      *                       the keys to encrypt data.
      * @param data the data that is encrypted. The encrypted data will overwrite
      *             the data that was supplied. */
-    UA_StatusCode (*encrypt)(const UA_SecurityPolicy *securityPolicy,
-                             void *channelContext,
+    UA_StatusCode (*encrypt)(void *channelContext,
                              UA_ByteString *data) UA_FUNC_ATTR_WARN_UNUSED_RESULT;
 
-    /* Decrypts the given ciphertext in place using an asymmetric algorithm and
-     * key.
+    /* Decrypts the given ciphertext in place. For asymmetric encryption, the
+     * block size for plaintext and cypher depend on the local private key.
      *
-     * @param securityPolicy the securityPolicy the function is invoked on.
      * @param channelContext the channelContext which contains information about
      *                       the keys needed to decrypt the message.
      * @param data the data to decrypt. The decryption is done in place. */
-    UA_StatusCode (*decrypt)(const UA_SecurityPolicy *securityPolicy,
-                             void *channelContext,
+    UA_StatusCode (*decrypt)(void *channelContext,
                              UA_ByteString *data) UA_FUNC_ATTR_WARN_UNUSED_RESULT;
 
-    /* Returns the length of the key used locally to encrypt messages in bits
+    /* Returns the length of the key used to encrypt messages in bits. For
+     * asymmetric encryption the key length is for the local private key.
      *
-     * @param securityPolicy the securityPolicy the function is invoked on.
      * @param channelContext the context to retrieve data from.
      * @return the length of the local key. Returns 0 if no
      *         key length is known. */
-    size_t (*getLocalKeyLength)(const UA_SecurityPolicy *securityPolicy,
-                                const void *channelContext);
+    size_t (*getLocalKeyLength)(const void *channelContext);
 
-    /* Returns the length of the key used remotely to encrypt messages in bits
+    /* Returns the length of the key to encrypt messages in bits. Depends on the
+     * key (certificate) from the remote side.
      *
-     * @param securityPolicy the securityPolicy the function is invoked on.
      * @param channelContext the context to retrieve data from.
      * @return the length of the remote key. Returns 0 if no
      *         key length is known. */
-    size_t (*getRemoteKeyLength)(const UA_SecurityPolicy *securityPolicy,
-                                 const void *channelContext);
+    size_t (*getRemoteKeyLength)(const void *channelContext);
 
-    /* Returns the size of encrypted blocks used by the local encryption algorithm.
+    /* Returns the size of encrypted blocks for sending. For asymmetric
+     * encryption this depends on the remote key (certificate). For symmetric
+     * encryption the local and remote encrypted block size are identical.
      *
-     * @param securityPolicy the securityPolicy the function is invoked on.
      * @param channelContext the context to retrieve data from.
      * @return the size of encrypted blocks in bytes. Returns 0 if no key length is known.
      */
-    size_t (*getLocalBlockSize)(const UA_SecurityPolicy *securityPolicy,
-                                const void *channelContext);
+    size_t (*getRemoteBlockSize)(const void *channelContext);
 
-    /* Returns the size of encrypted blocks used by the remote encryption algorithm.
+    /* Returns the size of plaintext blocks for sending. For asymmetric
+     * encryption this depends on the remote key (certificate). For symmetric
+     * encryption the local and remote plaintext block size are identical.
      *
-     * @param securityPolicy the securityPolicy the function is invoked on.
-     * @param channelContext the context to retrieve data from.
-     * @return the size of encrypted blocks in bytes. Returns 0 if no key length is known.
-     */
-    size_t (*getRemoteBlockSize)(const UA_SecurityPolicy *securityPolicy,
-                                 const void *channelContext);
-
-    /* Returns the size of plaintext blocks used by the local encryption algorithm.
-     *
-     * @param securityPolicy the securityPolicy the function is invoked on.
      * @param channelContext the context to retrieve data from.
      * @return the size of plaintext blocks in bytes. Returns 0 if no key length is known.
      */
-    size_t (*getLocalPlainTextBlockSize)(const UA_SecurityPolicy *securityPolicy,
-                                         const void *channelContext);
-
-    /* Returns the size of plaintext blocks used by the remote encryption algorithm.
-     *
-     * @param securityPolicy the securityPolicy the function is invoked on.
-     * @param channelContext the context to retrieve data from.
-     * @return the size of plaintext blocks in bytes. Returns 0 if no key length is known.
-     */
-    size_t (*getRemotePlainTextBlockSize)(const UA_SecurityPolicy *securityPolicy,
-                                          const void *channelContext);
+    size_t (*getRemotePlainTextBlockSize)(const void *channelContext);
 } UA_SecurityPolicyEncryptionAlgorithm;
 
 typedef struct {
@@ -35073,7 +23673,6 @@ typedef struct {
 typedef struct {
     /* Generates a thumbprint for the specified certificate.
      *
-     * @param securityPolicy the securityPolicy the function is invoked on.
      * @param certificate the certificate to make a thumbprint of.
      * @param thumbprint an output buffer for the resulting thumbprint. Always
      *                   has the length specified in the thumbprintLength in the
@@ -35083,7 +23682,7 @@ typedef struct {
                                                UA_ByteString *thumbprint)
     UA_FUNC_ATTR_WARN_UNUSED_RESULT;
 
-    /* Compares the supplied certificate with the certificate in the endpoit context.
+    /* Compares the supplied certificate with the certificate in the endpoint context.
      *
      * @param securityPolicy the policy data that contains the certificate
      *                       to compare to.
@@ -35104,26 +23703,22 @@ typedef struct {
      * For information on what parameters this function receives in what situation,
      * refer to the OPC UA specification 1.03 Part6 Table 33
      *
-     * @param securityPolicy the securityPolicy the function is invoked on.
+     * @param policyContext The context of the policy instance
      * @param secret
      * @param seed
      * @param out an output to write the data to. The length defines the maximum
      *            number of output bytes that are produced. */
-    UA_StatusCode (*generateKey)(const UA_SecurityPolicy *securityPolicy,
-                                 const UA_ByteString *secret,
+    UA_StatusCode (*generateKey)(void *policyContext, const UA_ByteString *secret,
                                  const UA_ByteString *seed, UA_ByteString *out)
     UA_FUNC_ATTR_WARN_UNUSED_RESULT;
 
     /* Random generator for generating nonces.
      *
-     * @param securityPolicy the securityPolicy this function is invoked on.
-     *                       Example: myPolicy->generateNonce(myPolicy,
-     *                       &outBuff);
+     * @param policyContext The context of the policy instance
      * @param out pointer to a buffer to store the nonce in. Needs to be
      *            allocated by the caller. The buffer is filled with random
      *            data. */
-    UA_StatusCode (*generateNonce)(const UA_SecurityPolicy *securityPolicy,
-                                   UA_ByteString *out)
+    UA_StatusCode (*generateNonce)(void *policyContext, UA_ByteString *out)
     UA_FUNC_ATTR_WARN_UNUSED_RESULT;
 
     /*
@@ -35249,34 +23844,67 @@ struct UA_SecurityPolicy {
     void (*clear)(UA_SecurityPolicy *policy);
 };
 
-/* Gets the number of bytes that are needed by the encryption function in
- * addition to the length of the plaintext message. This is needed, since
- * most RSA encryption methods have their own padding mechanism included.
- * This makes the encrypted message larger than the plainText, so we need to
- * have enough room in the buffer for the overhead.
+/**
+ * PubSub SecurityPolicy
+ * ---------------------
  *
- * @param securityPolicy the algorithms to use.
- * @param channelContext the retrieve data from.
- * @param maxEncryptionLength the maximum number of bytes that the data to
- *                            encrypt can be. */
-size_t
-UA_SecurityPolicy_getRemoteAsymEncryptionBufferLengthOverhead(const UA_SecurityPolicy *securityPolicy,
-                                                              const void *channelContext,
-                                                              size_t maxEncryptionLength);
+ * For PubSub encryption, the message nonce is part of the (unencrypted)
+ * SecurityHeader. The nonce is required for the de- and encryption and has to
+ * be set in the channel context before de/encrypting. */
 
-/* Gets the a pointer to the context of a security policy supported by the
- * server matched by the security policy uri.
- *
- * @param server the server context.
- * @param securityPolicyUri the security policy to get the context of. */
-UA_SecurityPolicy *
-UA_SecurityPolicy_getSecurityPolicyByUri(const UA_Server *server,
-                                         const UA_ByteString *securityPolicyUri);
+#ifdef UA_ENABLE_PUBSUB_ENCRYPTION
+
+struct UA_PubSubSecurityPolicy;
+typedef struct UA_PubSubSecurityPolicy UA_PubSubSecurityPolicy;
+
+struct UA_PubSubSecurityPolicy {
+    UA_ByteString policyUri; /* The policy uri that identifies the implemented
+                              * algorithms */
+    UA_SecurityPolicySymmetricModule symmetricModule;
+
+    /* Create the context for the WriterGroup. The keys and nonce can be NULL
+     * here. Then they have to be set before the first encryption or signing
+     * operation. */
+    UA_StatusCode
+    (*newContext)(void *policyContext,
+                  const UA_ByteString *signingKey,
+                  const UA_ByteString *encryptingKey,
+                  const UA_ByteString *keyNonce,
+                  void **wgContext);
+
+    /* Delete the WriterGroup SecurityPolicy context */
+    void (*deleteContext)(void *wgContext);
+
+    /* Set the keys and nonce for the WriterGroup. This is returned from the
+     * GetSecurityKeys method of a Security Key Service (SKS). Otherwise, set
+     * manually via out-of-band transmission of the keys. */
+    UA_StatusCode
+    (*setSecurityKeys)(void *wgContext,
+                       const UA_ByteString *signingKey,
+                       const UA_ByteString *encryptingKey,
+                       const UA_ByteString *keyNonce)
+    UA_FUNC_ATTR_WARN_UNUSED_RESULT;
+
+    /* The nonce is contained in the NetworkMessage SecurityHeader. Set before
+     * each en-/decryption step. */
+    UA_StatusCode
+    (*setMessageNonce)(void *wgContext,
+                       const UA_ByteString *nonce)
+    UA_FUNC_ATTR_WARN_UNUSED_RESULT;
+
+    const UA_Logger *logger;
+
+    /* Deletes the dynamic content of the policy */
+    void (*clear)(UA_PubSubSecurityPolicy *policy);
+    void *policyContext;
+};
+
+#endif
 
 _UA_END_DECLS
 
 
-/*********************************** amalgamated original file "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/include/open62541/plugin/pubsub.h" ***********************************/
+/*********************************** amalgamated original file "C:/Projects/open62541Upstream/include/open62541/plugin/pubsub.h" ***********************************/
 
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -35374,7 +24002,7 @@ typedef struct {
 _UA_END_DECLS
 
 
-/*********************************** amalgamated original file "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/deps/ziptree.h" ***********************************/
+/*********************************** amalgamated original file "C:/Projects/open62541Upstream/deps/ziptree.h" ***********************************/
 
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -35622,7 +24250,60 @@ name##_ZIP_ITER(struct name *head, name##_cb cb, void *data) {          \
 #endif
 
 
-/*********************************** amalgamated original file "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/include/open62541/plugin/nodestore.h" ***********************************/
+/*********************************** amalgamated original file "C:/Projects/open62541Upstream/deps/aa_tree.h" ***********************************/
+
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. 
+ *
+ *    Copyright 2020 (c) Fraunhofer IOSB (Author: Julius Pfrommer)
+ */
+
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+enum aa_cmp {
+    AA_CMP_LESS = -1,
+    AA_CMP_EQ = 0,
+    AA_CMP_MORE = 1
+};
+
+struct aa_entry {
+    struct aa_entry *left;
+    struct aa_entry *right;
+    unsigned int level;
+};
+
+struct aa_head {
+    struct aa_entry *root;
+    enum aa_cmp (*cmp)(const void* a, const void* b);
+    /* Offset from the container element to the aa_entry and the key */
+    unsigned int entry_offset;
+    unsigned int key_offset;
+};
+
+/* The AA-Tree allows duplicate entries. The first matching key is returned in
+ * aa_find. */
+
+void aa_init(struct aa_head *head,
+             enum aa_cmp (*cmp)(const void*, const void*),
+             unsigned int entry_offset, unsigned int key_offset);
+void aa_insert(struct aa_head *head, void *elem);
+void aa_remove(struct aa_head *head, void *elem);
+void * aa_find(const struct aa_head *head, const void *key);
+void * aa_min(const struct aa_head *head);
+void * aa_max(const struct aa_head *head);
+void * aa_next(const struct aa_head *head, const void *elem);
+void * aa_prev(const struct aa_head *head, const void *elem);
+
+#ifdef __cplusplus
+} /* extern "C" */
+#endif
+
+
+/*********************************** amalgamated original file "C:/Projects/open62541Upstream/include/open62541/plugin/nodestore.h" ***********************************/
 
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -35880,44 +24561,20 @@ UA_ReferenceTypeSet_contains(const UA_ReferenceTypeSet *set, UA_Byte index) {
  * correctness of casting from ``UA_Node`` to a specific node type. */
 
 /* Ordered tree structure for fast member check */
-typedef struct UA_ReferenceTarget {
-    /* Zip-Tree for fast lookup */
-    ZIP_ENTRY(UA_ReferenceTarget) idTreeFields; /* Must be the first member */
-    ZIP_ENTRY(UA_ReferenceTarget) nameTreeFields;
-    UA_UInt32 targetIdHash;   /* Hash of the target's NodeId */
-    UA_UInt32 targetNameHash; /* Hash of the target's BrowseName */
-
-    /* Emulate the queue.h structure so we don't have to include it in the
-     * public API */
-    struct {
-        struct UA_ReferenceTarget *tqe_next;
-        struct UA_ReferenceTarget **tqe_prev;
-    } queuePointers;
-
+typedef struct {
+    struct aa_entry idTreeEntry; /* Binary-Tree for fast lookup */
+    struct aa_entry nameTreeEntry;
+    UA_UInt32 targetIdHash;      /* Hash of the target's NodeId */
+    UA_UInt32 targetNameHash;    /* Hash of the target's BrowseName */
     UA_ExpandedNodeId targetId;
 } UA_ReferenceTarget;
 
-ZIP_HEAD(UA_ReferenceTargetIdTree, UA_ReferenceTarget);
-typedef struct UA_ReferenceTargetIdTree UA_ReferenceTargetIdTree;
-ZIP_PROTOTYPE(UA_ReferenceTargetIdTree, UA_ReferenceTarget, UA_ReferenceTarget)
-
-ZIP_HEAD(UA_ReferenceTargetNameTree, UA_ReferenceTarget);
-typedef struct UA_ReferenceTargetNameTree UA_ReferenceTargetNameTree;
-ZIP_PROTOTYPE(UA_ReferenceTargetNameTree, UA_ReferenceTarget, UA_UInt32)
-
 /* List of reference targets with the same reference type and direction */
 typedef struct {
+    struct aa_entry *idTreeRoot;   /* Fast lookup based on the target id */
+    struct aa_entry *nameTreeRoot; /* Fast lookup based on the target browseName*/
     UA_Byte referenceTypeIndex;
     UA_Boolean isInverse;
-
-    /* Emulate the queue.h structure so we don't have to include it in the
-     * public API */
-    struct {
-        struct UA_ReferenceTarget *tqh_first;
-        struct UA_ReferenceTarget **tqh_last;
-    } queueHead;
-    UA_ReferenceTargetIdTree refTargetsIdTree;
-    UA_ReferenceTargetNameTree refTargetsNameTree;
 } UA_NodeReferenceKind;
 
 /* Every Node starts with these attributes */
@@ -35955,7 +24612,7 @@ typedef struct {
  * attributes.
  *
  * Data Type
- * ^^^^^^^^^
+ * ~~~~~~~~~
  *
  * The (scalar) data type of the variable is constrained to be of a specific
  * type or one of its children in the type hierarchy. The data type is given as
@@ -35972,7 +24629,7 @@ typedef struct {
  * :ref:`VariableTypeNode` is ensured.
  *
  * Value Rank
- * ^^^^^^^^^^
+ * ~~~~~~~~~~
  *
  * This attribute indicates whether the value attribute of the variable is an
  * array and how many dimensions the array has. It may have the following
@@ -35988,7 +24645,7 @@ typedef struct {
  * :ref:`variabletypenode` is ensured.
  *
  * Array Dimensions
- * ^^^^^^^^^^^^^^^^
+ * ~~~~~~~~~~~~~~~~
  *
  * If the value rank permits the value to be a (multi-dimensional) array, the
  * exact length in each dimensions can be further constrained with this
@@ -36114,7 +24771,7 @@ typedef struct {
  * .. _value-callback:
  *
  * Value Callback
- * ^^^^^^^^^^^^^^
+ * ~~~~~~~~~~~~~~
  * Value Callbacks can be attached to variable and variable type nodes. If
  * not ``NULL``, they are called before reading and after writing respectively. */
 typedef struct {
@@ -36193,6 +24850,13 @@ typedef struct {
     UA_Byte accessLevel;
     UA_Double minimumSamplingInterval;
     UA_Boolean historizing;
+
+    /* Members specific to open62541 */
+    UA_Boolean isDynamic; /* Some variables are "static" in the sense that they
+                           * are not attached to a dynamic process in the
+                           * background. Only dynamic variables conserve source
+                           * and server timestamp for the value attribute.
+                           * Static variables have timestamps of "now". */
 } UA_VariableNode;
 
 /**
@@ -36568,7 +25232,796 @@ UA_Node_clear(UA_Node *node);
 _UA_END_DECLS
 
 
-/*********************************** amalgamated original file "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/include/open62541/server.h" ***********************************/
+/*********************************** amalgamated original file "C:/Projects/open62541Upstream/include/open62541/server_pubsub.h" ***********************************/
+
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * Copyright (c) 2017-2018 Fraunhofer IOSB (Author: Andreas Ebner)
+ * Copyright (c) 2019 Kalycito Infotech Private Limited
+ */
+
+#ifndef UA_SERVER_PUBSUB_H
+#define UA_SERVER_PUBSUB_H
+
+
+_UA_BEGIN_DECLS
+
+#ifdef UA_ENABLE_PUBSUB
+
+/**
+ * .. _pubsub:
+ *
+ * PubSub
+ * ======
+ *
+ * In PubSub the participating OPC UA Applications take their roles as
+ * Publishers and Subscribers. Publishers are the sources of data, while
+ * Subscribers consume that data. Communication in PubSub is message-based.
+ * Publishers send messages to a Message Oriented Middleware, without knowledge
+ * of what, if any, Subscribers there may be. Similarly, Subscribers express
+ * interest in specific types of data, and process messages that contain this
+ * data, without knowledge of what Publishers there are.
+ *
+ * Message Oriented Middleware is software or hardware infrastructure that
+ * supports sending and receiving messages between distributed systems. OPC UA
+ * PubSub supports two different Message Oriented Middleware variants, namely
+ * the broker-less form and broker-based form. A broker-less form is where the
+ * Message Oriented Middleware is the network infrastructure that is able to
+ * route datagram-based messages. Subscribers and Publishers use datagram
+ * protocols like UDP. In a broker-based form, the core component of the Message
+ * Oriented Middleware is a message Broker. Subscribers and Publishers use
+ * standard messaging protocols like AMQP or MQTT to communicate with the
+ * Broker.
+ *
+ * This makes PubSub suitable for applications where location independence
+ * and/or scalability are required.
+ *
+ * The Publish/Subscribe (PubSub) extension for OPC UA enables fast and
+ * efficient 1:m communication. The PubSub extension is protocol agnostic and
+ * can be used with broker based protocols like MQTT and AMQP or brokerless
+ * implementations like UDP-Multicasting.
+ *
+ * The PubSub API uses the following scheme:
+ *
+ * 1. Create a configuration for the needed PubSub element.
+ *
+ * 2. Call the add[element] function and pass in the configuration.
+ *
+ * 3. The add[element] function returns the unique nodeId of the internally created element.
+ *
+ * Take a look on the PubSub Tutorials for more details about the API usage.::
+ *
+ *  +-----------+
+ *  | UA_Server |
+ *  +-----------+
+ *   |    |
+ *   |    |
+ *   |    |
+ *   |    |  +----------------------+
+ *   |    +--> UA_PubSubConnection  |  UA_Server_addPubSubConnection
+ *   |       +----------------------+
+ *   |        |    |
+ *   |        |    |    +----------------+
+ *   |        |    +----> UA_WriterGroup |  UA_PubSubConnection_addWriterGroup
+ *   |        |         +----------------+
+ *   |        |              |
+ *   |        |              |    +------------------+
+ *   |        |              +----> UA_DataSetWriter |  UA_WriterGroup_addDataSetWriter     +-+
+ *   |        |                   +------------------+                                        |
+ *   |        |                                                                               |
+ *   |        |         +----------------+                                                    | r
+ *   |        +---------> UA_ReaderGroup |    UA_PubSubConnection_addReaderGroup              | e
+ *   |                  +----------------+                                                    | f
+ *   |                       |                                                                |
+ *   |                       |    +------------------+                                        |
+ *   |                       +----> UA_DataSetReader |  UA_ReaderGroup_addDataSetReader       |
+ *   |                            +------------------+                                        |
+ *   |                                 |                                                      |
+ *   |                                 |    +----------------------+                          |
+ *   |                                 +----> UA_SubscribedDataSet |                          |
+ *   |                                      +----------------------+                          |
+ *   |                                           |                                            |
+ *   |                                           |    +----------------------------+          |
+ *   |                                           +----> UA_TargetVariablesDataType |          |
+ *   |                                           |    +----------------------------+          |
+ *   |                                           |                                            |
+ *   |                                           |    +------------------------------------+  |
+ *   |                                           +----> UA_SubscribedDataSetMirrorDataType |  |
+ *   |                                                +------------------------------------+  |
+ *   |                                                                                        |
+ *   |       +---------------------------+                                                    |
+ *   +-------> UA_PubSubPublishedDataSet |  UA_Server_addPublishedDataSet                   <-+
+ *           +---------------------------+
+ *                 |
+ *                 |    +-----------------+
+ *                 +----> UA_DataSetField |  UA_PublishedDataSet_addDataSetField
+ *                      +-----------------+
+ *
+ * PubSub Information Model Representation
+ * ---------------------------------------
+ * .. _pubsub_informationmodel:
+ *
+ * The complete PubSub configuration is available inside the information model.
+ * The entry point is the node 'PublishSubscribe, located under the Server node.
+ * The standard defines for PubSub no new Service set. The configuration can optionally
+ * done over methods inside the information model. The information model representation
+ * of the current PubSub configuration is generated automatically. This feature
+ * can enabled/disable by changing the UA_ENABLE_PUBSUB_INFORMATIONMODEL option.
+ *
+ * Connections
+ * -----------
+ * The PubSub connections are the abstraction between the concrete transport protocol
+ * and the PubSub functionality. It is possible to create multiple connections with
+ * different transport protocols at runtime.
+ *
+ * Take a look on the PubSub Tutorials for mor details about the API usage.
+ */
+
+typedef enum  {
+    UA_PUBSUB_COMPONENT_CONNECTION,
+    UA_PUBSUB_COMPONENT_WRITERGROUP,
+    UA_PUBSUB_COMPONENT_DATASETWRITER,
+    UA_PUBSUB_COMPONENT_READERGROUP,
+    UA_PUBSUB_COMPONENT_DATASETREADER
+} UA_PubSubComponentEnumType;
+
+typedef enum {
+    UA_PUBSUB_PUBLISHERID_NUMERIC,
+    UA_PUBSUB_PUBLISHERID_STRING
+} UA_PublisherIdType;
+
+struct UA_PubSubConnectionConfig {
+    UA_String name;
+    UA_Boolean enabled;
+    UA_PublisherIdType publisherIdType;
+    union { /* std: valid types UInt or String */
+        UA_UInt32 numeric;
+        UA_String string;
+    } publisherId;
+    UA_String transportProfileUri;
+    UA_Variant address;
+    size_t connectionPropertiesSize;
+    UA_KeyValuePair *connectionProperties;
+    UA_Variant connectionTransportSettings;
+};
+
+#ifdef UA_ENABLE_PUBSUB_MONITORING
+
+typedef enum {
+    UA_PUBSUB_MONITORING_MESSAGE_RECEIVE_TIMEOUT
+    // extend as needed
+} UA_PubSubMonitoringType;
+
+/* PubSub monitoring interface */
+typedef struct {
+    UA_StatusCode (*createMonitoring)(UA_Server *server, UA_NodeId Id,
+                                      UA_PubSubComponentEnumType eComponentType,
+                                      UA_PubSubMonitoringType eMonitoringType,
+                                      void *data, UA_ServerCallback callback);
+    UA_StatusCode (*startMonitoring)(UA_Server *server, UA_NodeId Id,
+                                     UA_PubSubComponentEnumType eComponentType,
+                                     UA_PubSubMonitoringType eMonitoringType, void *data);
+    UA_StatusCode (*stopMonitoring)(UA_Server *server, UA_NodeId Id,
+                                    UA_PubSubComponentEnumType eComponentType,
+                                    UA_PubSubMonitoringType eMonitoringType, void *data);
+    UA_StatusCode (*updateMonitoringInterval)(UA_Server *server, UA_NodeId Id,
+                                              UA_PubSubComponentEnumType eComponentType,
+                                              UA_PubSubMonitoringType eMonitoringType,
+                                              void *data);
+    UA_StatusCode (*deleteMonitoring)(UA_Server *server, UA_NodeId Id,
+                                      UA_PubSubComponentEnumType eComponentType,
+                                      UA_PubSubMonitoringType eMonitoringType, void *data);
+} UA_PubSubMonitoringInterface;
+
+#endif /* UA_ENABLE_PUBSUB_MONITORING */
+
+/* General PubSub configuration */
+struct UA_PubSubConfiguration {
+    /* PubSub network layer */
+    size_t transportLayersSize;
+    UA_PubSubTransportLayer *transportLayers;
+
+    /* Callback for PubSub component state changes: If provided this callback
+     * informs the application about PubSub component state changes. E.g. state
+     * change from operational to error in case of a DataSetReader
+     * MessageReceiveTimeout. The status code provides additional
+     * information. */
+    void (*stateChangeCallback)(UA_NodeId *Id, UA_PubSubState state,
+                                UA_StatusCode status);
+    /* TODO: maybe status code provides not enough information about the state change */
+
+#ifdef UA_ENABLE_PUBSUB_ENCRYPTION
+    /* PubSub security policies */
+    size_t securityPoliciesSize;
+    UA_PubSubSecurityPolicy *securityPolicies;
+#endif
+
+#ifdef UA_ENABLE_PUBSUB_MONITORING
+    UA_PubSubMonitoringInterface monitoringInterface;
+#endif
+};
+
+
+/**
+ * The UA_ServerConfig_addPubSubTransportLayer is used to add a transport layer
+ * to the server configuration. The list memory is allocated and will be freed
+ * with UA_PubSubManager_delete.
+ *
+ * .. note:: If the UA_String transportProfileUri was dynamically allocated
+ *           the memory has to be freed when no longer required.
+ *
+ * .. note:: This has to be done before the server is started with UA_Server_run. */
+
+UA_StatusCode UA_EXPORT
+UA_ServerConfig_addPubSubTransportLayer(UA_ServerConfig *config,
+                                        UA_PubSubTransportLayer pubsubTransportLayer);
+
+UA_StatusCode UA_EXPORT
+UA_Server_addPubSubConnection(UA_Server *server,
+                              const UA_PubSubConnectionConfig *connectionConfig,
+                              UA_NodeId *connectionIdentifier);
+
+/* Returns a deep copy of the config */
+UA_StatusCode UA_EXPORT
+UA_Server_getPubSubConnectionConfig(UA_Server *server,
+                                    const UA_NodeId connection,
+                                    UA_PubSubConnectionConfig *config);
+
+/* Remove Connection, identified by the NodeId. Deletion of Connection
+ * removes all contained WriterGroups and Writers. */
+UA_StatusCode UA_EXPORT
+UA_Server_removePubSubConnection(UA_Server *server, const UA_NodeId connection);
+
+/**
+ * PublishedDataSets
+ * -----------------
+ * The PublishedDataSets (PDS) are containers for the published information. The
+ * PDS contain the published variables and meta informations. The metadata is
+ * commonly autogenerated or given as constant argument as part of the template
+ * functions. The template functions are standard defined and intended for
+ * configuration tools. You should normally create a empty PDS and call the
+ * functions to add new fields. */
+
+/* The UA_PUBSUB_DATASET_PUBLISHEDITEMS has currently no additional members and
+ * thus no dedicated config structure. */
+
+typedef enum {
+    UA_PUBSUB_DATASET_PUBLISHEDITEMS,
+    UA_PUBSUB_DATASET_PUBLISHEDEVENTS,
+    UA_PUBSUB_DATASET_PUBLISHEDITEMS_TEMPLATE,
+    UA_PUBSUB_DATASET_PUBLISHEDEVENTS_TEMPLATE,
+} UA_PublishedDataSetType;
+
+typedef struct {
+    UA_DataSetMetaDataType metaData;
+    size_t variablesToAddSize;
+    UA_PublishedVariableDataType *variablesToAdd;
+} UA_PublishedDataItemsTemplateConfig;
+
+typedef struct {
+    UA_NodeId eventNotfier;
+    UA_ContentFilter filter;
+} UA_PublishedEventConfig;
+
+typedef struct {
+    UA_DataSetMetaDataType metaData;
+    UA_NodeId eventNotfier;
+    size_t selectedFieldsSize;
+    UA_SimpleAttributeOperand *selectedFields;
+    UA_ContentFilter filter;
+} UA_PublishedEventTemplateConfig;
+
+/* Configuration structure for PublishedDataSet */
+typedef struct {
+    UA_String name;
+    UA_PublishedDataSetType publishedDataSetType;
+    union {
+        /* The UA_PUBSUB_DATASET_PUBLISHEDITEMS has currently no additional members
+         * and thus no dedicated config structure.*/
+        UA_PublishedDataItemsTemplateConfig itemsTemplate;
+        UA_PublishedEventConfig event;
+        UA_PublishedEventTemplateConfig eventTemplate;
+    } config;
+} UA_PublishedDataSetConfig;
+
+void UA_EXPORT
+UA_PublishedDataSetConfig_clear(UA_PublishedDataSetConfig *pdsConfig);
+
+typedef struct {
+    UA_StatusCode addResult;
+    size_t fieldAddResultsSize;
+    UA_StatusCode *fieldAddResults;
+    UA_ConfigurationVersionDataType configurationVersion;
+} UA_AddPublishedDataSetResult;
+
+UA_AddPublishedDataSetResult UA_EXPORT
+UA_Server_addPublishedDataSet(UA_Server *server,
+                              const UA_PublishedDataSetConfig *publishedDataSetConfig,
+                              UA_NodeId *pdsIdentifier);
+
+/* Returns a deep copy of the config */
+UA_StatusCode UA_EXPORT
+UA_Server_getPublishedDataSetConfig(UA_Server *server, const UA_NodeId pds,
+                                    UA_PublishedDataSetConfig *config);
+
+/* Returns a deep copy of the DataSetMetaData for an specific PDS */
+UA_StatusCode UA_EXPORT
+UA_Server_getPublishedDataSetMetaData(UA_Server *server, const UA_NodeId pds,
+                                      UA_DataSetMetaDataType *metaData);
+
+/* Remove PublishedDataSet, identified by the NodeId. Deletion of PDS removes
+ * all contained and linked PDS Fields. Connected WriterGroups will be also
+ * removed. */
+UA_StatusCode UA_EXPORT
+UA_Server_removePublishedDataSet(UA_Server *server, const UA_NodeId pds);
+
+/**
+ * DataSetFields
+ * -------------
+ * The description of published variables is named DataSetField. Each
+ * DataSetField contains the selection of one information model node. The
+ * DataSetField has additional parameters for the publishing, sampling and error
+ * handling process. */
+
+typedef struct{
+    UA_ConfigurationVersionDataType configurationVersion;
+    UA_String fieldNameAlias;
+    UA_Boolean promotedField;
+    UA_PublishedVariableDataType publishParameters;
+
+    /* non std. field */
+    struct {
+        UA_Boolean rtFieldSourceEnabled;
+        /* If the rtInformationModelNode is set, the nodeid in publishParameter must point
+         * to a node with external data source backend defined
+         * */
+        UA_Boolean rtInformationModelNode;
+        //TODO -> decide if suppress C++ warnings and use 'UA_DataValue * * const staticValueSource;'
+        UA_DataValue ** staticValueSource;
+    } rtValueSource;
+
+
+} UA_DataSetVariableConfig;
+
+typedef enum {
+    UA_PUBSUB_DATASETFIELD_VARIABLE,
+    UA_PUBSUB_DATASETFIELD_EVENT
+} UA_DataSetFieldType;
+
+typedef struct {
+    UA_DataSetFieldType dataSetFieldType;
+    union {
+        /* events need other config later */
+        UA_DataSetVariableConfig variable;
+    } field;
+} UA_DataSetFieldConfig;
+
+void UA_EXPORT
+UA_DataSetFieldConfig_clear(UA_DataSetFieldConfig *dataSetFieldConfig);
+
+typedef struct {
+    UA_StatusCode result;
+    UA_ConfigurationVersionDataType configurationVersion;
+} UA_DataSetFieldResult;
+
+UA_DataSetFieldResult UA_EXPORT
+UA_Server_addDataSetField(UA_Server *server,
+                          const UA_NodeId publishedDataSet,
+                          const UA_DataSetFieldConfig *fieldConfig,
+                          UA_NodeId *fieldIdentifier);
+
+/* Returns a deep copy of the config */
+UA_StatusCode UA_EXPORT
+UA_Server_getDataSetFieldConfig(UA_Server *server, const UA_NodeId dsf,
+                                UA_DataSetFieldConfig *config);
+
+UA_DataSetFieldResult UA_EXPORT
+UA_Server_removeDataSetField(UA_Server *server, const UA_NodeId dsf);
+
+/**
+ * Custom Callback Implementation
+ * ------------------------------
+ * The user can use his own callback implementation for publishing
+ * and subscribing. The user must take care of the callback to call for
+ * every publishing or subscibing interval */
+
+typedef struct {
+    /* User's callback implementation. The user configured base time and timer policy
+     * will be provided as an argument to this callback so that the user can
+     * implement his callback (thread) considering base time and timer policies */
+    UA_StatusCode (*addCustomCallback)(UA_Server *server, UA_NodeId identifier,
+                                       UA_ServerCallback callback,
+                                       void *data, UA_Double interval_ms,
+                                       UA_DateTime *baseTime, UA_TimerPolicy timerPolicy,
+                                       UA_UInt64 *callbackId);
+
+    UA_StatusCode (*changeCustomCallback)(UA_Server *server, UA_NodeId identifier,
+                                          UA_UInt64 callbackId, UA_Double interval_ms,
+                                          UA_DateTime *baseTime, UA_TimerPolicy timerPolicy);
+
+    void (*removeCustomCallback)(UA_Server *server, UA_NodeId identifier, UA_UInt64 callbackId);
+
+} UA_PubSub_CallbackLifecycle;
+
+/**
+ * WriterGroup
+ * -----------
+ * All WriterGroups are created within a PubSubConnection and automatically
+ * deleted if the connection is removed. The WriterGroup is primary used as
+ * container for :ref:`dsw` and network message settings. The WriterGroup can be
+ * imagined as producer of the network messages. The creation of network
+ * messages is controlled by parameters like the publish interval, which is e.g.
+ * contained in the WriterGroup. */
+
+typedef enum {
+    UA_PUBSUB_ENCODING_BINARY,
+    UA_PUBSUB_ENCODING_JSON,
+    UA_PUBSUB_ENCODING_UADP
+} UA_PubSubEncodingType;
+
+/**
+ * WriterGroup
+ * -----------
+ * The message publishing can be configured for realtime requirements. The RT-levels
+ * go along with different requirements. The below listed levels can be configured:
+ *
+ * UA_PUBSUB_RT_NONE -
+ * ---> Description: Default "none-RT" Mode
+ * ---> Requirements: -
+ * ---> Restrictions: -
+ * UA_PUBSUB_RT_DIRECT_VALUE_ACCESS (Preview - not implemented)
+ * ---> Description: Normally, the latest value for each DataSetField is read out of the information model. Within this RT-mode, the
+ * value source of each field configured as static pointer to an DataValue. The publish cycle won't use call the server read function.
+ * ---> Requirements: All fields must be configured with a 'staticValueSource'.
+ * ---> Restrictions: -
+ * UA_PUBSUB_RT_FIXED_LENGTH (Preview - not implemented)
+ * ---> Description: All DataSetFields have a known, non-changing length. The server will pre-generate some
+ * buffers and use only memcopy operations to generate requested PubSub packages.
+ * ---> Requirements: DataSetFields with variable size can't be used within this mode.
+ * ---> Restrictions: The configuration must be frozen and changes are not allowed while the WriterGroup is 'Operational'.
+ * UA_PUBSUB_RT_DETERMINISTIC (Preview - not implemented)
+ * ---> Description: -
+ * ---> Requirements: -
+ * ---> Restrictions: -
+ *
+ * WARNING! For hard real time requirements the underlying system must be rt-capable.
+ *
+ */
+typedef enum {
+    UA_PUBSUB_RT_NONE = 0,
+    UA_PUBSUB_RT_DIRECT_VALUE_ACCESS = 1,
+    UA_PUBSUB_RT_FIXED_SIZE = 2,
+    UA_PUBSUB_RT_DETERMINISTIC = 4,
+} UA_PubSubRTLevel;
+
+typedef struct {
+    UA_String name;
+    UA_Boolean enabled;
+    UA_UInt16 writerGroupId;
+    UA_Duration publishingInterval;
+    UA_Double keepAliveTime;
+    UA_Byte priority;
+    UA_ExtensionObject transportSettings;
+    UA_ExtensionObject messageSettings;
+    size_t groupPropertiesSize;
+    UA_KeyValuePair *groupProperties;
+    UA_PubSubEncodingType encodingMimeType;
+    /* PubSub Manager Callback */
+    UA_PubSub_CallbackLifecycle pubsubManagerCallback;
+    /* non std. config parameter. maximum count of embedded DataSetMessage in
+     * one NetworkMessage */
+    UA_UInt16 maxEncapsulatedDataSetMessageCount;
+    /* non std. field */
+    UA_PubSubRTLevel rtLevel;
+
+    /* Message are encrypted if a SecurityPolicy is configured and the
+     * securityMode set accordingly. The symmetric key is a runtime information
+     * and has to be set set via UA_Server_setWriterGroupEncryptionKey. */
+    UA_MessageSecurityMode securityMode; /* via the UA_WriterGroupDataType */
+#ifdef UA_ENABLE_PUBSUB_ENCRYPTION
+    UA_PubSubSecurityPolicy *securityPolicy;
+#endif
+} UA_WriterGroupConfig;
+
+void UA_EXPORT
+UA_WriterGroupConfig_clear(UA_WriterGroupConfig *writerGroupConfig);
+
+/* Add a new WriterGroup to an existing Connection */
+UA_StatusCode UA_EXPORT
+UA_Server_addWriterGroup(UA_Server *server, const UA_NodeId connection,
+                         const UA_WriterGroupConfig *writerGroupConfig,
+                         UA_NodeId *writerGroupIdentifier);
+
+/* Returns a deep copy of the config */
+UA_StatusCode UA_EXPORT
+UA_Server_getWriterGroupConfig(UA_Server *server, const UA_NodeId writerGroup,
+                               UA_WriterGroupConfig *config);
+
+UA_StatusCode UA_EXPORT
+UA_Server_updateWriterGroupConfig(UA_Server *server, UA_NodeId writerGroupIdentifier,
+                                  const UA_WriterGroupConfig *config);
+
+/* Get state of WriterGroup */
+UA_StatusCode UA_EXPORT
+UA_Server_WriterGroup_getState(UA_Server *server, UA_NodeId writerGroupIdentifier,
+                               UA_PubSubState *state);
+
+UA_StatusCode UA_EXPORT
+UA_Server_removeWriterGroup(UA_Server *server, const UA_NodeId writerGroup);
+
+UA_StatusCode UA_EXPORT
+UA_Server_freezeWriterGroupConfiguration(UA_Server *server, const UA_NodeId writerGroup);
+
+UA_StatusCode UA_EXPORT
+UA_Server_unfreezeWriterGroupConfiguration(UA_Server *server, const UA_NodeId writerGroup);
+
+UA_StatusCode UA_EXPORT
+UA_Server_setWriterGroupOperational(UA_Server *server, const UA_NodeId writerGroup);
+
+UA_StatusCode UA_EXPORT
+UA_Server_setWriterGroupDisabled(UA_Server *server, const UA_NodeId writerGroup);
+
+#ifdef UA_ENABLE_PUBSUB_ENCRYPTION
+/* Set the group key for the message encryption */
+UA_StatusCode UA_EXPORT
+UA_Server_setWriterGroupEncryptionKeys(UA_Server *server, const UA_NodeId writerGroup,
+                                       UA_UInt32 securityTokenId,
+                                       const UA_ByteString signingKey,
+                                       const UA_ByteString encryptingKey,
+                                       const UA_ByteString keyNonce);
+#endif
+
+
+/**
+ * .. _dsw:
+ *
+ * DataSetWriter
+ * -------------
+ * The DataSetWriters are the glue between the WriterGroups and the
+ * PublishedDataSets. The DataSetWriter contain configuration parameters and
+ * flags which influence the creation of DataSet messages. These messages are
+ * encapsulated inside the network message. The DataSetWriter must be linked
+ * with an existing PublishedDataSet and be contained within a WriterGroup. */
+
+typedef struct {
+    UA_String name;
+    UA_UInt16 dataSetWriterId;
+    UA_DataSetFieldContentMask dataSetFieldContentMask;
+    UA_UInt32 keyFrameCount;
+    UA_ExtensionObject messageSettings;
+    UA_ExtensionObject transportSettings;
+    UA_String dataSetName;
+    size_t dataSetWriterPropertiesSize;
+    UA_KeyValuePair *dataSetWriterProperties;
+} UA_DataSetWriterConfig;
+
+void UA_EXPORT
+UA_DataSetWriterConfig_clear(UA_DataSetWriterConfig *pdsConfig);
+
+/* Add a new DataSetWriter to a existing WriterGroup. The DataSetWriter must be
+ * coupled with a PublishedDataSet on creation.
+ *
+ * Part 14, 7.1.5.2.1 defines: The link between the PublishedDataSet and
+ * DataSetWriter shall be created when an instance of the DataSetWriterType is
+ * created. */
+UA_StatusCode UA_EXPORT
+UA_Server_addDataSetWriter(UA_Server *server,
+                           const UA_NodeId writerGroup, const UA_NodeId dataSet,
+                           const UA_DataSetWriterConfig *dataSetWriterConfig,
+                           UA_NodeId *writerIdentifier);
+
+/* Returns a deep copy of the config */
+UA_StatusCode UA_EXPORT
+UA_Server_getDataSetWriterConfig(UA_Server *server, const UA_NodeId dsw,
+                                 UA_DataSetWriterConfig *config);
+
+/* Get state of DataSetWriter */
+UA_StatusCode UA_EXPORT
+UA_Server_DataSetWriter_getState(UA_Server *server, UA_NodeId dataSetWriterIdentifier,
+                               UA_PubSubState *state);
+
+UA_StatusCode UA_EXPORT
+UA_Server_removeDataSetWriter(UA_Server *server, const UA_NodeId dsw);
+
+/**
+ * SubscribedDataSet
+ * -----------------
+ * SubscribedDataSet describes the processing of the received DataSet.
+ * SubscribedDataSet defines which field in the DataSet is mapped to which
+ * Variable in the OPC UA Application. SubscribedDataSet has two sub-types
+ * called the TargetVariablesType and SubscribedDataSetMirrorType.
+ * SubscribedDataSetMirrorType is currently not supported. SubscribedDataSet is
+ * set to TargetVariablesType and then the list of target Variables are created
+ * in the Subscriber AddressSpace. TargetVariables are a list of variables that
+ * are to be added in the Subscriber AddressSpace. It defines a list of Variable
+ * mappings between received DataSet fields and added Variables in the
+ * Subscriber AddressSpace. */
+
+/* SubscribedDataSetDataType Definition */
+typedef enum {
+    UA_PUBSUB_SDS_TARGET,
+    UA_PUBSUB_SDS_MIRROR
+} UA_SubscribedDataSetEnumType;
+
+typedef struct {
+    /* Standard-defined FieldTargetDataType */
+    UA_FieldTargetDataType targetVariable;
+
+    /* If realtime-handling is required, set this pointer non-NULL and it will be used
+     * to memcpy the value instead of using the Write service.
+     * If the afterWrite method pointer is set, it will be called after a memcpy update
+     * to the value. */
+    UA_DataValue **externalDataValue;
+    void *targetVariableContext; /* user-defined pointer */
+    void (*afterWrite)(UA_Server *server,
+                       const UA_NodeId *readerIdentifier,
+                       const UA_NodeId *readerGroupIdentifier,
+                       const UA_NodeId *targetVariableIdentifier,
+                       void *targetVariableContext,
+                       UA_DataValue **externalDataValue);
+} UA_FieldTargetVariable;
+
+typedef struct {
+    size_t targetVariablesSize;
+    UA_FieldTargetVariable *targetVariables;
+} UA_TargetVariables;
+
+/* Return Status Code after creating TargetVariables in Subscriber AddressSpace */
+UA_StatusCode UA_EXPORT
+UA_Server_DataSetReader_createTargetVariables(UA_Server *server,
+                                              UA_NodeId dataSetReaderIdentifier,
+                                              size_t targetVariablesSize,
+                                              const UA_FieldTargetVariable *targetVariables);
+
+/* To Do:Implementation of SubscribedDataSetMirrorType
+ * UA_StatusCode
+ * A_PubSubDataSetReader_createDataSetMirror(UA_Server *server, UA_NodeId dataSetReaderIdentifier,
+ * UA_SubscribedDataSetMirrorDataType* mirror) */
+
+/**
+ * DataSetReader
+ * -------------
+ * DataSetReader can receive NetworkMessages with the DataSetMessage
+ * of interest sent by the Publisher. DataSetReaders represent
+ * the configuration necessary to receive and process DataSetMessages
+ * on the Subscriber side. DataSetReader must be linked with a
+ * SubscribedDataSet and be contained within a ReaderGroup. */
+
+/* Parameters for PubSubSecurity */
+typedef struct {
+    UA_Int32 securityMode;          /* placeholder datatype 'MessageSecurityMode' */
+    UA_String securityGroupId;
+    size_t keyServersSize;
+    UA_Int32 *keyServers;
+} UA_PubSubSecurityParameters;
+
+/* Parameters for PubSub DataSetReader Configuration */
+typedef struct {
+    UA_String name;
+    UA_Variant publisherId;
+    UA_UInt16 writerGroupId;
+    UA_UInt16 dataSetWriterId;
+    UA_DataSetMetaDataType dataSetMetaData;
+    UA_DataSetFieldContentMask dataSetFieldContentMask;
+    UA_Double messageReceiveTimeout;
+    UA_PubSubSecurityParameters securityParameters;
+    UA_ExtensionObject messageSettings;
+    UA_ExtensionObject transportSettings;
+    UA_SubscribedDataSetEnumType subscribedDataSetType;
+    /* TODO UA_SubscribedDataSetMirrorDataType subscribedDataSetMirror */
+    union {
+        UA_TargetVariables subscribedDataSetTarget;
+        // UA_SubscribedDataSetMirrorDataType subscribedDataSetMirror;
+    } subscribedDataSet;
+} UA_DataSetReaderConfig;
+
+/* Update configuration to the dataSetReader */
+UA_StatusCode UA_EXPORT
+UA_Server_DataSetReader_updateConfig(UA_Server *server, UA_NodeId dataSetReaderIdentifier,
+                                     UA_NodeId readerGroupIdentifier,
+                                     const UA_DataSetReaderConfig *config);
+
+/* Get configuration of the dataSetReader */
+UA_StatusCode UA_EXPORT
+UA_Server_DataSetReader_getConfig(UA_Server *server, UA_NodeId dataSetReaderIdentifier,
+                                  UA_DataSetReaderConfig *config);
+
+/* Get state of DataSetReader */
+UA_StatusCode UA_EXPORT
+UA_Server_DataSetReader_getState(UA_Server *server, UA_NodeId dataSetReaderIdentifier,
+                                 UA_PubSubState *state);
+
+/**
+ * ReaderGroup
+ * -----------
+
+ * ReaderGroup is used to group a list of DataSetReaders. All ReaderGroups are
+ * created within a PubSubConnection and automatically deleted if the connection
+ * is removed. All network message related filters are only available in the
+ * DataSetReader.
+ *
+ * The RT-levels go along with different requirements. The below listed levels
+ * can be configured for a ReaderGroup.
+ *
+ * - UA_PUBSUB_RT_NONE: RT applied to this level
+ * - PUBSUB_CONFIG_FASTPATH_FIXED_OFFSETS: Extends PubSub RT functionality and
+ *   implements fast path message decoding in the Subscriber. Uses a buffered
+ *   network message and only decodes the necessary offsets stored in an offset
+ *   buffer. */
+
+/* ReaderGroup configuration */
+typedef struct {
+    UA_String name;
+    UA_PubSubSecurityParameters securityParameters;
+    /* PubSub Manager Callback */
+    UA_PubSub_CallbackLifecycle pubsubManagerCallback;
+    /* non std. field */
+    UA_Duration subscribingInterval; // Callback interval for subscriber: set the least publishingInterval value of all DSRs in this RG
+    UA_Boolean enableBlockingSocket; // To enable or disable blocking socket option
+    UA_UInt32 timeout; // Timeout for receive to wait for the packets
+    UA_PubSubRTLevel rtLevel;
+} UA_ReaderGroupConfig;
+
+void UA_EXPORT
+UA_ReaderGroupConfig_clear(UA_ReaderGroupConfig *readerGroupConfig);
+
+/* Add DataSetReader to the ReaderGroup */
+UA_StatusCode UA_EXPORT
+UA_Server_addDataSetReader(UA_Server *server, UA_NodeId readerGroupIdentifier,
+                           const UA_DataSetReaderConfig *dataSetReaderConfig,
+                           UA_NodeId *readerIdentifier);
+
+/* Remove DataSetReader from ReaderGroup */
+UA_StatusCode UA_EXPORT
+UA_Server_removeDataSetReader(UA_Server *server, UA_NodeId readerIdentifier);
+
+/* To Do: Update Configuration of ReaderGroup
+ * UA_StatusCode UA_EXPORT
+ * UA_Server_ReaderGroup_updateConfig(UA_Server *server, UA_NodeId readerGroupIdentifier,
+ *                                    const UA_ReaderGroupConfig *config);
+ */
+
+/* Get configuraiton of ReaderGroup */
+UA_StatusCode UA_EXPORT
+UA_Server_ReaderGroup_getConfig(UA_Server *server, UA_NodeId readerGroupIdentifier,
+                                UA_ReaderGroupConfig *config);
+
+/* Get state of ReaderGroup */
+UA_StatusCode UA_EXPORT
+UA_Server_ReaderGroup_getState(UA_Server *server, UA_NodeId readerGroupIdentifier,
+                               UA_PubSubState *state);
+
+/* Add ReaderGroup to the created connection */
+UA_StatusCode UA_EXPORT
+UA_Server_addReaderGroup(UA_Server *server, UA_NodeId connectionIdentifier,
+                         const UA_ReaderGroupConfig *readerGroupConfig,
+                         UA_NodeId *readerGroupIdentifier);
+
+/* Remove ReaderGroup from connection */
+UA_StatusCode UA_EXPORT
+UA_Server_removeReaderGroup(UA_Server *server, UA_NodeId groupIdentifier);
+
+UA_StatusCode UA_EXPORT
+UA_Server_freezeReaderGroupConfiguration(UA_Server *server, const UA_NodeId readerGroupId);
+
+UA_StatusCode UA_EXPORT
+UA_Server_unfreezeReaderGroupConfiguration(UA_Server *server, const UA_NodeId readerGroupId);
+
+UA_StatusCode UA_EXPORT
+UA_Server_setReaderGroupOperational(UA_Server *server, const UA_NodeId readerGroupId);
+
+UA_StatusCode UA_EXPORT
+UA_Server_setReaderGroupDisabled(UA_Server *server, const UA_NodeId readerGroupId);
+
+#endif /* UA_ENABLE_PUBSUB */
+
+_UA_END_DECLS
+
+#endif /* UA_SERVER_PUBSUB_H */
+
+/*********************************** amalgamated original file "C:/Projects/open62541Upstream/include/open62541/server.h" ***********************************/
 
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -36583,6 +26036,7 @@ _UA_END_DECLS
  *    Copyright 2017 (c) Henrik Norrman
  *    Copyright 2018 (c) Fabian Arndt, Root-Core
  *    Copyright 2017-2020 (c) HMS Industrial Networks AB (Author: Jonas Green)
+ *    Copyright 2020-2021 (c) Christian von Arnim, ISW University of Stuttgart  (for VDW and umati)
  */
 
 
@@ -36623,6 +26077,9 @@ _UA_BEGIN_DECLS
  *
  * The :ref:`tutorials` provide a good starting point for this. */
 
+struct UA_PubSubConfiguration;
+typedef struct UA_PubSubConfiguration UA_PubSubConfiguration;
+
 typedef struct {
     UA_UInt32 min;
     UA_UInt32 max;
@@ -36653,6 +26110,13 @@ struct UA_ServerConfig {
     /* Rule Handling */
     UA_RuleHandling verifyRequestTimestamp; /* Verify that the server sends a
                                              * timestamp in the request header */
+    UA_RuleHandling allowEmptyVariables; /* Variables (that don't have a
+                                          * DataType of BaseDataType) must not
+                                          * have an empty variant value. The
+                                          * default behaviour is to auto-create
+                                          * a matching zeroed-out value for
+                                          * empty VariableNodes when they are
+                                          * added. */
 
     /* Custom DataTypes. Attention! Custom datatypes are not cleaned up together
      * with the configuration. So it is possible to allocate them on ROM. */
@@ -36668,10 +26132,9 @@ struct UA_ServerConfig {
     UA_ServerNetworkLayer *networkLayers;
     UA_String customHostname;
 
+    /* PubSub */
 #ifdef UA_ENABLE_PUBSUB
-    /*PubSub network layer */
-    size_t pubsubTransportLayersSize;
-    UA_PubSubTransportLayer *pubsubTransportLayers;
+    UA_PubSubConfiguration pubSubConfig;
 #endif
 
     /* Available security policies */
@@ -36694,6 +26157,16 @@ struct UA_ServerConfig {
     /* Node Lifecycle callbacks */
     UA_GlobalNodeLifecycle nodeLifecycle;
 
+    /** Copy the HasModellingRule reference in instances from the type
+     * definition in UA_Server_addObjectNode and UA_Server_addVariableNode.
+     * Part 3 - 6.4.4
+     * https://reference.opcfoundation.org/v104/Core/docs/Part3/6.4.4/#6.4.4.4
+     *   [...] it is not required that newly created or referenced instances
+     *   based on InstanceDeclarations have a ModellingRule, however, it is
+     *   allowed that they have any ModellingRule independent of the
+     *   ModellingRule of their InstanceDeclaration */
+    UA_Boolean modellingRulesOnInstances;
+
     /**
      * .. note:: See the section for :ref:`node lifecycle
      *    handling<node-lifecycle>`. */
@@ -36713,10 +26186,6 @@ struct UA_ServerConfig {
     UA_Server_AsyncOperationNotifyCallback asyncOperationNotifyCallback;
 #endif
 
-#if UA_MULTITHREADING >= 200
-    UA_UInt16 nThreads; /* Experimental feature */
-#endif
-
     /**
      * .. note:: See the section for :ref:`async
      *    operations<async-operations>`. */
@@ -36726,11 +26195,6 @@ struct UA_ServerConfig {
 
     /* Certificate Verification */
     UA_CertificateVerification certificateVerification;
-
-    /* Relax constraints for the InformationModel */
-    UA_Boolean relaxEmptyValueConstraint; /* Nominally, only variables with data
-                                           * type BaseDataType can have an empty
-                                           * value. */
 
     /* Limits for SecureChannels */
     UA_UInt16 maxSecureChannels;
@@ -36909,7 +26373,6 @@ UA_Server_run_shutdown(UA_Server *server);
 /**
  * Timed Callbacks
  * --------------- */
-typedef void (*UA_ServerCallback)(UA_Server *server, void *data);
 
 /* Add a callback for execution at a specified time. If the indicated time lies
  * in the past, then the callback is executed at the next iteration of the
@@ -37864,7 +27327,7 @@ UA_Server_addMethodNode(UA_Server *server, const UA_NodeId requestedNewNodeId,
  *
  * The special UA_Server_addMethodNode_finish method needs to be used for method
  * nodes, since there you need to explicitly specifiy the input and output
- * arguments which are added in the finish step (if not yet already there) **/
+ * arguments which are added in the finish step (if not yet already there) */
 
 /* The ``attr`` argument must have a type according to the NodeClass.
  * ``VariableAttributes`` for variables, ``ObjectAttributes`` for objects, and
@@ -37938,14 +27401,6 @@ UA_Server_deleteReference(UA_Server *server, const UA_NodeId sourceNodeId,
  * would cause the node to be deleted. */
 
 #ifdef UA_ENABLE_SUBSCRIPTIONS_EVENTS
-
-/* The EventQueueOverflowEventType is defined as abstract, therefore we can not
- * create an instance of that type directly, but need to create a subtype. The
- * following is an arbitrary number which shall refer to our internal overflow
- * type. This is already posted on the OPC Foundation bug tracker under the
- * following link for clarification:
- * https://opcfoundation-onlineapplications.org/mantis/view.php?id=4206 */
-# define UA_NS0ID_SIMPLEOVERFLOWEVENTTYPE 4035
 
 /* Creates a node representation of an event
  *
@@ -38229,728 +27684,7 @@ _UA_END_DECLS
 #endif
 
 
-/*********************************** amalgamated original file "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/include/open62541/server_pubsub.h" ***********************************/
-
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
- *
- * Copyright (c) 2017-2018 Fraunhofer IOSB (Author: Andreas Ebner)
- * Copyright (c) 2019 Kalycito Infotech Private Limited
- */
-
-#ifndef UA_SERVER_PUBSUB_H
-#define UA_SERVER_PUBSUB_H
-
-
-
-_UA_BEGIN_DECLS
-
-#ifdef UA_ENABLE_PUBSUB
-
-/**
- * .. _pubsub:
- *
- * Publish/Subscribe
- * =================
- *
- * Work in progress!
- * This part will be a new chapter later.
- *
- * In PubSub the participating OPC UA Applications take their roles as Publishers and Subscribers. Publishers are the
- * sources of data, while Subscribers consume that data. Communication in PubSub is message-based.
- * Publishers send messages to a Message Oriented Middleware, without knowledge of what, if any, Subscribers there may be.
- * Similarly, Subscribers express interest in specific types of data, and process messages that contain this data,
- * without knowledge of what Publishers there are.
- *
- * Message Oriented Middleware is software or hardware infrastructure that supports sending and receiving messages between distributed systems.
- * OPC UA PubSub supports two different Message Oriented Middleware variants, namely the broker-less form and broker-based form.
- * A broker-less form is where the Message Oriented Middleware is the network infrastructure that is able to route datagram-based messages.
- * Subscribers and Publishers use datagram protocols like UDP. In a broker-based form, the core component of the Message Oriented Middleware
- * is a message Broker. Subscribers and Publishers use standard messaging protocols like AMQP or MQTT to communicate with the Broker.
- *
- * This makes PubSub suitable for applications where location independence and/or scalability are required.
- *
- *
- * The Publish/Subscribe (PubSub) extension for OPC UA enables fast and efficient
- * 1:m communication. The PubSub extension is protocol agnostic and can be used
- * with broker based protocols like MQTT and AMQP or brokerless implementations like UDP-Multicasting.
- *
- * The PubSub API uses the following scheme:
- *
- * 1. Create a configuration for the needed PubSub element.
- *
- * 2. Call the add[element] function and pass in the configuration.
- *
- * 3. The add[element] function returns the unique nodeId of the internally created element.
- *
- * Take a look on the PubSub Tutorials for more details about the API usage.::
- *
- *  +-----------+
- *  | UA_Server |
- *  +-----------+
- *   |    |
- *   |    |
- *   |    |
- *   |    |  +----------------------+
- *   |    +--> UA_PubSubConnection  |  UA_Server_addPubSubConnection
- *   |       +----------------------+
- *   |        |    |
- *   |        |    |    +----------------+
- *   |        |    +----> UA_WriterGroup |  UA_PubSubConnection_addWriterGroup
- *   |        |         +----------------+
- *   |        |              |
- *   |        |              |    +------------------+
- *   |        |              +----> UA_DataSetWriter |  UA_WriterGroup_addDataSetWriter     +-+
- *   |        |                   +------------------+                                        |
- *   |        |                                                                               |
- *   |        |         +----------------+                                                    | r
- *   |        +---------> UA_ReaderGroup |    UA_PubSubConnection_addReaderGroup              | e
- *   |                  +----------------+                                                    | f
- *   |                       |                                                                |
- *   |                       |    +------------------+                                        |
- *   |                       +----> UA_DataSetReader |  UA_ReaderGroup_addDataSetReader       |
- *   |                            +------------------+                                        |
- *   |                                 |                                                      |
- *   |                                 |    +----------------------+                          |
- *   |                                 +----> UA_SubscribedDataSet |                          |
- *   |                                      +----------------------+                          |
- *   |                                           |                                            |
- *   |                                           |    +----------------------------+          |
- *   |                                           +----> UA_TargetVariablesDataType |          |
- *   |                                           |    +----------------------------+          |
- *   |                                           |                                            |
- *   |                                           |    +------------------------------------+  |
- *   |                                           +----> UA_SubscribedDataSetMirrorDataType |  |
- *   |                                                +------------------------------------+  |
- *   |                                                                                        |
- *   |       +---------------------------+                                                    |
- *   +-------> UA_PubSubPublishedDataSet |  UA_Server_addPublishedDataSet                   <-+
- *           +---------------------------+
- *                 |
- *                 |    +-----------------+
- *                 +----> UA_DataSetField |  UA_PublishedDataSet_addDataSetField
- *                      +-----------------+
- *
- * PubSub compile flags
- * --------------------
- *
- * **UA_ENABLE_PUBSUB**
- *  Enable the experimental OPC UA PubSub support. The option will include the PubSub UDP multicast plugin. Disabled by default.
- * **UA_ENABLE_PUBSUB_DELTAFRAMES**
- *  The PubSub messages differentiate between keyframe (all published values contained) and deltaframe (only changed values contained) messages.
- *  Deltaframe messages creation consumes some additional ressources and can be disabled with this flag. Disabled by default.
- *  Compile the human-readable name of the StatusCodes into the binary. Disabled by default.
- * **UA_ENABLE_PUBSUB_FILE_CONFIG**
- *  Enable loading OPC UA PubSub configuration from File/ByteString. Enabling PubSub informationmodel methods also will add a method to the Publish/Subscribe object which allows configuring PubSub at runtime.
- * **UA_ENABLE_PUBSUB_INFORMATIONMODEL**
- *  Enable the information model representation of the PubSub configuration. For more details take a look at the following section `PubSub Information Model Representation`. Disabled by default.
- * **UA_ENABLE_PUBSUB_ETH_UADP**
- *  Enable the OPC UA Ethernet PubSub support to transport UADP NetworkMessages as payload of Ethernet II frame without IP or UDP headers. This option will include Publish and Subscribe based on
- *  EtherType B62C. Disabled by default.
- * **UA_ENABLE_PUBSUB_ETH_UADP_ETF**
- *  Enable ETF feature to allow the user to transmit packets at calculated transmission time with nanosecond precision, in addition to the PubSub support to transport UADP NetworkMessages as payload of Ethernet II frame.
- *  Disabled by default.
- * **UA_ENABLE_PUBSUB_ETH_UADP_XDP**
- *  Enable XDP feature to allow the user to receive packets using the eXpress Data Path (XDP), which bypasses TCP/IP layers and transfers the frames from hardware/netdev to user application thereby reducing the receiving time,
- *  in addition to the PubSub support to transport UADP NetworkMessages as payload of Ethernet II frame. Disabled by default.
- *
- * PubSub Information Model Representation
- * ---------------------------------------
- * .. _pubsub_informationmodel:
- *
- * The complete PubSub configuration is available inside the information model.
- * The entry point is the node 'PublishSubscribe, located under the Server node.
- * The standard defines for PubSub no new Service set. The configuration can optionally
- * done over methods inside the information model. The information model representation
- * of the current PubSub configuration is generated automatically. This feature
- * can enabled/disable by changing the UA_ENABLE_PUBSUB_INFORMATIONMODEL option.
- *
- * Connections
- * -----------
- * The PubSub connections are the abstraction between the concrete transport protocol
- * and the PubSub functionality. It is possible to create multiple connections with
- * different transport protocols at runtime.
- *
- * Take a look on the PubSub Tutorials for mor details about the API usage.
- */
-
-typedef enum {
-    UA_PUBSUB_PUBLISHERID_NUMERIC,
-    UA_PUBSUB_PUBLISHERID_STRING
-} UA_PublisherIdType;
-
-#ifdef UA_ENABLE_PUBSUB_ETH_UADP_ETF
-typedef struct {
-    UA_Int32 socketPriority;
-    UA_Boolean sotxtimeEnabled;
-    /* SO_TXTIME-specific additional socket config */
-    UA_Int32 sotxtimeDeadlinemode;
-    UA_Int32 sotxtimeReceiveerrors;
-} UA_ETFConfiguration;
-#endif
-
-struct UA_PubSubConnectionConfig {
-    UA_String name;
-    UA_Boolean enabled;
-    UA_PublisherIdType publisherIdType;
-    union { /* std: valid types UInt or String */
-        UA_UInt32 numeric;
-        UA_String string;
-    } publisherId;
-    UA_String transportProfileUri;
-    UA_Variant address;
-    size_t connectionPropertiesSize;
-    UA_KeyValuePair *connectionProperties;
-    UA_Variant connectionTransportSettings;
-#ifdef UA_ENABLE_PUBSUB_ETH_UADP_ETF
-    /* ETF related connection configuration - Not in PubSub specfication */
-    UA_ETFConfiguration etfConfiguration;
-#endif
-};
-
-/**
- * The UA_ServerConfig_addPubSubTransportLayer is used to add a transport layer
- * to the server configuration. The list memory is allocated and will be freed
- * with UA_PubSubManager_delete.
- *
- * .. note:: If the UA_String transportProfileUri was dynamically allocated
- *           the memory has to be freed when no longer required.
- *
- * .. note:: This has to be done before the server is started with UA_Server_run. */
-
-UA_StatusCode UA_EXPORT
-UA_ServerConfig_addPubSubTransportLayer(UA_ServerConfig *config,
-                                        UA_PubSubTransportLayer *pubsubTransportLayer);
-
-UA_StatusCode UA_EXPORT
-UA_Server_addPubSubConnection(UA_Server *server,
-                              const UA_PubSubConnectionConfig *connectionConfig,
-                              UA_NodeId *connectionIdentifier);
-
-/* Returns a deep copy of the config */
-UA_StatusCode UA_EXPORT
-UA_Server_getPubSubConnectionConfig(UA_Server *server,
-                                    const UA_NodeId connection,
-                                    UA_PubSubConnectionConfig *config);
-
-/* Remove Connection, identified by the NodeId. Deletion of Connection
- * removes all contained WriterGroups and Writers. */
-UA_StatusCode UA_EXPORT
-UA_Server_removePubSubConnection(UA_Server *server, const UA_NodeId connection);
-
-/**
- * PublishedDataSets
- * -----------------
- * The PublishedDataSets (PDS) are containers for the published information. The
- * PDS contain the published variables and meta informations. The metadata is
- * commonly autogenerated or given as constant argument as part of the template
- * functions. The template functions are standard defined and intended for
- * configuration tools. You should normally create a empty PDS and call the
- * functions to add new fields. */
-
-/* The UA_PUBSUB_DATASET_PUBLISHEDITEMS has currently no additional members and
- * thus no dedicated config structure. */
-
-typedef enum {
-    UA_PUBSUB_DATASET_PUBLISHEDITEMS,
-    UA_PUBSUB_DATASET_PUBLISHEDEVENTS,
-    UA_PUBSUB_DATASET_PUBLISHEDITEMS_TEMPLATE,
-    UA_PUBSUB_DATASET_PUBLISHEDEVENTS_TEMPLATE,
-} UA_PublishedDataSetType;
-
-typedef struct {
-    UA_DataSetMetaDataType metaData;
-    size_t variablesToAddSize;
-    UA_PublishedVariableDataType *variablesToAdd;
-} UA_PublishedDataItemsTemplateConfig;
-
-typedef struct {
-    UA_NodeId eventNotfier;
-    UA_ContentFilter filter;
-} UA_PublishedEventConfig;
-
-typedef struct {
-    UA_DataSetMetaDataType metaData;
-    UA_NodeId eventNotfier;
-    size_t selectedFieldsSize;
-    UA_SimpleAttributeOperand *selectedFields;
-    UA_ContentFilter filter;
-} UA_PublishedEventTemplateConfig;
-
-/* Configuration structure for PublishedDataSet */
-typedef struct {
-    UA_String name;
-    UA_PublishedDataSetType publishedDataSetType;
-    union {
-        /* The UA_PUBSUB_DATASET_PUBLISHEDITEMS has currently no additional members
-         * and thus no dedicated config structure.*/
-        UA_PublishedDataItemsTemplateConfig itemsTemplate;
-        UA_PublishedEventConfig event;
-        UA_PublishedEventTemplateConfig eventTemplate;
-    } config;
-} UA_PublishedDataSetConfig;
-
-void UA_EXPORT
-UA_PublishedDataSetConfig_clear(UA_PublishedDataSetConfig *pdsConfig);
-
-typedef struct {
-    UA_StatusCode addResult;
-    size_t fieldAddResultsSize;
-    UA_StatusCode *fieldAddResults;
-    UA_ConfigurationVersionDataType configurationVersion;
-} UA_AddPublishedDataSetResult;
-
-UA_AddPublishedDataSetResult UA_EXPORT
-UA_Server_addPublishedDataSet(UA_Server *server,
-                              const UA_PublishedDataSetConfig *publishedDataSetConfig,
-                              UA_NodeId *pdsIdentifier);
-
-/* Returns a deep copy of the config */
-UA_StatusCode UA_EXPORT
-UA_Server_getPublishedDataSetConfig(UA_Server *server, const UA_NodeId pds,
-                                    UA_PublishedDataSetConfig *config);
-
-/* Returns a deep copy of the DataSetMetaData for an specific PDS */
-UA_StatusCode UA_EXPORT
-UA_Server_getPublishedDataSetMetaData(UA_Server *server, const UA_NodeId pds,
-                                      UA_DataSetMetaDataType *metaData);
-
-/* Remove PublishedDataSet, identified by the NodeId. Deletion of PDS removes
- * all contained and linked PDS Fields. Connected WriterGroups will be also
- * removed. */
-UA_StatusCode UA_EXPORT
-UA_Server_removePublishedDataSet(UA_Server *server, const UA_NodeId pds);
-
-/**
- * DataSetFields
- * -------------
- * The description of published variables is named DataSetField. Each
- * DataSetField contains the selection of one information model node. The
- * DataSetField has additional parameters for the publishing, sampling and error
- * handling process. */
-
-typedef struct{
-    UA_ConfigurationVersionDataType configurationVersion;
-    UA_String fieldNameAlias;
-    UA_Boolean promotedField;
-    UA_PublishedVariableDataType publishParameters;
-
-    /* non std. field */
-    struct {
-        UA_Boolean rtFieldSourceEnabled;
-        /* If the rtInformationModelNode is set, the nodeid in publishParameter must point
-         * to a node with external data source backend defined
-         * */
-        UA_Boolean rtInformationModelNode;
-        //TODO -> decide if suppress C++ warnings and use 'UA_DataValue * * const staticValueSource;'
-        UA_DataValue ** staticValueSource;
-    } rtValueSource;
-
-
-} UA_DataSetVariableConfig;
-
-typedef enum {
-    UA_PUBSUB_DATASETFIELD_VARIABLE,
-    UA_PUBSUB_DATASETFIELD_EVENT
-} UA_DataSetFieldType;
-
-typedef struct {
-    UA_DataSetFieldType dataSetFieldType;
-    union {
-        /* events need other config later */
-        UA_DataSetVariableConfig variable;
-    } field;
-} UA_DataSetFieldConfig;
-
-void UA_EXPORT
-UA_DataSetFieldConfig_clear(UA_DataSetFieldConfig *dataSetFieldConfig);
-
-typedef struct {
-    UA_StatusCode result;
-    UA_ConfigurationVersionDataType configurationVersion;
-} UA_DataSetFieldResult;
-
-UA_DataSetFieldResult UA_EXPORT
-UA_Server_addDataSetField(UA_Server *server,
-                          const UA_NodeId publishedDataSet,
-                          const UA_DataSetFieldConfig *fieldConfig,
-                          UA_NodeId *fieldIdentifier);
-
-/* Returns a deep copy of the config */
-UA_StatusCode UA_EXPORT
-UA_Server_getDataSetFieldConfig(UA_Server *server, const UA_NodeId dsf,
-                                UA_DataSetFieldConfig *config);
-
-UA_DataSetFieldResult UA_EXPORT
-UA_Server_removeDataSetField(UA_Server *server, const UA_NodeId dsf);
-
-/**
- * Custom Callback Implementation
- * ----------------------------
- * The user can use his own callback implementation for publishing
- * and subscribing. The user must take care of the callback to call for
- * every publishing or subscibing interval */
-
-typedef struct {
-    UA_StatusCode (*addCustomCallback)(UA_Server *server, UA_NodeId identifier,
-                                       UA_ServerCallback callback,
-                                       void *data, UA_Double interval_ms, UA_UInt64 *callbackId);
-
-    UA_StatusCode (*changeCustomCallbackInterval)(UA_Server *server, UA_NodeId identifier,
-                                                  UA_UInt64 callbackId, UA_Double interval_ms);
-
-    void (*removeCustomCallback)(UA_Server *server, UA_NodeId identifier, UA_UInt64 callbackId);
-
-} UA_PubSub_CallbackLifecycle;
-
-/**
- * WriterGroup
- * -----------
- * All WriterGroups are created within a PubSubConnection and automatically
- * deleted if the connection is removed. The WriterGroup is primary used as
- * container for :ref:`dsw` and network message settings. The WriterGroup can be
- * imagined as producer of the network messages. The creation of network
- * messages is controlled by parameters like the publish interval, which is e.g.
- * contained in the WriterGroup. */
-
-typedef enum {
-    UA_PUBSUB_ENCODING_BINARY,
-    UA_PUBSUB_ENCODING_JSON,
-    UA_PUBSUB_ENCODING_UADP
-} UA_PubSubEncodingType;
-
-/**
- * WriterGroup
- * -----------
- * The message publishing can be configured for realtime requirements. The RT-levels
- * go along with different requirements. The below listed levels can be configured:
- *
- * UA_PUBSUB_RT_NONE -
- * ---> Description: Default "none-RT" Mode
- * ---> Requirements: -
- * ---> Restrictions: -
- * UA_PUBSUB_RT_DIRECT_VALUE_ACCESS (Preview - not implemented)
- * ---> Description: Normally, the latest value for each DataSetField is read out of the information model. Within this RT-mode, the
- * value source of each field configured as static pointer to an DataValue. The publish cycle won't use call the server read function.
- * ---> Requirements: All fields must be configured with a 'staticValueSource'.
- * ---> Restrictions: -
- * UA_PUBSUB_RT_FIXED_LENGTH (Preview - not implemented)
- * ---> Description: All DataSetFields have a known, non-changing length. The server will pre-generate some
- * buffers and use only memcopy operations to generate requested PubSub packages.
- * ---> Requirements: DataSetFields with variable size can't be used within this mode.
- * ---> Restrictions: The configuration must be frozen and changes are not allowed while the WriterGroup is 'Operational'.
- * UA_PUBSUB_RT_DETERMINISTIC (Preview - not implemented)
- * ---> Description: -
- * ---> Requirements: -
- * ---> Restrictions: -
- *
- * WARNING! For hard real time requirements the underlying system must be rt-capable.
- *
- */
-typedef enum {
-    UA_PUBSUB_RT_NONE = 0,
-    UA_PUBSUB_RT_DIRECT_VALUE_ACCESS = 1,
-    UA_PUBSUB_RT_FIXED_SIZE = 2,
-    UA_PUBSUB_RT_DETERMINISTIC = 4,
-} UA_PubSubRTLevel;
-
-typedef struct {
-    UA_String name;
-    UA_Boolean enabled;
-    UA_UInt16 writerGroupId;
-    UA_Duration publishingInterval;
-    UA_Double keepAliveTime;
-    UA_Byte priority;
-    UA_MessageSecurityMode securityMode;
-    UA_ExtensionObject transportSettings;
-    UA_ExtensionObject messageSettings;
-    size_t groupPropertiesSize;
-    UA_KeyValuePair *groupProperties;
-    UA_PubSubEncodingType encodingMimeType;
-    /* PubSub Manager Callback */
-    UA_PubSub_CallbackLifecycle pubsubManagerCallback;
-    /* non std. config parameter. maximum count of embedded DataSetMessage in
-     * one NetworkMessage */
-    UA_UInt16 maxEncapsulatedDataSetMessageCount;
-    /* non std. field */
-    UA_PubSubRTLevel rtLevel;
-} UA_WriterGroupConfig;
-
-void UA_EXPORT
-UA_WriterGroupConfig_clear(UA_WriterGroupConfig *writerGroupConfig);
-
-/* Add a new WriterGroup to an existing Connection */
-UA_StatusCode UA_EXPORT
-UA_Server_addWriterGroup(UA_Server *server, const UA_NodeId connection,
-                         const UA_WriterGroupConfig *writerGroupConfig,
-                         UA_NodeId *writerGroupIdentifier);
-
-/* Returns a deep copy of the config */
-UA_StatusCode UA_EXPORT
-UA_Server_getWriterGroupConfig(UA_Server *server, const UA_NodeId writerGroup,
-                               UA_WriterGroupConfig *config);
-
-UA_StatusCode UA_EXPORT
-UA_Server_updateWriterGroupConfig(UA_Server *server, UA_NodeId writerGroupIdentifier,
-                                  const UA_WriterGroupConfig *config);
-
-/* Get state of WriterGroup */
-UA_StatusCode UA_EXPORT
-UA_Server_WriterGroup_getState(UA_Server *server, UA_NodeId writerGroupIdentifier,
-                               UA_PubSubState *state);
-
-UA_StatusCode UA_EXPORT
-UA_Server_removeWriterGroup(UA_Server *server, const UA_NodeId writerGroup);
-
-UA_StatusCode UA_EXPORT
-UA_Server_freezeWriterGroupConfiguration(UA_Server *server, const UA_NodeId writerGroup);
-
-UA_StatusCode UA_EXPORT
-UA_Server_unfreezeWriterGroupConfiguration(UA_Server *server, const UA_NodeId writerGroup);
-
-UA_StatusCode UA_EXPORT
-UA_Server_setWriterGroupOperational(UA_Server *server, const UA_NodeId writerGroup);
-
-UA_StatusCode UA_EXPORT
-UA_Server_setWriterGroupDisabled(UA_Server *server, const UA_NodeId writerGroup);
-
-/**
- * .. _dsw:
- *
- * DataSetWriter
- * -------------
- * The DataSetWriters are the glue between the WriterGroups and the
- * PublishedDataSets. The DataSetWriter contain configuration parameters and
- * flags which influence the creation of DataSet messages. These messages are
- * encapsulated inside the network message. The DataSetWriter must be linked
- * with an existing PublishedDataSet and be contained within a WriterGroup. */
-
-typedef struct {
-    UA_String name;
-    UA_UInt16 dataSetWriterId;
-    UA_DataSetFieldContentMask dataSetFieldContentMask;
-    UA_UInt32 keyFrameCount;
-    UA_ExtensionObject messageSettings;
-    UA_ExtensionObject transportSettings;
-    UA_String dataSetName;
-    size_t dataSetWriterPropertiesSize;
-    UA_KeyValuePair *dataSetWriterProperties;
-} UA_DataSetWriterConfig;
-
-void UA_EXPORT
-UA_DataSetWriterConfig_clear(UA_DataSetWriterConfig *pdsConfig);
-
-/* Add a new DataSetWriter to a existing WriterGroup. The DataSetWriter must be
- * coupled with a PublishedDataSet on creation.
- *
- * Part 14, 7.1.5.2.1 defines: The link between the PublishedDataSet and
- * DataSetWriter shall be created when an instance of the DataSetWriterType is
- * created. */
-UA_StatusCode UA_EXPORT
-UA_Server_addDataSetWriter(UA_Server *server,
-                           const UA_NodeId writerGroup, const UA_NodeId dataSet,
-                           const UA_DataSetWriterConfig *dataSetWriterConfig,
-                           UA_NodeId *writerIdentifier);
-
-/* Returns a deep copy of the config */
-UA_StatusCode UA_EXPORT
-UA_Server_getDataSetWriterConfig(UA_Server *server, const UA_NodeId dsw,
-                                 UA_DataSetWriterConfig *config);
-
-/* Get state of DataSetWriter */
-UA_StatusCode UA_EXPORT
-UA_Server_DataSetWriter_getState(UA_Server *server, UA_NodeId dataSetWriterIdentifier,
-                               UA_PubSubState *state);
-
-UA_StatusCode UA_EXPORT
-UA_Server_removeDataSetWriter(UA_Server *server, const UA_NodeId dsw);
-
-/**
- * SubscribedDataSet
- * -----------------
- * SubscribedDataSet describes the processing of the received DataSet. SubscribedDataSet defines which field
- * in the DataSet is mapped to which Variable in the OPC UA Application. SubscribedDataSet has two sub-types
- * called the TargetVariablesType and SubscribedDataSetMirrorType.
- * SubscribedDataSetMirrorType is currently not supported. SubscribedDataSet is set to TargetVariablesType
- * and then the list of target Variables are created in the Subscriber AddressSpace.
- * TargetVariables are a list of variables that are to be added in the Subscriber AddressSpace.
- * It defines a list of Variable mappings between received DataSet fields and added Variables
- * in the Subscriber AddressSpace. */
-
-/* SubscribedDataSetDataType Definition */
-typedef enum {
-    UA_PUBSUB_SDS_TARGET,
-    UA_PUBSUB_SDS_MIRROR
-} UA_SubscribedDataSetEnumType;
-
-typedef struct {
-    /* Standard-defined FieldTargetDataType */
-    UA_FieldTargetDataType targetVariable;
-
-    /* If realtime-handling is required, set this pointer non-NULL and it will be used
-     * to memcpy the value instead of using the Write service.
-     * If the afterWrite method pointer is set, it will be called after a memcpy update
-     * to the value. */
-    UA_DataValue **externalDataValue;
-    void *targetVariableContext; /* user-defined pointer */
-    void (*afterWrite)(UA_Server *server,
-                       const UA_NodeId *readerIdentifier,
-                       const UA_NodeId *readerGroupIdentifier,
-                       const UA_NodeId *targetVariableIdentifier,
-                       void *targetVariableContext,
-                       UA_DataValue **externalDataValue);
-} UA_FieldTargetVariable;
-
-typedef struct {
-    size_t targetVariablesSize;
-    UA_FieldTargetVariable *targetVariables;
-} UA_TargetVariables;
-
-/* Return Status Code after creating TargetVariables in Subscriber AddressSpace */
-UA_StatusCode UA_EXPORT
-UA_Server_DataSetReader_createTargetVariables(UA_Server *server,
-                                              UA_NodeId dataSetReaderIdentifier,
-                                              size_t targetVariablesSize,
-                                              const UA_FieldTargetVariable *targetVariables);
-
-/* To Do:Implementation of SubscribedDataSetMirrorType
- * UA_StatusCode
- * A_PubSubDataSetReader_createDataSetMirror(UA_Server *server, UA_NodeId dataSetReaderIdentifier,
- * UA_SubscribedDataSetMirrorDataType* mirror) */
-
-/**
- * DataSetReader
- * -------------
- * DataSetReader can receive NetworkMessages with the DataSetMessage
- * of interest sent by the Publisher. DataSetReaders represent
- * the configuration necessary to receive and process DataSetMessages
- * on the Subscriber side. DataSetReader must be linked with a
- * SubscribedDataSet and be contained within a ReaderGroup. */
-
-/* Parameters for PubSubSecurity */
-typedef struct {
-    UA_Int32 securityMode;          /* placeholder datatype 'MessageSecurityMode' */
-    UA_String securityGroupId;
-    size_t keyServersSize;
-    UA_Int32 *keyServers;
-} UA_PubSubSecurityParameters;
-
-/* Parameters for PubSub DataSetReader Configuration */
-typedef struct {
-    UA_String name;
-    UA_Variant publisherId;
-    UA_UInt16 writerGroupId;
-    UA_UInt16 dataSetWriterId;
-    UA_DataSetMetaDataType dataSetMetaData;
-    UA_DataSetFieldContentMask dataSetFieldContentMask;
-    UA_Double messageReceiveTimeout;
-    UA_PubSubSecurityParameters securityParameters;
-    UA_ExtensionObject messageSettings;
-    UA_ExtensionObject transportSettings;
-    UA_SubscribedDataSetEnumType subscribedDataSetType;
-    /* TODO UA_SubscribedDataSetMirrorDataType subscribedDataSetMirror */
-    union {
-        UA_TargetVariables subscribedDataSetTarget;
-        // UA_SubscribedDataSetMirrorDataType subscribedDataSetMirror;
-    } subscribedDataSet;
-} UA_DataSetReaderConfig;
-
-/* Update configuration to the dataSetReader */
-UA_StatusCode UA_EXPORT
-UA_Server_DataSetReader_updateConfig(UA_Server *server, UA_NodeId dataSetReaderIdentifier,
-                                     UA_NodeId readerGroupIdentifier,
-                                     const UA_DataSetReaderConfig *config);
-
-/* Get configuration of the dataSetReader */
-UA_StatusCode UA_EXPORT
-UA_Server_DataSetReader_getConfig(UA_Server *server, UA_NodeId dataSetReaderIdentifier,
-                                  UA_DataSetReaderConfig *config);
-
-/* Get state of DataSetReader */
-UA_StatusCode UA_EXPORT
-UA_Server_DataSetReader_getState(UA_Server *server, UA_NodeId dataSetReaderIdentifier,
-                               UA_PubSubState *state);
-
-/**
- * ReaderGroup
- * -----------
- * ReaderGroup is used to group a list of DataSetReaders. All ReaderGroups are
- * created within a PubSubConnection and automatically deleted if the connection
- * is removed. All network message related filters are only available in the DataSetReader.
- *
- * The RT-levels go along with different requirements. The below listed levels can be configured
- * for a ReaderGroup.
- * UA_PUBSUB_RT_NONE --> No RT applied to this level
- * PUBSUB_CONFIG_FASTPATH_FIXED_OFFSETS --> Extends PubSub RT functionality and implements fast path
- * message decoding in the Subscriber. Uses a buffered network message and only decodes the necessary
- * offsets stored in an offset buffer. */
-
-/* ReaderGroup configuration */
-typedef struct {
-    UA_String name;
-    UA_PubSubSecurityParameters securityParameters;
-    /* PubSub Manager Callback */
-    UA_PubSub_CallbackLifecycle pubsubManagerCallback;
-    /* non std. field */
-    UA_PubSubRTLevel rtLevel;
-} UA_ReaderGroupConfig;
-
-/* Add DataSetReader to the ReaderGroup */
-UA_StatusCode UA_EXPORT
-UA_Server_addDataSetReader(UA_Server *server, UA_NodeId readerGroupIdentifier,
-                                      const UA_DataSetReaderConfig *dataSetReaderConfig,
-                                      UA_NodeId *readerIdentifier);
-
-/* Remove DataSetReader from ReaderGroup */
-UA_StatusCode UA_EXPORT
-UA_Server_removeDataSetReader(UA_Server *server, UA_NodeId readerIdentifier);
-
-/* To Do: Update Configuration of ReaderGroup
- * UA_StatusCode UA_EXPORT
- * UA_Server_ReaderGroup_updateConfig(UA_Server *server, UA_NodeId readerGroupIdentifier,
- *                                    const UA_ReaderGroupConfig *config);
- */
-
-/* Get configuraiton of ReaderGroup */
-UA_StatusCode UA_EXPORT
-UA_Server_ReaderGroup_getConfig(UA_Server *server, UA_NodeId readerGroupIdentifier,
-                               UA_ReaderGroupConfig *config);
-
-/* Get state of ReaderGroup */
-UA_StatusCode UA_EXPORT
-UA_Server_ReaderGroup_getState(UA_Server *server, UA_NodeId readerGroupIdentifier,
-                               UA_PubSubState *state);
-
-/* Add ReaderGroup to the created connection */
-UA_StatusCode UA_EXPORT
-UA_Server_addReaderGroup(UA_Server *server, UA_NodeId connectionIdentifier,
-                                   const UA_ReaderGroupConfig *readerGroupConfig,
-                                   UA_NodeId *readerGroupIdentifier);
-
-/* Remove ReaderGroup from connection */
-UA_StatusCode UA_EXPORT
-UA_Server_removeReaderGroup(UA_Server *server, UA_NodeId groupIdentifier);
-
-UA_StatusCode UA_EXPORT
-UA_Server_freezeReaderGroupConfiguration(UA_Server *server, const UA_NodeId readerGroupId);
-
-UA_StatusCode UA_EXPORT
-UA_Server_unfreezeReaderGroupConfiguration(UA_Server *server, const UA_NodeId readerGroupId);
-
-UA_StatusCode UA_EXPORT
-UA_Server_setReaderGroupOperational(UA_Server *server, const UA_NodeId readerGroupId);
-
-UA_StatusCode UA_EXPORT
-UA_Server_setReaderGroupDisabled(UA_Server *server, const UA_NodeId readerGroupId);
-
-#endif /* UA_ENABLE_PUBSUB */
-
-_UA_END_DECLS
-
-#endif /* UA_SERVER_PUBSUB_H */
-
-/*********************************** amalgamated original file "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/include/open62541/client.h" ***********************************/
+/*********************************** amalgamated original file "C:/Projects/open62541Upstream/include/open62541/client.h" ***********************************/
 
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -38966,6 +27700,7 @@ _UA_END_DECLS
  *    Copyright 2017 (c) Mark Giraud, Fraunhofer IOSB
  *    Copyright 2018 (c) Thomas Stalder, Blue Time Concept SA
  *    Copyright 2018 (c) Kalycito Infotech Private Limited
+ *    Copyright 2020 (c) Christian von Arnim, ISW University of Stuttgart
  */
 
 
@@ -39105,6 +27840,9 @@ typedef struct {
                                            UA_UInt32 subscriptionId,
                                            void *subContext);
 #endif
+
+    UA_LocaleId *sessionLocaleIds;
+    size_t sessionLocaleIdsSize;
 } UA_ClientConfig;
 
  /**
@@ -39518,7 +28256,7 @@ UA_Client_Service_queryNext(UA_Client *client,
  * The userdata and requestId arguments can be NULL. */
 
 typedef void (*UA_ClientAsyncServiceCallback)(UA_Client *client, void *userdata,
-        UA_UInt32 requestId, void *response);
+                                              UA_UInt32 requestId, void *response);
 
 UA_StatusCode UA_EXPORT
 __UA_Client_AsyncService(UA_Client *client, const void *request,
@@ -39531,6 +28269,21 @@ UA_StatusCode UA_EXPORT
 UA_Client_sendAsyncRequest(UA_Client *client, const void *request,
         const UA_DataType *requestType, UA_ClientAsyncServiceCallback callback,
         const UA_DataType *responseType, void *userdata, UA_UInt32 *requestId);
+
+/**
+ * Set new userdata and callback for an existing request.
+ *
+ * @param client Pointer to the UA_Client
+ * @param requestId RequestId of the request, which was returned by
+ *        UA_Client_sendAsyncRequest before
+ * @param userdata The new userdata.
+ * @param callback The new callback
+ * @return UA_StatusCode UA_STATUSCODE_GOOD on success
+ *         UA_STATUSCODE_BADNOTFOUND when no request with requestId is found.
+ */
+UA_StatusCode UA_EXPORT
+UA_Client_modifyAsyncCallback(UA_Client *client, UA_UInt32 requestId,
+        void *userdata, UA_ClientAsyncServiceCallback callback);
 
 /* Listen on the network and process arriving asynchronous responses in the
  * background. Internal housekeeping, renewal of SecureChannels and subscription
@@ -39646,7 +28399,7 @@ UA_Client_findDataType(UA_Client *client, const UA_NodeId *typeId);
 _UA_END_DECLS
 
 
-/*********************************** amalgamated original file "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/include/open62541/client_highlevel.h" ***********************************/
+/*********************************** amalgamated original file "C:/Projects/open62541Upstream/include/open62541/client_highlevel.h" ***********************************/
 
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -40305,7 +29058,7 @@ UA_Client_forEachChildNodeCall(UA_Client *client, UA_NodeId parentNodeId,
 _UA_END_DECLS
 
 
-/*********************************** amalgamated original file "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/include/open62541/client_subscriptions.h" ***********************************/
+/*********************************** amalgamated original file "C:/Projects/open62541Upstream/include/open62541/client_subscriptions.h" ***********************************/
 
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -40595,7 +29348,7 @@ UA_Client_MonitoredItems_setTriggering_async(UA_Client *client,
 _UA_END_DECLS
 
 
-/*********************************** amalgamated original file "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/include/open62541/client_highlevel_async.h" ***********************************/
+/*********************************** amalgamated original file "C:/Projects/open62541Upstream/include/open62541/client_highlevel_async.h" ***********************************/
 
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -40610,8 +29363,11 @@ _UA_END_DECLS
 _UA_BEGIN_DECLS
 
 /**
- * Raw Services
- * ^^^^^^^^^^^^ */
+ * Async Services
+ * ^^^^^^^^^^^^^^
+ *
+ * Call OPC UA Services asynchronously with a callback. The (optional) requestId
+ * output can be used to cancel the service while it is still pending. */
 
 typedef void (*UA_ClientAsyncReadCallback)(UA_Client *client, void *userdata,
                                            UA_UInt32 requestId, UA_ReadResponse *rr);
@@ -40648,287 +29404,256 @@ UA_Client_sendAsyncBrowseRequest(UA_Client *client, UA_BrowseRequest *request,
 }
 
 /**
+ * Asynchronous Operations
+ * ^^^^^^^^^^^^^^^^^^^^^^^
+ *
+ * Many Services can be called with an array of operations. For example, a
+ * request to the Read Service contains an array of ReadValueId, each
+ * corresponding to a single read operation. For convenience, wrappers are
+ * provided to call single operations for the most common Services.
+ *
+ * All async operations have a callback of the following structure: The returned
+ * StatusCode is split in two parts. The status indicates the overall success of
+ * the request and the operation. The result argument is non-NULL only if the
+ * status is no good. */
+typedef void
+(*UA_ClientAsyncOperationCallback)(UA_Client *client, void *userdata,
+                                   UA_UInt32 requestId, UA_StatusCode status,
+                                   void *result);
+
+/**
  * Read Attribute
- * ^^^^^^^^^^^^^^ */
+ * ^^^^^^^^^^^^^^
+ *
+ * Asynchronously read a single attribute. The attribute is unpacked from the
+ * response as the datatype of the attribute is known ahead of time. Value
+ * attributes are variants.
+ *
+ * Note that the last argument (value pointer) of the callbacks can be NULL if
+ * the status of the operation is not good. */
+
+/* Reading a single attribute */
+typedef void
+(*UA_ClientAsyncReadAttributeCallback)(UA_Client *client, void *userdata,
+                                       UA_UInt32 requestId, UA_StatusCode status,
+                                       UA_DataValue *attribute);
 UA_StatusCode UA_EXPORT
-__UA_Client_readAttribute_async(UA_Client *client, const UA_NodeId *nodeId,
-                                UA_AttributeId attributeId,
-                                const UA_DataType *outDataType,
-                                UA_ClientAsyncServiceCallback callback, void *userdata,
-                                UA_UInt32 *reqId);
+UA_Client_readAttribute_async(UA_Client *client, const UA_ReadValueId *rvi,
+                              UA_TimestampsToReturn timestampsToReturn,
+                              UA_ClientAsyncReadAttributeCallback callback,
+                              void *userdata, UA_UInt32 *requestId);
 
-typedef void (*UA_ClientAsyncReadDataTypeAttributeCallback)(UA_Client *client,
-                                                            void *userdata,
-                                                            UA_UInt32 requestId,
-                                                            UA_NodeId *var);
-static UA_INLINE UA_StatusCode
-UA_Client_readDataTypeAttribute_async(
-    UA_Client *client, const UA_NodeId nodeId,
-    UA_ClientAsyncReadDataTypeAttributeCallback callback, void *userdata,
-    UA_UInt32 *reqId) {
-    return __UA_Client_readAttribute_async(
-        client, &nodeId, UA_ATTRIBUTEID_DATATYPE, &UA_TYPES[UA_TYPES_NODEID],
-        (UA_ClientAsyncServiceCallback)callback, userdata, reqId);
-}
-
-typedef void (*UA_ClientAsyncReadValueAttributeCallback)(UA_Client *client,
-                                                         void *userdata,
-                                                         UA_UInt32 requestId,
-                                                         UA_Variant *var);
-static UA_INLINE UA_StatusCode
+/* Read a single Value attribute */
+typedef void
+(*UA_ClientAsyncReadValueAttributeCallback)(UA_Client *client, void *userdata,
+                                            UA_UInt32 requestId, UA_StatusCode status,
+                                            UA_DataValue *value);
+UA_StatusCode UA_EXPORT
 UA_Client_readValueAttribute_async(UA_Client *client, const UA_NodeId nodeId,
                                    UA_ClientAsyncReadValueAttributeCallback callback,
-                                   void *userdata, UA_UInt32 *reqId) {
-    return __UA_Client_readAttribute_async(
-        client, &nodeId, UA_ATTRIBUTEID_VALUE, &UA_TYPES[UA_TYPES_VARIANT],
-        (UA_ClientAsyncServiceCallback)callback, userdata, reqId);
-}
+                                   void *userdata, UA_UInt32 *requestId);
 
-typedef void (*UA_ClientAsyncReadNodeIdAttributeCallback)(UA_Client *client,
-                                                          void *userdata,
-                                                          UA_UInt32 requestId,
-                                                          UA_NodeId *out);
-static UA_INLINE UA_StatusCode
-UA_Client_readNodeIdAttribute_async(UA_Client *client, const UA_NodeId nodeId,
-                                    UA_ClientAsyncReadNodeIdAttributeCallback callback,
-                                    void *userdata, UA_UInt32 *reqId) {
-    return __UA_Client_readAttribute_async(
-        client, &nodeId, UA_ATTRIBUTEID_NODEID, &UA_TYPES[UA_TYPES_NODEID],
-        (UA_ClientAsyncServiceCallback)callback, userdata, reqId);
-}
-typedef void (*UA_ClientAsyncReadNodeClassAttributeCallback)(UA_Client *client,
-                                                             void *userdata,
-                                                             UA_UInt32 requestId,
-                                                             UA_NodeClass *out);
-static UA_INLINE UA_StatusCode
-UA_Client_readNodeClassAttribute_async(
-    UA_Client *client, const UA_NodeId nodeId,
-    UA_ClientAsyncReadNodeClassAttributeCallback callback, void *userdata,
-    UA_UInt32 *reqId) {
-    return __UA_Client_readAttribute_async(
-        client, &nodeId, UA_ATTRIBUTEID_NODECLASS, &UA_TYPES[UA_TYPES_NODECLASS],
-        (UA_ClientAsyncServiceCallback)callback, userdata, reqId);
-}
-typedef void (*UA_ClientAsyncReadBrowseNameAttributeCallback)(UA_Client *client,
-                                                              void *userdata,
-                                                              UA_UInt32 requestId,
-                                                              UA_QualifiedName *out);
-static UA_INLINE UA_StatusCode
-UA_Client_readBrowseNameAttribute_async(
-    UA_Client *client, const UA_NodeId nodeId,
-    UA_ClientAsyncReadBrowseNameAttributeCallback callback, void *userdata,
-    UA_UInt32 *reqId) {
-    return __UA_Client_readAttribute_async(
-        client, &nodeId, UA_ATTRIBUTEID_BROWSENAME, &UA_TYPES[UA_TYPES_QUALIFIEDNAME],
-        (UA_ClientAsyncServiceCallback)callback, userdata, reqId);
-}
-typedef void (*UA_ClientAsyncReadDisplayNameAttributeCallback)(UA_Client *client,
-                                                               void *userdata,
-                                                               UA_UInt32 requestId,
-                                                               UA_LocalizedText *out);
-static UA_INLINE UA_StatusCode
-UA_Client_readDisplayNameAttribute_async(
-    UA_Client *client, const UA_NodeId nodeId,
-    UA_ClientAsyncReadDisplayNameAttributeCallback callback, void *userdata,
-    UA_UInt32 *reqId) {
-    return __UA_Client_readAttribute_async(
-        client, &nodeId, UA_ATTRIBUTEID_DISPLAYNAME, &UA_TYPES[UA_TYPES_LOCALIZEDTEXT],
-        (UA_ClientAsyncServiceCallback)callback, userdata, reqId);
-}
-typedef void (*UA_ClientAsyncReadDescriptionAttributeCallback)(UA_Client *client,
-                                                               void *userdata,
-                                                               UA_UInt32 requestId,
-                                                               UA_LocalizedText *out);
-static UA_INLINE UA_StatusCode
-UA_Client_readDescriptionAttribute_async(
-    UA_Client *client, const UA_NodeId nodeId,
-    UA_ClientAsyncReadDescriptionAttributeCallback callback, void *userdata,
-    UA_UInt32 *reqId) {
-    return __UA_Client_readAttribute_async(
-        client, &nodeId, UA_ATTRIBUTEID_DESCRIPTION, &UA_TYPES[UA_TYPES_LOCALIZEDTEXT],
-        (UA_ClientAsyncServiceCallback)callback, userdata, reqId);
-}
-typedef void (*UA_ClientAsyncReadWriteMaskAttributeCallback)(UA_Client *client,
-                                                             void *userdata,
-                                                             UA_UInt32 requestId,
-                                                             UA_UInt32 *out);
-static UA_INLINE UA_StatusCode
-UA_Client_readWriteMaskAttribute_async(
-    UA_Client *client, const UA_NodeId nodeId,
-    UA_ClientAsyncReadWriteMaskAttributeCallback callback, void *userdata,
-    UA_UInt32 *reqId) {
-    return __UA_Client_readAttribute_async(
-        client, &nodeId, UA_ATTRIBUTEID_WRITEMASK, &UA_TYPES[UA_TYPES_UINT32],
-        (UA_ClientAsyncServiceCallback)callback, userdata, reqId);
-}
-typedef void (*UA_ClientAsyncReadUserWriteMaskAttributeCallback)(UA_Client *client,
-                                                                 void *userdata,
-                                                                 UA_UInt32 requestId,
-                                                                 UA_UInt32 *out);
-static UA_INLINE UA_StatusCode
-UA_Client_readUserWriteMaskAttribute_async(
-    UA_Client *client, const UA_NodeId nodeId,
-    UA_ClientAsyncReadUserWriteMaskAttributeCallback callback, void *userdata,
-    UA_UInt32 *reqId) {
-    return __UA_Client_readAttribute_async(
-        client, &nodeId, UA_ATTRIBUTEID_USERWRITEMASK, &UA_TYPES[UA_TYPES_UINT32],
-        (UA_ClientAsyncServiceCallback)callback, userdata, reqId);
-}
-typedef void (*UA_ClientAsyncReadIsAbstractAttributeCallback)(UA_Client *client,
-                                                              void *userdata,
-                                                              UA_UInt32 requestId,
-                                                              UA_Boolean *out);
-static UA_INLINE UA_StatusCode
-UA_Client_readIsAbstractAttribute_async(
-    UA_Client *client, const UA_NodeId nodeId,
-    UA_ClientAsyncReadIsAbstractAttributeCallback callback, void *userdata,
-    UA_UInt32 *reqId) {
-    return __UA_Client_readAttribute_async(
-        client, &nodeId, UA_ATTRIBUTEID_ISABSTRACT, &UA_TYPES[UA_TYPES_BOOLEAN],
-        (UA_ClientAsyncServiceCallback)callback, userdata, reqId);
-}
-typedef void (*UA_ClientAsyncReadSymmetricAttributeCallback)(UA_Client *client,
-                                                             void *userdata,
-                                                             UA_UInt32 requestId,
-                                                             UA_Boolean *out);
-static UA_INLINE UA_StatusCode
-UA_Client_readSymmetricAttribute_async(
-    UA_Client *client, const UA_NodeId nodeId,
-    UA_ClientAsyncReadSymmetricAttributeCallback callback, void *userdata,
-    UA_UInt32 *reqId) {
-    return __UA_Client_readAttribute_async(
-        client, &nodeId, UA_ATTRIBUTEID_SYMMETRIC, &UA_TYPES[UA_TYPES_BOOLEAN],
-        (UA_ClientAsyncServiceCallback)callback, userdata, reqId);
-}
-typedef void (*UA_ClientAsyncReadInverseNameAttributeCallback)(UA_Client *client,
-                                                               void *userdata,
-                                                               UA_UInt32 requestId,
-                                                               UA_LocalizedText *out);
-static UA_INLINE UA_StatusCode
-UA_Client_readInverseNameAttribute_async(
-    UA_Client *client, const UA_NodeId nodeId,
-    UA_ClientAsyncReadInverseNameAttributeCallback callback, void *userdata,
-    UA_UInt32 *reqId) {
-    return __UA_Client_readAttribute_async(
-        client, &nodeId, UA_ATTRIBUTEID_INVERSENAME, &UA_TYPES[UA_TYPES_LOCALIZEDTEXT],
-        (UA_ClientAsyncServiceCallback)callback, userdata, reqId);
-}
-typedef void (*UA_ClientAsyncReadContainsNoLoopsAttributeCallback)(UA_Client *client,
-                                                                   void *userdata,
-                                                                   UA_UInt32 requestId,
-                                                                   UA_Boolean *out);
-static UA_INLINE UA_StatusCode
-UA_Client_readContainsNoLoopsAttribute_async(
-    UA_Client *client, const UA_NodeId nodeId,
-    UA_ClientAsyncReadContainsNoLoopsAttributeCallback callback, void *userdata,
-    UA_UInt32 *reqId) {
-    return __UA_Client_readAttribute_async(
-        client, &nodeId, UA_ATTRIBUTEID_CONTAINSNOLOOPS, &UA_TYPES[UA_TYPES_BOOLEAN],
-        (UA_ClientAsyncServiceCallback)callback, userdata, reqId);
-}
-typedef void (*UA_ClientAsyncReadEventNotifierAttributeCallback)(UA_Client *client,
-                                                                 void *userdata,
-                                                                 UA_UInt32 requestId,
-                                                                 UA_Byte *out);
-static UA_INLINE UA_StatusCode
-UA_Client_readEventNotifierAttribute_async(
-    UA_Client *client, const UA_NodeId nodeId,
-    UA_ClientAsyncReadEventNotifierAttributeCallback callback, void *userdata,
-    UA_UInt32 *reqId) {
-    return __UA_Client_readAttribute_async(
-        client, &nodeId, UA_ATTRIBUTEID_EVENTNOTIFIER, &UA_TYPES[UA_TYPES_BYTE],
-        (UA_ClientAsyncServiceCallback)callback, userdata, reqId);
-}
-typedef void (*UA_ClientAsyncReadValueRankAttributeCallback)(UA_Client *client,
-                                                             void *userdata,
-                                                             UA_UInt32 requestId,
-                                                             UA_Int32 *out);
-static UA_INLINE UA_StatusCode
-UA_Client_readValueRankAttribute_async(
-    UA_Client *client, const UA_NodeId nodeId,
-    UA_ClientAsyncReadValueRankAttributeCallback callback, void *userdata,
-    UA_UInt32 *reqId) {
-    return __UA_Client_readAttribute_async(
-        client, &nodeId, UA_ATTRIBUTEID_VALUERANK, &UA_TYPES[UA_TYPES_INT32],
-        (UA_ClientAsyncServiceCallback)callback, userdata, reqId);
-}
-typedef void (*UA_ClientAsyncReadAccessLevelAttributeCallback)(UA_Client *client,
-                                                               void *userdata,
-                                                               UA_UInt32 requestId,
-                                                               UA_Byte *out);
-static UA_INLINE UA_StatusCode
-UA_Client_readAccessLevelAttribute_async(
-    UA_Client *client, const UA_NodeId nodeId,
-    UA_ClientAsyncReadAccessLevelAttributeCallback callback, void *userdata,
-    UA_UInt32 *reqId) {
-    return __UA_Client_readAttribute_async(
-        client, &nodeId, UA_ATTRIBUTEID_ACCESSLEVEL, &UA_TYPES[UA_TYPES_BYTE],
-        (UA_ClientAsyncServiceCallback)callback, userdata, reqId);
-}
-typedef void (*UA_ClientAsyncReadUserAccessLevelAttributeCallback)(UA_Client *client,
-                                                                   void *userdata,
-                                                                   UA_UInt32 requestId,
-                                                                   UA_Byte *out);
-static UA_INLINE UA_StatusCode
-UA_Client_readUserAccessLevelAttribute_async(
-    UA_Client *client, const UA_NodeId nodeId,
-    UA_ClientAsyncReadUserAccessLevelAttributeCallback callback, void *userdata,
-    UA_UInt32 *reqId) {
-    return __UA_Client_readAttribute_async(
-        client, &nodeId, UA_ATTRIBUTEID_USERACCESSLEVEL, &UA_TYPES[UA_TYPES_BYTE],
-        (UA_ClientAsyncServiceCallback)callback, userdata, reqId);
-}
-typedef void (*UA_ClientAsyncReadMinimumSamplingIntervalAttributeCallback)(
-    UA_Client *client, void *userdata, UA_UInt32 requestId, UA_Double *out);
-static UA_INLINE UA_StatusCode
-UA_Client_readMinimumSamplingIntervalAttribute_async(
-    UA_Client *client, const UA_NodeId nodeId,
-    UA_ClientAsyncReadMinimumSamplingIntervalAttributeCallback callback, void *userdata,
-    UA_UInt32 *reqId) {
-    return __UA_Client_readAttribute_async(
-        client, &nodeId, UA_ATTRIBUTEID_MINIMUMSAMPLINGINTERVAL,
-        &UA_TYPES[UA_TYPES_DOUBLE], (UA_ClientAsyncServiceCallback)callback, userdata,
-        reqId);
-}
-typedef void (*UA_ClientAsyncReadHistorizingAttributeCallback)(UA_Client *client,
-                                                               void *userdata,
-                                                               UA_UInt32 requestId,
-                                                               UA_Boolean *out);
-static UA_INLINE UA_StatusCode
-UA_Client_readHistorizingAttribute_async(
-    UA_Client *client, const UA_NodeId nodeId,
-    UA_ClientAsyncReadHistorizingAttributeCallback callback, void *userdata,
-    UA_UInt32 *reqId) {
-    return __UA_Client_readAttribute_async(
-        client, &nodeId, UA_ATTRIBUTEID_HISTORIZING, &UA_TYPES[UA_TYPES_BOOLEAN],
-        (UA_ClientAsyncServiceCallback)callback, userdata, reqId);
-}
-typedef void (*UA_ClientAsyncReadExecutableAttributeCallback)(UA_Client *client,
-                                                              void *userdata,
-                                                              UA_UInt32 requestId,
-                                                              UA_Boolean *out);
-static UA_INLINE UA_StatusCode
-UA_Client_readExecutableAttribute_async(
-    UA_Client *client, const UA_NodeId nodeId,
-    UA_ClientAsyncReadExecutableAttributeCallback callback, void *userdata,
-    UA_UInt32 *reqId) {
-    return __UA_Client_readAttribute_async(
-        client, &nodeId, UA_ATTRIBUTEID_EXECUTABLE, &UA_TYPES[UA_TYPES_BOOLEAN],
-        (UA_ClientAsyncServiceCallback)callback, userdata, reqId);
-}
-typedef void (*UA_ClientAsyncReadUserExecutableAttributeCallback)(UA_Client *client,
-                                                                  void *userdata,
-                                                                  UA_UInt32 requestId,
-                                                                  UA_Boolean *out);
-static UA_INLINE UA_StatusCode
-UA_Client_readUserExecutableAttribute_async(
-    UA_Client *client, const UA_NodeId nodeId,
-    UA_ClientAsyncReadUserExecutableAttributeCallback callback, void *userdata,
-    UA_UInt32 *reqId) {
-    return __UA_Client_readAttribute_async(
-        client, &nodeId, UA_ATTRIBUTEID_USEREXECUTABLE, &UA_TYPES[UA_TYPES_BOOLEAN],
-        (UA_ClientAsyncServiceCallback)callback, userdata, reqId);
-}
+/* Read a single DataType attribute */
+typedef void
+(*UA_ClientAsyncReadDataTypeAttributeCallback)(UA_Client *client, void *userdata,
+                                               UA_UInt32 requestId, UA_StatusCode status,
+                                               UA_NodeId *dataType);
+UA_StatusCode UA_EXPORT
+UA_Client_readDataTypeAttribute_async(UA_Client *client, const UA_NodeId nodeId,
+                                      UA_ClientAsyncReadDataTypeAttributeCallback callback,
+                                      void *userdata, UA_UInt32 *requestId);
+
+/* Read a single ArrayDimensions attribute. If the status is good, the variant
+ * carries an UInt32 array. */
+typedef void
+(*UA_ClientReadArrayDimensionsAttributeCallback)(UA_Client *client, void *userdata,
+                                                 UA_UInt32 requestId, UA_StatusCode status,
+                                                 UA_Variant *arrayDimensions);
+UA_StatusCode UA_EXPORT
+UA_Client_readArrayDimensionsAttribute_async(UA_Client *client, const UA_NodeId nodeId,
+                                             UA_ClientReadArrayDimensionsAttributeCallback callback,
+                                             void *userdata, UA_UInt32 *requestId);
+
+/* Read a single NodeClass attribute */
+typedef void
+(*UA_ClientAsyncReadNodeClassAttributeCallback)(UA_Client *client, void *userdata,
+                                                UA_UInt32 requestId, UA_StatusCode status,
+                                                UA_NodeClass *nodeClass);
+UA_StatusCode UA_EXPORT
+UA_Client_readNodeClassAttribute_async(UA_Client *client, const UA_NodeId nodeId,
+                                       UA_ClientAsyncReadNodeClassAttributeCallback callback,
+                                       void *userdata, UA_UInt32 *requestId);
+
+/* Read a single BrowseName attribute */
+typedef void
+(*UA_ClientAsyncReadBrowseNameAttributeCallback)(UA_Client *client, void *userdata,
+                                                 UA_UInt32 requestId, UA_StatusCode status,
+                                                 UA_QualifiedName *browseName);
+UA_StatusCode UA_EXPORT
+UA_Client_readBrowseNameAttribute_async(UA_Client *client, const UA_NodeId nodeId,
+                                        UA_ClientAsyncReadBrowseNameAttributeCallback callback,
+                                        void *userdata, UA_UInt32 *requestId);
+
+/* Read a single DisplayName attribute */
+typedef void
+(*UA_ClientAsyncReadDisplayNameAttributeCallback)(UA_Client *client, void *userdata,
+                                                  UA_UInt32 requestId, UA_StatusCode status,
+                                                  UA_LocalizedText *displayName);
+UA_StatusCode UA_EXPORT
+UA_Client_readDisplayNameAttribute_async(UA_Client *client, const UA_NodeId nodeId,
+                                         UA_ClientAsyncReadDisplayNameAttributeCallback callback,
+                                         void *userdata, UA_UInt32 *requestId);
+
+/* Read a single Description attribute */
+typedef void
+(*UA_ClientAsyncReadDescriptionAttributeCallback)(UA_Client *client, void *userdata,
+                                                  UA_UInt32 requestId, UA_StatusCode status,
+                                                  UA_LocalizedText *description);
+UA_StatusCode UA_EXPORT
+UA_Client_readDescriptionAttribute_async(UA_Client *client, const UA_NodeId nodeId,
+                                         UA_ClientAsyncReadDescriptionAttributeCallback callback,
+                                         void *userdata, UA_UInt32 *requestId);
+
+/* Read a single WriteMask attribute */
+typedef void
+(*UA_ClientAsyncReadWriteMaskAttributeCallback)(UA_Client *client, void *userdata,
+                                                UA_UInt32 requestId, UA_StatusCode status,
+                                                UA_UInt32 *writeMask);
+UA_StatusCode UA_EXPORT
+UA_Client_readWriteMaskAttribute_async(UA_Client *client, const UA_NodeId nodeId,
+                                       UA_ClientAsyncReadWriteMaskAttributeCallback callback,
+                                       void *userdata, UA_UInt32 *requestId);
+
+/* Read a single UserWriteMask attribute */
+typedef void
+(*UA_ClientAsyncReadUserWriteMaskAttributeCallback)(UA_Client *client, void *userdata,
+                                                    UA_UInt32 requestId, UA_StatusCode status,
+                                                    UA_UInt32 *writeMask);
+UA_StatusCode UA_EXPORT
+UA_Client_readUserWriteMaskAttribute_async(UA_Client *client, const UA_NodeId nodeId,
+                                           UA_ClientAsyncReadUserWriteMaskAttributeCallback callback,
+                                           void *userdata, UA_UInt32 *requestId);
+
+/* Read a single IsAbstract attribute */
+typedef void
+(*UA_ClientAsyncReadIsAbstractAttributeCallback)(UA_Client *client, void *userdata,
+                                                 UA_UInt32 requestId, UA_StatusCode status,
+                                                 UA_Boolean *isAbstract);
+UA_StatusCode UA_EXPORT
+UA_Client_readIsAbstractAttribute_async(UA_Client *client, const UA_NodeId nodeId,
+                                        UA_ClientAsyncReadIsAbstractAttributeCallback callback,
+                                        void *userdata, UA_UInt32 *requestId);
+
+/* Read a single Symmetric attribute */
+typedef void
+(*UA_ClientAsyncReadSymmetricAttributeCallback)(UA_Client *client, void *userdata,
+                                                UA_UInt32 requestId, UA_StatusCode status,
+                                                UA_Boolean *symmetric);
+UA_StatusCode UA_EXPORT
+UA_Client_readSymmetricAttribute_async(UA_Client *client, const UA_NodeId nodeId,
+                                       UA_ClientAsyncReadSymmetricAttributeCallback callback,
+                                       void *userdata, UA_UInt32 *requestId);
+
+/* Read a single InverseName attribute */
+typedef void
+(*UA_ClientAsyncReadInverseNameAttributeCallback)(UA_Client *client, void *userdata,
+                                                  UA_UInt32 requestId, UA_StatusCode status,
+                                                  UA_LocalizedText *inverseName);
+UA_StatusCode UA_EXPORT
+UA_Client_readInverseNameAttribute_async(UA_Client *client, const UA_NodeId nodeId,
+                                         UA_ClientAsyncReadInverseNameAttributeCallback callback,
+                                         void *userdata, UA_UInt32 *requestId);
+
+/* Read a single ContainsNoLoops attribute */
+typedef void
+(*UA_ClientAsyncReadContainsNoLoopsAttributeCallback)(UA_Client *client, void *userdata,
+                                                      UA_UInt32 requestId, UA_StatusCode status,
+                                                      UA_Boolean *containsNoLoops);
+UA_StatusCode UA_EXPORT
+UA_Client_readContainsNoLoopsAttribute_async(UA_Client *client, const UA_NodeId nodeId,
+                                             UA_ClientAsyncReadContainsNoLoopsAttributeCallback callback,
+                                             void *userdata, UA_UInt32 *requestId);
+
+/* Read a single EventNotifier attribute */
+typedef void
+(*UA_ClientAsyncReadEventNotifierAttributeCallback)(UA_Client *client, void *userdata,
+                                                    UA_UInt32 requestId, UA_StatusCode status,
+                                                    UA_Byte *eventNotifier);
+UA_StatusCode UA_EXPORT
+UA_Client_readEventNotifierAttribute_async(UA_Client *client, const UA_NodeId nodeId,
+                                           UA_ClientAsyncReadEventNotifierAttributeCallback callback,
+                                           void *userdata, UA_UInt32 *requestId);
+
+/* Read a single ValueRank attribute */
+typedef void
+(*UA_ClientAsyncReadValueRankAttributeCallback)(UA_Client *client, void *userdata,
+                                                UA_UInt32 requestId, UA_StatusCode status,
+                                                UA_Int32 *valueRank);
+UA_StatusCode UA_EXPORT
+UA_Client_readValueRankAttribute_async(UA_Client *client, const UA_NodeId nodeId,
+                                       UA_ClientAsyncReadValueRankAttributeCallback callback,
+                                       void *userdata, UA_UInt32 *requestId);
+
+/* Read a single AccessLevel attribute */
+typedef void
+(*UA_ClientAsyncReadAccessLevelAttributeCallback)(UA_Client *client, void *userdata,
+                                                  UA_UInt32 requestId, UA_StatusCode status,
+                                                  UA_Byte *accessLevel);
+UA_StatusCode UA_EXPORT
+UA_Client_readAccessLevelAttribute_async(UA_Client *client, const UA_NodeId nodeId,
+                                         UA_ClientAsyncReadAccessLevelAttributeCallback callback,
+                                         void *userdata, UA_UInt32 *requestId);
+
+/* Read a single UserAccessLevel attribute */
+typedef void
+(*UA_ClientAsyncReadUserAccessLevelAttributeCallback)(UA_Client *client, void *userdata,
+                                                      UA_UInt32 requestId, UA_StatusCode status,
+                                                      UA_Byte *userAccessLevel);
+UA_StatusCode UA_EXPORT
+UA_Client_readUserAccessLevelAttribute_async(UA_Client *client, const UA_NodeId nodeId,
+                                             UA_ClientAsyncReadUserAccessLevelAttributeCallback callback,
+                                             void *userdata, UA_UInt32 *requestId);
+
+/* Read a single MinimumSamplingInterval attribute */
+typedef void
+(*UA_ClientAsyncReadMinimumSamplingIntervalAttributeCallback)(UA_Client *client, void *userdata,
+                                                              UA_UInt32 requestId, UA_StatusCode status,
+                                                              UA_Double *minimumSamplingInterval);
+UA_StatusCode UA_EXPORT
+UA_Client_readMinimumSamplingIntervalAttribute_async(UA_Client *client, const UA_NodeId nodeId,
+                                                     UA_ClientAsyncReadMinimumSamplingIntervalAttributeCallback callback,
+                                                     void *userdata, UA_UInt32 *requestId);
+
+/* Read a single Historizing attribute */
+typedef void
+(*UA_ClientAsyncReadHistorizingAttributeCallback)(UA_Client *client, void *userdata,
+                                                  UA_UInt32 requestId, UA_StatusCode status,
+                                                  UA_Boolean *historizing);
+UA_StatusCode UA_EXPORT
+UA_Client_readHistorizingAttribute_async(UA_Client *client, const UA_NodeId nodeId,
+                                         UA_ClientAsyncReadHistorizingAttributeCallback callback,
+                                         void *userdata, UA_UInt32 *requestId);
+
+/* Read a single Executable attribute */
+typedef void
+(*UA_ClientAsyncReadExecutableAttributeCallback)(UA_Client *client, void *userdata,
+                                                 UA_UInt32 requestId, UA_StatusCode status,
+                                                 UA_Boolean *executable);
+UA_StatusCode UA_EXPORT
+UA_Client_readExecutableAttribute_async(UA_Client *client, const UA_NodeId nodeId,
+                                        UA_ClientAsyncReadExecutableAttributeCallback callback,
+                                        void *userdata, UA_UInt32 *requestId);
+
+/* Read a single UserExecutable attribute */
+typedef void
+(*UA_ClientAsyncReadUserExecutableAttributeCallback)(UA_Client *client, void *userdata,
+                                                     UA_UInt32 requestId, UA_StatusCode status,
+                                                     UA_Boolean *userExecutable);
+UA_StatusCode UA_EXPORT
+UA_Client_readUserExecutableAttribute_async(UA_Client *client, const UA_NodeId nodeId,
+                                            UA_ClientAsyncReadUserExecutableAttributeCallback callback,
+                                            void *userdata, UA_UInt32 *requestId);
+
 /**
  * Write Attribute
  * ^^^^^^^^^^^^^^ */
@@ -41312,7 +30037,7 @@ UA_Cient_translateBrowsePathsToNodeIds_async(UA_Client *client, char **paths,
 _UA_END_DECLS
 
 
-/*********************************** amalgamated original file "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/plugins/include/open62541/plugin/accesscontrol_default.h" ***********************************/
+/*********************************** amalgamated original file "C:/Projects/open62541Upstream/plugins/include/open62541/plugin/accesscontrol_default.h" ***********************************/
 
 /* This work is licensed under a Creative Commons CCZero 1.0 Universal License.
  * See http://creativecommons.org/publicdomain/zero/1.0/ for more information.
@@ -41341,7 +30066,7 @@ UA_AccessControl_default(UA_ServerConfig *config, UA_Boolean allowAnonymous,
 _UA_END_DECLS
 
 
-/*********************************** amalgamated original file "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/plugins/include/open62541/plugin/pki_default.h" ***********************************/
+/*********************************** amalgamated original file "C:/Projects/open62541Upstream/plugins/include/open62541/plugin/pki_default.h" ***********************************/
 
 /* This work is licensed under a Creative Commons CCZero 1.0 Universal License.
  * See http://creativecommons.org/publicdomain/zero/1.0/ for more information.
@@ -41384,7 +30109,7 @@ UA_CertificateVerification_CertFolders(UA_CertificateVerification *cv,
 _UA_END_DECLS
 
 
-/*********************************** amalgamated original file "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/plugins/include/open62541/plugin/log_stdout.h" ***********************************/
+/*********************************** amalgamated original file "C:/Projects/open62541Upstream/plugins/include/open62541/plugin/log_stdout.h" ***********************************/
 
 /* This work is licensed under a Creative Commons CCZero 1.0 Universal License.
  * See http://creativecommons.org/publicdomain/zero/1.0/ for more information.
@@ -41415,7 +30140,7 @@ UA_EXPORT UA_Logger UA_Log_Stdout_withLevel(UA_LogLevel minlevel);
 _UA_END_DECLS
 
 
-/*********************************** amalgamated original file "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/plugins/include/open62541/plugin/nodestore_default.h" ***********************************/
+/*********************************** amalgamated original file "C:/Projects/open62541Upstream/plugins/include/open62541/plugin/nodestore_default.h" ***********************************/
 
 /* This work is licensed under a Creative Commons CCZero 1.0 Universal License.
  * See http://creativecommons.org/publicdomain/zero/1.0/ for more information.
@@ -41446,7 +30171,7 @@ UA_Nodestore_ZipTree(UA_Nodestore *ns);
 _UA_END_DECLS
 
 
-/*********************************** amalgamated original file "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/plugins/include/open62541/server_config_default.h" ***********************************/
+/*********************************** amalgamated original file "C:/Projects/open62541Upstream/plugins/include/open62541/server_config_default.h" ***********************************/
 
 /* This work is licensed under a Creative Commons CCZero 1.0 Universal License.
  * See http://creativecommons.org/publicdomain/zero/1.0/ for more information.
@@ -41688,7 +30413,7 @@ UA_ServerConfig_addAllEndpoints(UA_ServerConfig *config);
 _UA_END_DECLS
 
 
-/*********************************** amalgamated original file "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/plugins/include/open62541/client_config_default.h" ***********************************/
+/*********************************** amalgamated original file "C:/Projects/open62541Upstream/plugins/include/open62541/client_config_default.h" ***********************************/
 
 /* This work is licensed under a Creative Commons CCZero 1.0 Universal License.
  * See http://creativecommons.org/publicdomain/zero/1.0/ for more information.
@@ -41718,7 +30443,7 @@ UA_ClientConfig_setDefaultEncryption(UA_ClientConfig *config,
 _UA_END_DECLS
 
 
-/*********************************** amalgamated original file "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/plugins/include/open62541/plugin/securitypolicy_default.h" ***********************************/
+/*********************************** amalgamated original file "C:/Projects/open62541Upstream/plugins/include/open62541/plugin/securitypolicy_default.h" ***********************************/
 
 /* This work is licensed under a Creative Commons CCZero 1.0 Universal License.
  * See http://creativecommons.org/publicdomain/zero/1.0/ for more information.
@@ -41765,10 +30490,21 @@ UA_SecurityPolicy_Aes128Sha256RsaOaep(UA_SecurityPolicy *policy,
 
 #endif
 
+#ifdef UA_ENABLE_PUBSUB_ENCRYPTION
+
+UA_EXPORT UA_StatusCode
+UA_PubSubSecurityPolicy_Aes128Ctr(UA_PubSubSecurityPolicy *policy,
+                                  const UA_Logger *logger);
+UA_EXPORT UA_StatusCode
+UA_PubSubSecurityPolicy_Aes256Ctr(UA_PubSubSecurityPolicy *policy,
+                                  const UA_Logger *logger);
+
+#endif
+
 _UA_END_DECLS
 
 
-/*********************************** amalgamated original file "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/include/open62541/network_tcp.h" ***********************************/
+/*********************************** amalgamated original file "C:/Projects/open62541Upstream/include/open62541/network_tcp.h" ***********************************/
 
 /* This work is licensed under a Creative Commons CCZero 1.0 Universal License.
  * See http://creativecommons.org/publicdomain/zero/1.0/ for more information. 
@@ -41811,7 +30547,7 @@ UA_ClientConnectionTCP_poll(UA_Connection *connection, UA_UInt32 timeout,
 _UA_END_DECLS
 
 
-/*********************************** amalgamated original file "C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/include/open62541/architecture_functions.h" ***********************************/
+/*********************************** amalgamated original file "C:/Projects/open62541Upstream/include/open62541/architecture_functions.h" ***********************************/
 
 /* This work is licensed under a Creative Commons CCZero 1.0 Universal License.
  * See http://creativecommons.org/publicdomain/zero/1.0/ for more information.
@@ -41829,23 +30565,6 @@ _UA_END_DECLS
 
 _UA_BEGIN_DECLS
 
-/* Allocation functions */
-#ifndef UA_malloc
-void* UA_malloc(size_t size); //allocate memory in the heap with size bytes
-#endif
-
-#ifndef UA_calloc
-void* UA_calloc(size_t num, size_t size); //allocate memory in the heap with size*num bytes and set the memory to zero
-#endif
-
-#ifndef UA_realloc
-void* UA_realloc(void *ptr, size_t new_size);//re-allocate memory in the heap with new_size bytes from previously allocated memory ptr
-#endif
-
-#ifndef UA_free
-void UA_free(void* ptr); //de-allocate memory previously allocated with UA_malloc, UA_calloc or UA_realloc
-#endif
-
 /* Sleep function */
 #ifndef UA_sleep_ms
 int UA_sleep_ms(unsigned int miliSeconds); //suspend the thread for a certain amount of mili seconds
@@ -41857,7 +30576,7 @@ ssize_t UA_send(UA_SOCKET sockfd, const void *buf, size_t len, int flags); //equ
 #endif
 
 #ifndef UA_sendto
-ssize_t sendto(UA_SOCKET sockfd, const void *buf, size_t len, int flags, const struct sockaddr *dest_addr, socklen_t addrlen); //equivalent to posix sendto implementation
+ssize_t UA_sendto(UA_SOCKET sockfd, const void *buf, size_t len, int flags, const struct sockaddr *dest_addr, socklen_t addrlen); //equivalent to posix sendto implementation
 #endif
 
 #ifndef UA_select
@@ -41869,7 +30588,11 @@ ssize_t UA_recv(UA_SOCKET sockfd, void *buf, size_t len, int flags); //equivalen
 #endif
 
 #ifndef UA_recvfrom
-ssize_t recvfrom(UA_SOCKET sockfd, void *buf, size_t len, int flags, struct sockaddr *src_addr, socklen_t *addrlen);
+ssize_t UA_recvfrom(UA_SOCKET sockfd, void *buf, size_t len, int flags, struct sockaddr *src_addr, socklen_t *addrlen);//equivalent to posix recvfrom implementation
+#endif
+
+#ifndef UA_recvmsg
+ssize_t UA_recvmsg(int sockfd, struct msghdr *msg, int flags);//equivalent to posix recvmsg implementation
 #endif
 
 #ifndef UA_shutdown
@@ -41938,6 +30661,10 @@ unsigned int UA_socket_set_blocking(UA_SOCKET sockfd);//set a socket as blocking
 unsigned int UA_socket_set_nonblocking(UA_SOCKET sockfd);//set a socket as non-blocking. Returns 0 if OK, other value otherwise
 #endif
 
+#ifndef UA_ioctl
+int UA_ioctl(int fildes, int request, ...);//equivalent to posix ioctl implementation
+#endif
+
 #ifndef UA_getsockopt
 int UA_getsockopt(int sockfd, int level, int optname, void *optval, socklen_t *optlen); //equivalent to posix getsockopt implementation. Only in non windows architectures
 #endif
@@ -41947,7 +30674,7 @@ int UA_setsockopt(int sockfd, int level, int optname, const void *optval, sockle
 #endif
 
 #ifndef UA_freeaddrinfo
-void UA_freeaddrinfo(struct addrinfo *res);//equivalent to posix freeaddrinfo implementatio
+void UA_freeaddrinfo(struct addrinfo *res);//equivalent to posix freeaddrinfo implementation
 #endif
 
 #ifndef UA_gethostname

@@ -234,6 +234,14 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <Project>{29F1471B-88FF-3A54-82A0-9F3EE66CB6AA}</Project>
       <Name>server_nodeset</Name>
     </ProjectReference>
+    <ProjectReference Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\examples\nodeset\server_nodeset_plcopen.vcxproj">
+      <Project>{03206ACC-8365-302F-A471-157767E7771C}</Project>
+      <Name>server_nodeset_plcopen</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\examples\nodeset\server_nodeset_powerlink.vcxproj">
+      <Project>{2382E5B8-9981-3894-8D8D-293EAE91DAC5}</Project>
+      <Name>server_nodeset_powerlink</Name>
+    </ProjectReference>
     <ProjectReference Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\examples\server_repeated_job.vcxproj">
       <Project>{143A6B05-ECE9-3079-98D2-3BAE33AE4297}</Project>
       <Name>server_repeated_job</Name>
@@ -241,6 +249,10 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ProjectReference Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\examples\server_settimestamp.vcxproj">
       <Project>{BC0E685B-4C94-3E5D-814A-8FB436A97194}</Project>
       <Name>server_settimestamp</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\examples\nodeset\server_testnodeset.vcxproj">
+      <Project>{31327039-7806-3F44-9592-DB30227B48B3}</Project>
+      <Name>server_testnodeset</Name>
     </ProjectReference>
     <ProjectReference Include="C:\Users\Rudolf\source\repos\STUBA-rupr\open62541-i4Component\buildWIN\examples\tutorial_client_events.vcxproj">
       <Project>{1F63A10C-0083-3299-A89E-B77550E90617}</Project>

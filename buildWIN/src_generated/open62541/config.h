@@ -11,8 +11,8 @@
 #define UA_OPEN62541_VER_MAJOR 1
 #define UA_OPEN62541_VER_MINOR 1
 #define UA_OPEN62541_VER_PATCH 2
-#define UA_OPEN62541_VER_LABEL "-300-g782d576b-dirty" /* Release candidate label, etc. */
-#define UA_OPEN62541_VER_COMMIT "v1.1.2-300-g782d576b-dirty"
+#define UA_OPEN62541_VER_LABEL "-301-ged1fcac1-dirty" /* Release candidate label, etc. */
+#define UA_OPEN62541_VER_COMMIT "v1.1.2-301-ged1fcac1-dirty"
 
 /**
  * Feature Options
@@ -21,7 +21,7 @@
 
 #define UA_LOGLEVEL 300
 #ifndef UA_ENABLE_AMALGAMATION
-#define UA_ENABLE_AMALGAMATION
+/* #undef UA_ENABLE_AMALGAMATION */
 #endif
 #define UA_ENABLE_METHODCALLS
 #define UA_ENABLE_NODEMANAGEMENT

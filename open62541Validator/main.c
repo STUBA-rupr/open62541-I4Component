@@ -3,7 +3,7 @@
 #pragma warning(disable : 4996)
 
 #include "namespace_i4aas_generated.h"
-#include "namespace_instance_generated.h"
+#include "namespace_i4aas_inst_generated.h"
 #include "open62541.h"
 
 
@@ -78,7 +78,7 @@ int main() {
         return (int)UA_STATUSCODE_BADUNEXPECTEDERROR;
     }
 
-    retval |= namespace_instance_generated(server);
+    retval |= namespace_i4aas_inst_generated(server);
     if(retval != UA_STATUSCODE_GOOD) {
         UA_LOG_ERROR(UA_Log_Stdout, UA_LOGCATEGORY_SERVER,
                      "Adding the namespace_instance_generated namespace failed. Please "
@@ -87,6 +87,7 @@ int main() {
         UA_Server_delete(server);
         return (int)UA_STATUSCODE_BADUNEXPECTEDERROR;
     }
+
 
     // Add method call backs
     

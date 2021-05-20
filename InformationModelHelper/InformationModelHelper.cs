@@ -196,5 +196,33 @@ namespace InformationModelHelper
             // rewind 
             stream.Position = 0;
         }
+
+        /// <summary>
+        /// Check if NodeSet is completed in terms of references , datatypes, ect.
+        /// </summary>
+        /// <param name="uaNodeSet"></param>
+        public static void Validate(Opc.Ua.Export.UANodeSet uaNodeSet)
+        {
+
+            // check for duplicity NodeIds
+            var duplicateNodes = uaNodeSet.Items.GroupBy(x => x.NodeId).Where(x => x.Count() > 1).Select(x => x.Key);
+            duplicateNodes.ToList().ForEach(i => Console.WriteLine("Duplicate:\t" + i));
+
+            // check if all references are defined within Nodeset
+            foreach (Opc.Ua.Export.UANode uaNode in uaNodeSet.Items)
+            {
+                var noRefNodes =  uaNode.References.Where(r => !uaNodeSet.Items.ToList().Select(i => i.NodeId).Contains(r.Value));
+                noRefNodes.ToList().ForEach(i => Console.WriteLine("NoRef:\t" + i.Value));
+            }
+            
+
+
+        }
+
+        public static void LoadNodeSet(Stream stream, out Opc.Ua.Export.UANodeSet uaNodeSet)
+        {
+            // load stream 
+            uaNodeSet = Opc.Ua.Export.UANodeSet.Read(stream);
+        }
     }
 }

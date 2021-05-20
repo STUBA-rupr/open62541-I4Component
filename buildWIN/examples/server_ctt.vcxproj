@@ -127,6 +127,7 @@
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <ImportLibrary>C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/bin/Debug/server_ctt.lib</ImportLibrary>
       <ProgramDataBaseFile>C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/bin/examples/server_ctt.pdb</ProgramDataBaseFile>
+      <StackReserveSize>8000000</StackReserveSize>
       <SubSystem>Console</SubSystem>
     </Link>
     <ProjectReference>
@@ -172,6 +173,7 @@
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <ImportLibrary>C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/bin/Release/server_ctt.lib</ImportLibrary>
       <ProgramDataBaseFile>C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/bin/examples/server_ctt.pdb</ProgramDataBaseFile>
+      <StackReserveSize>8000000</StackReserveSize>
       <SubSystem>Console</SubSystem>
     </Link>
     <ProjectReference>
@@ -217,6 +219,7 @@
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <ImportLibrary>C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/bin/MinSizeRel/server_ctt.lib</ImportLibrary>
       <ProgramDataBaseFile>C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/bin/examples/server_ctt.pdb</ProgramDataBaseFile>
+      <StackReserveSize>8000000</StackReserveSize>
       <SubSystem>Console</SubSystem>
     </Link>
     <ProjectReference>
@@ -261,6 +264,7 @@
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <ImportLibrary>C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/bin/RelWithDebInfo/server_ctt.lib</ImportLibrary>
       <ProgramDataBaseFile>C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/bin/examples/server_ctt.pdb</ProgramDataBaseFile>
+      <StackReserveSize>8000000</StackReserveSize>
       <SubSystem>Console</SubSystem>
     </Link>
     <ProjectReference>

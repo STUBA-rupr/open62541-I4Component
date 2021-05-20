@@ -127,6 +127,7 @@
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <ImportLibrary>C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/bin/Debug/tutorial_client_events.lib</ImportLibrary>
       <ProgramDataBaseFile>C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/bin/examples/tutorial_client_events.pdb</ProgramDataBaseFile>
+      <StackReserveSize>8000000</StackReserveSize>
       <SubSystem>Console</SubSystem>
     </Link>
     <ProjectReference>
@@ -172,6 +173,7 @@
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <ImportLibrary>C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/bin/Release/tutorial_client_events.lib</ImportLibrary>
       <ProgramDataBaseFile>C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/bin/examples/tutorial_client_events.pdb</ProgramDataBaseFile>
+      <StackReserveSize>8000000</StackReserveSize>
       <SubSystem>Console</SubSystem>
     </Link>
     <ProjectReference>
@@ -217,6 +219,7 @@
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <ImportLibrary>C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/bin/MinSizeRel/tutorial_client_events.lib</ImportLibrary>
       <ProgramDataBaseFile>C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/bin/examples/tutorial_client_events.pdb</ProgramDataBaseFile>
+      <StackReserveSize>8000000</StackReserveSize>
       <SubSystem>Console</SubSystem>
     </Link>
     <ProjectReference>
@@ -261,6 +264,7 @@
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <ImportLibrary>C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/bin/RelWithDebInfo/tutorial_client_events.lib</ImportLibrary>
       <ProgramDataBaseFile>C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/buildWIN/bin/examples/tutorial_client_events.pdb</ProgramDataBaseFile>
+      <StackReserveSize>8000000</StackReserveSize>
       <SubSystem>Console</SubSystem>
     </Link>
     <ProjectReference>

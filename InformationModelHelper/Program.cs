@@ -14,14 +14,27 @@ namespace InformationModelHelper
     {
         static void Main(string[] args)
         {
-            const string nsName = "stm32-EnvSensor-AASX041";
+
+           
+
+
+            string nsName = "stm32-EnvSensor-AASX041";
             Stream stream = new FileStream(nsName + ".xml", FileMode.Open);
             Opc.Ua.Export.UANodeSet[] uaNodeSets;
+            Opc.Ua.Export.UANodeSet uaNodeSet;
+
+
+            nsName = "Opc.Ua.NodeSet2.Reduced_i4aas";
+            stream = new FileStream(nsName + ".xml", FileMode.Open);
+
+            
+            InformationModelHelper.LoadNodeSet(stream, out uaNodeSet);
+            InformationModelHelper.Validate(uaNodeSet);
+
 
             InformationModelHelper.FixNodeSet2(ref stream);
             InformationModelHelper.SplitNodeSet2byNamespaces(stream, out uaNodeSets);
 
-            
             // add reference OrganizedBy to AASROOT to point to Objects (ns=0;i=85)
             InformationModelHelper.AddReference(ref uaNodeSets[1],
                 uaNodeSets[1].Items.First(i => i.BrowseName.EndsWith("AASROOT")).NodeId,
