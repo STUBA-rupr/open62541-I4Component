@@ -8,7 +8,7 @@ After generating Nodeset from AASX Package Explorer the nodeset XML needs to be 
 - Namespaces and models needs to be added in the file header.
 
 The i4aas and i4aas_inst nodeset are generated with code:
-``
+```
  generate namespace from XML file
 ua_generate_nodeset_and_datatypes(
         NAME "i4aas"
@@ -31,20 +31,20 @@ ua_generate_nodeset_and_datatypes(
         INTERNAL
    )
 
-``
+```
 ## Project open62541Validator
 Its purpose is to check generated nodesets.
 Generated soruce .c .h needs to be little bit adjusted:
 Define TYPES and 
 
-``
+```
 static UA_StatusCode function_namespace_i4aas_generated_0_begin(UA_Server *server, UA_UInt16* ns) {
 
 UA_StatusCode retVal = UA_STATUSCODE_GOOD;
   
   return UA_STATUSCODE_GOOD;
 ...
-``
+```
 
 The biggest deal is to use reduced nodeset to generate smaller open62541.c. For that a modified **Opc.Ua.NodeSet2.Reduced.xml** is used.
 There mest be done some modifications in CMAKE to allow Examples for Amalganed and for Reduced model.
