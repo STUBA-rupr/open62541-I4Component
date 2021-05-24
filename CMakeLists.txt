@@ -990,6 +990,7 @@ endif()
 
 if(UA_DEBUG_DUMP_PKGS)
     list(APPEND lib_sources ${PROJECT_SOURCE_DIR}/plugins/ua_debug_dump_pkgs.c)
+    list(APPEND lib_sources ${PROJECT_SOURCE_DIR}/tests/testing-plugins/testing_networklayers.c)
 endif()
 
 if(UA_ENABLE_DISCOVERY_MULTICAST)
@@ -1339,6 +1340,7 @@ target_link_libraries(open62541 ${open62541_LIBRARIES})
 add_subdirectory(doc)
 
 if(UA_BUILD_EXAMPLES)
+  # This will allow build nodeset with reduced model and as amalganmed
     if(UA_ENABLE_AMALGAMATION)
         # Cannot compile tests with amalgamation. Not prepared for single header include
         message(FATAL_ERROR "Examples cannot be built with source amalgamation enabled")

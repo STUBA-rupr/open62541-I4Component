@@ -16,6 +16,29 @@ if(NOT CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 endif()
 
 # generate namespace from XML file
+ua_generate_nodeset_and_datatypes(
+        NAME "i4aas"
+        FILE_CSV "${FILE_CSV_DIRPREFIX}/stm32-EnvSensor-AASX041_part1.csv"
+        FILE_BSD "${FILE_BSD_DIRPREFIX}/Opc.Ua.i4aas.Types.bsd"        
+        NAMESPACE_MAP "2:http://opcfoundation.org/UA/i4aas;3:http://admin-shell.io/samples/i4aas/instance"
+        FILE_NS "${FILE_NS_DIRPREFIX}/stm32-EnvSensor-AASX041_part1.xml"
+        #DEPENDS "${CMAKE_SOURCE_DIR}/tools/schema/Opc.Ua.NodeSet2.xml"
+        INTERNAL
+   )
+
+   # generate namespace from XML file
+ua_generate_nodeset_and_datatypes(
+        NAME "i4aas_inst"
+        FILE_CSV "${FILE_CSV_DIRPREFIX}/stm32-EnvSensor-AASX041_part2.csv"
+        FILE_BSD "${FILE_BSD_DIRPREFIX}/Opc.Ua.i4aas.Types.bsd"        
+        NAMESPACE_MAP "2:http://opcfoundation.org/UA/i4aas;3:http://admin-shell.io/samples/i4aas/instance"
+        FILE_NS "${FILE_NS_DIRPREFIX}/stm32-EnvSensor-AASX041_part2.xml"
+        DEPENDS "i4aas"
+        INTERNAL
+   )
+ 
+
+# generate namespace from XML file
 if(NOT CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     ua_generate_nodeset_and_datatypes(
         NAME "example"

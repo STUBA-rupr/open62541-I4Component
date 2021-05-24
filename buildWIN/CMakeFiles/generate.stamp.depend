@@ -1,0 +1,42 @@
+# CMake generation dependency list for this directory.
+C:/Program Files/CMake/share/cmake-3.20/Modules/BasicConfigVersion-AnyNewerVersion.cmake.in
+C:/Program Files/CMake/share/cmake-3.20/Modules/CMakeCInformation.cmake
+C:/Program Files/CMake/share/cmake-3.20/Modules/CMakeCheckCompilerFlagCommonPatterns.cmake
+C:/Program Files/CMake/share/cmake-3.20/Modules/CMakeCommonLanguageInclude.cmake
+C:/Program Files/CMake/share/cmake-3.20/Modules/CMakeGenericSystem.cmake
+C:/Program Files/CMake/share/cmake-3.20/Modules/CMakeInitializeConfigs.cmake
+C:/Program Files/CMake/share/cmake-3.20/Modules/CMakeLanguageInformation.cmake
+C:/Program Files/CMake/share/cmake-3.20/Modules/CMakePackageConfigHelpers.cmake
+C:/Program Files/CMake/share/cmake-3.20/Modules/CMakeRCInformation.cmake
+C:/Program Files/CMake/share/cmake-3.20/Modules/CMakeSystemSpecificInformation.cmake
+C:/Program Files/CMake/share/cmake-3.20/Modules/CMakeSystemSpecificInitialize.cmake
+C:/Program Files/CMake/share/cmake-3.20/Modules/CheckCCompilerFlag.cmake
+C:/Program Files/CMake/share/cmake-3.20/Modules/CheckCSourceCompiles.cmake
+C:/Program Files/CMake/share/cmake-3.20/Modules/Compiler/CMakeCommonCompilerMacros.cmake
+C:/Program Files/CMake/share/cmake-3.20/Modules/Compiler/MSVC-C.cmake
+C:/Program Files/CMake/share/cmake-3.20/Modules/FindGit.cmake
+C:/Program Files/CMake/share/cmake-3.20/Modules/FindPackageHandleStandardArgs.cmake
+C:/Program Files/CMake/share/cmake-3.20/Modules/FindPackageMessage.cmake
+C:/Program Files/CMake/share/cmake-3.20/Modules/FindPythonInterp.cmake
+C:/Program Files/CMake/share/cmake-3.20/Modules/GNUInstallDirs.cmake
+C:/Program Files/CMake/share/cmake-3.20/Modules/Internal/CheckCompilerFlag.cmake
+C:/Program Files/CMake/share/cmake-3.20/Modules/Internal/CheckSourceCompiles.cmake
+C:/Program Files/CMake/share/cmake-3.20/Modules/Platform/Windows-MSVC-C.cmake
+C:/Program Files/CMake/share/cmake-3.20/Modules/Platform/Windows-MSVC.cmake
+C:/Program Files/CMake/share/cmake-3.20/Modules/Platform/Windows.cmake
+C:/Program Files/CMake/share/cmake-3.20/Modules/Platform/WindowsPaths.cmake
+C:/Program Files/CMake/share/cmake-3.20/Modules/WriteBasicConfigVersionFile.cmake
+C:/Projects/open62541-i4Component/CMakeLists.txt
+C:/Projects/open62541-i4Component/buildWIN/CMakeFiles/3.20.2/CMakeCCompiler.cmake
+C:/Projects/open62541-i4Component/buildWIN/CMakeFiles/3.20.2/CMakeRCCompiler.cmake
+C:/Projects/open62541-i4Component/buildWIN/CMakeFiles/3.20.2/CMakeSystem.cmake
+C:/Projects/open62541-i4Component/include/open62541/config.h.in
+C:/Projects/open62541-i4Component/open62541.pc.in
+C:/Projects/open62541-i4Component/tools/cmake/AssignSourceGroup.cmake
+C:/Projects/open62541-i4Component/tools/cmake/FindClangTools.cmake
+C:/Projects/open62541-i4Component/tools/cmake/SetGitBasedVersion.cmake
+C:/Projects/open62541-i4Component/tools/cmake/linting_build.cmake
+C:/Projects/open62541-i4Component/tools/cmake/linting_target.cmake
+C:/Projects/open62541-i4Component/tools/cmake/macros_internal.cmake
+C:/Projects/open62541-i4Component/tools/cmake/macros_public.cmake
+C:/Projects/open62541-i4Component/tools/cmake/open62541Config.cmake.in

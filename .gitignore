@@ -84,3 +84,10 @@ Makefile
 Pipfile
 Pipfile.lock
 .vscode
+/buildFREERTOS/
+/InformationModelHelper/obj/
+/InformationModelHelper/bin/
+/InformationModelHelper/packages/
+/open62541Validator/Debug/
+/open62541Validator/x64/
+**/.vs

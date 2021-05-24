@@ -1,0 +1,2 @@
+C:\Projects\open62541-i4Component\buildWIN\open62541-object.dir\Debug\open62541-object.lib
+C:\Projects\open62541-i4Component\buildWIN\open62541-object.dir\Debug\open62541-object.pdb

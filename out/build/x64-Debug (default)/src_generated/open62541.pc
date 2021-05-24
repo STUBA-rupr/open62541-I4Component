@@ -1,0 +1,15 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+prefix=C:/Users/Rudolf/source/repos/STUBA-rupr/open62541-i4Component/out/install/x64-Debug (default)
+exec_prefix=${prefix}
+libdir=${prefix}/lib
+sharedlibdir=${libdir}
+includedir=${prefix}/include
+
+Name: open62541
+Description: open62541 is an open source C (C99) implementation of OPC UA
+Version: 0.0.0
+Libs: -L${libdir} -lopen62541
+Cflags: -I${includedir}
