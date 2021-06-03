@@ -127,8 +127,9 @@ class NodeSet(object):
                 if not ref.referenceType in self.nodes:
                     raise Exception("Reference " + str(ref) + " has an unknown reference type")
                 if not ref.target in self.nodes:
-                    print(self.namespaces)
-                    raise Exception("Reference " + str(ref) + " has an unknown target")
+                    # print(self.namespaces)
+                    # raise Exception("Reference " + str(ref) + " has an unknown target")
+                    print("Missing " + str(ref.target))
 
     def addNamespace(self, nsURL):
         if not nsURL in self.namespaces:

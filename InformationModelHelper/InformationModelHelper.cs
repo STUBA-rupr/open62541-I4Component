@@ -219,6 +219,70 @@ namespace InformationModelHelper
 
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="uaNodeSet"></param>
+        /// <param name="uaNodeSetRef"></param>
+        /// <param name="maxRef"></param>
+        public static void ReduceNodeset(Opc.Ua.Export.UANodeSet uaNodeSet, Opc.Ua.Export.UANodeSet uaNodeSetRef, int maxRef)
+        {
+            // for all nodes 
+            foreach (Opc.Ua.Export.UANode uaNode in uaNodeSet.Items)
+            {
+                int refCount = 0;
+                foreach (Opc.Ua.Export.UANode uaNodeRef in uaNodeSetRef.Items)
+                {
+                    foreach(Opc.Ua.Export.Reference reference in uaNodeRef.References)
+                    {
+                        if(reference.Value == uaNode.NodeId)
+                        {
+                            refCount++;
+                        }
+                    }
+                }
+                if (refCount <= 0) Console.WriteLine(uaNode.BrowseName + "\t\t\t, " + uaNode.NodeId);
+
+            }
+        }
+
+        /// <summary>
+        /// List all nodes in allusedNodes which are properties or cmponents of uaUsedNodes
+        /// </summary>
+        /// <param name="uaUsedNodes"></param>
+        /// <param name="uaNodeSet"></param>
+        /// <param name="allusedNodes"></param>
+        public static void UsedNodes(Opc.Ua.Export.UANode[] usedNodes, Opc.Ua.Export.UANodeSet uaNodeSet, ref Dictionary<string, Opc.Ua.Export.UANode> allusedNodes)
+        {
+            foreach (Opc.Ua.Export.UANode uANode in usedNodes)
+            {
+
+                string[] nodeIds;
+                /* ref types
+                 * 35 - organizes
+                 * 47 - Has component
+                 * 46 - Has property
+                 */
+                // select "child" nodes with reference types listed above, forward only
+                nodeIds = uANode.References.Where(r => (r.ReferenceType == "i=35" || r.ReferenceType == "i=47" || r.ReferenceType == "i=46") && r.IsForward).Select(cp => cp.Value).ToArray();
+
+                foreach(Opc.Ua.Export.UANode uaChildNode in uaNodeSet.Items.Where(i => nodeIds.Contains(i.NodeId)).ToList())
+                {
+                    // add only unique
+                    if(!allusedNodes.ContainsKey(uaChildNode.NodeId))
+                        allusedNodes.Add(uaChildNode.NodeId, uaChildNode);
+                }
+
+                UsedNodes(uaNodeSet.Items.Where(i => nodeIds.Contains(i.NodeId)).ToArray(), uaNodeSet, ref allusedNodes);
+            }
+            // call recursively            
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <param name="uaNodeSet"></param>
         public static void LoadNodeSet(Stream stream, out Opc.Ua.Export.UANodeSet uaNodeSet)
         {
             // load stream 

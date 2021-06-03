@@ -1,4 +1,4 @@
-/* Generated from Custom.Opc.Ua.Transport.bsd with script C:/Projects/open62541-i4Component/tools/generate_datatypes.py * on host VM-WIN16-DEV by user Rudolf at 2021-05-24 11:36:01 */
+/* Generated from Custom.Opc.Ua.Transport.bsd with script C:/Projects/open62541-i4Component/tools/generate_datatypes.py * on host VM-WIN16-DEV by user Rudolf at 2021-06-02 02:43:21 */
 
 #ifndef TRANSPORT_GENERATED_H_
 #define TRANSPORT_GENERATED_H_

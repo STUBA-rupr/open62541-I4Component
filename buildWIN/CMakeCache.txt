@@ -290,13 +290,16 @@ SPHINX_EXECUTABLE:FILEPATH=SPHINX_EXECUTABLE-NOTFOUND
 //List of architectures to include in amalgamation
 UA_AMALGAMATION_ARCHITECTURES:STRING=
 
-UA_ARCHITECTURE:STRING=win32
+UA_ARCHITECTURE:STRING=freertosLWIP
 
 //Flags to be added to compilation that depends on the architecure
 UA_ARCH_ADD_FLAGS:STRING=
 
 //Folders to include from the architecture
 UA_ARCH_EXTRA_INCLUDES:STRING=
+
+//Enable free/malloc/etc from own implementation
+UA_ARCH_FREERTOS_USE_OWN_MEMORY_FUNCTIONS:BOOL=ON
 
 //Linker Flags to be added to compilation that depends on the architecure
 UA_ARCH_LINKER_FLAGS:STRING=
@@ -510,6 +513,12 @@ XELATEX_COMPILER:FILEPATH=XELATEX_COMPILER-NOTFOUND
 
 //Path to a program.
 XINDY_COMPILER:FILEPATH=XINDY_COMPILER-NOTFOUND
+
+//Value Computed by CMake
+open62541-examples_BINARY_DIR:STATIC=C:/Projects/open62541-i4Component/buildWIN/examples
+
+//Value Computed by CMake
+open62541-examples_SOURCE_DIR:STATIC=C:/Projects/open62541-i4Component/examples
 
 //Value Computed by CMake
 open62541_BINARY_DIR:STATIC=C:/Projects/open62541-i4Component/buildWIN
@@ -802,6 +811,24 @@ UA_FORCE_CPP-ADVANCED:INTERNAL=1
 UA_MSVC_FORCE_STATIC_CRT-ADVANCED:INTERNAL=1
 //STRINGS property for variable: UA_NAMESPACE_ZERO
 UA_NAMESPACE_ZERO-STRINGS:INTERNAL=MINIMAL;REDUCED;FULL
+//UA_NODESET_EXAMPLE header files
+UA_NODESET_EXAMPLE_HEADERS:INTERNAL=C:/Projects/open62541-i4Component/buildWIN/src_generated/open62541/namespace_example_generated.h
+//UA_NODESET_EXAMPLE source files
+UA_NODESET_EXAMPLE_SOURCES:INTERNAL=C:/Projects/open62541-i4Component/buildWIN/src_generated/open62541/namespace_example_generated.c
+//UA_NODESET_EXAMPLE target
+UA_NODESET_EXAMPLE_TARGET:INTERNAL=open62541-generator-ns-example
+//UA_NODESET_I4AAS header files
+UA_NODESET_I4AAS_HEADERS:INTERNAL=C:/Projects/open62541-i4Component/buildWIN/src_generated/open62541/namespace_i4aas_generated.h
+//UA_NODESET_I4AAS_INST header files
+UA_NODESET_I4AAS_INST_HEADERS:INTERNAL=C:/Projects/open62541-i4Component/buildWIN/src_generated/open62541/namespace_i4aas_inst_generated.h
+//UA_NODESET_I4AAS_INST source files
+UA_NODESET_I4AAS_INST_SOURCES:INTERNAL=C:/Projects/open62541-i4Component/buildWIN/src_generated/open62541/namespace_i4aas_inst_generated.c
+//UA_NODESET_I4AAS_INST target
+UA_NODESET_I4AAS_INST_TARGET:INTERNAL=open62541-generator-ns-i4aas_inst
+//UA_NODESET_I4AAS source files
+UA_NODESET_I4AAS_SOURCES:INTERNAL=C:/Projects/open62541-i4Component/buildWIN/src_generated/open62541/namespace_i4aas_generated.c
+//UA_NODESET_I4AAS target
+UA_NODESET_I4AAS_TARGET:INTERNAL=open62541-generator-ns-i4aas
 //UA_NODESET_NS0 header files
 UA_NODESET_NS0_HEADERS:INTERNAL=C:/Projects/open62541-i4Component/buildWIN/src_generated/open62541/namespace0_generated.h
 //UA_NODESET_NS0 source files
@@ -816,6 +843,14 @@ UA_TRANSPORT_HEADERS:INTERNAL=C:/Projects/open62541-i4Component/buildWIN/src_gen
 UA_TRANSPORT_SOURCES:INTERNAL=C:/Projects/open62541-i4Component/buildWIN/src_generated/open62541/transport_generated.c
 //types header files
 UA_TYPES_HEADERS:INTERNAL=C:/Projects/open62541-i4Component/buildWIN/src_generated/open62541/types_generated.h;C:/Projects/open62541-i4Component/buildWIN/src_generated/open62541/types_generated_handling.h;C:/Projects/open62541-i4Component/buildWIN/src_generated/open62541/types_generated_encoding_binary.h
+//types_i4aas header files
+UA_TYPES_I4AAS_HEADERS:INTERNAL=C:/Projects/open62541-i4Component/buildWIN/src_generated/open62541/types_i4aas_generated.h;C:/Projects/open62541-i4Component/buildWIN/src_generated/open62541/types_i4aas_generated_handling.h;C:/Projects/open62541-i4Component/buildWIN/src_generated/open62541/types_i4aas_generated_encoding_binary.h
+//types_i4aas_inst header files
+UA_TYPES_I4AAS_INST_HEADERS:INTERNAL=C:/Projects/open62541-i4Component/buildWIN/src_generated/open62541/types_i4aas_inst_generated.h;C:/Projects/open62541-i4Component/buildWIN/src_generated/open62541/types_i4aas_inst_generated_handling.h;C:/Projects/open62541-i4Component/buildWIN/src_generated/open62541/types_i4aas_inst_generated_encoding_binary.h
+//types_i4aas_inst source files
+UA_TYPES_I4AAS_INST_SOURCES:INTERNAL=C:/Projects/open62541-i4Component/buildWIN/src_generated/open62541/types_i4aas_inst_generated.c
+//types_i4aas source files
+UA_TYPES_I4AAS_SOURCES:INTERNAL=C:/Projects/open62541-i4Component/buildWIN/src_generated/open62541/types_i4aas_generated.c
 //types source files
 UA_TYPES_SOURCES:INTERNAL=C:/Projects/open62541-i4Component/buildWIN/src_generated/open62541/types_generated.c
 //ADVANCED property for variable: UA_VALGRIND_INTERACTIVE_INTERVAL

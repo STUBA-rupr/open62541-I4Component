@@ -1,6 +1,6 @@
 /* THIS IS A SINGLE-FILE DISTRIBUTION CONCATENATED FROM THE OPEN62541 SOURCES
  * visit http://open62541.org/ for information about this software
- * Git-Revision: v.1.2.2-210-gd7bbf512-dirty
+ * Git-Revision: v.1.2.2-211-ga32db5c4-dirty
  */
 
 /*
@@ -31,8 +31,8 @@
 #define UA_OPEN62541_VER_MAJOR 0
 #define UA_OPEN62541_VER_MINOR 0
 #define UA_OPEN62541_VER_PATCH 0
-#define UA_OPEN62541_VER_LABEL "-210-gd7bbf512-dirty" /* Release candidate label, etc. */
-#define UA_OPEN62541_VER_COMMIT "v.1.2.2-210-gd7bbf512-dirty"
+#define UA_OPEN62541_VER_LABEL "-211-ga32db5c4-dirty" /* Release candidate label, etc. */
+#define UA_OPEN62541_VER_COMMIT "v.1.2.2-211-ga32db5c4-dirty"
 
 /**
  * Feature Options
@@ -134,193 +134,171 @@
 
 
 
-/*********************************** amalgamated original file "C:/Projects/open62541-i4Component/arch/win32/ua_architecture.h" ***********************************/
+/*********************************** amalgamated original file "C:/Projects/open62541-i4Component/arch/freertosLWIP/../common/ua_freeRTOS.h" ***********************************/
 
 /* This work is licensed under a Creative Commons CCZero 1.0 Universal License.
  * See http://creativecommons.org/publicdomain/zero/1.0/ for more information.
  *
- *    Copyright 2016-2017 (c) Julius Pfrommer, Fraunhofer IOSB
- *    Copyright 2017 (c) Stefan Profanter, fortiss GmbH
+ *    Copyright 2018 (c) Jose Cabral, fortiss GmbH
  */
 
-#ifdef UA_ARCHITECTURE_WIN32
-
-#ifndef PLUGINS_ARCH_WIN32_UA_ARCHITECTURE_H_
-#define PLUGINS_ARCH_WIN32_UA_ARCHITECTURE_H_
-
-#ifndef _BSD_SOURCE
-# define _BSD_SOURCE
-#endif
-
-/* Disable some security warnings on MSVC */
-#if defined(_MSC_VER) && !defined(_CRT_SECURE_NO_WARNINGS)
-# define _CRT_SECURE_NO_WARNINGS
-#endif
-
-/* Assume that Windows versions are newer than Windows XP */
-#if defined(__MINGW32__) && (!defined(WINVER) || WINVER < 0x501)
-# undef WINVER
-# undef _WIN32_WINDOWS
-# undef _WIN32_WINNT
-# define WINVER 0x0600
-# define _WIN32_WINDOWS 0x0600
-# define _WIN32_WINNT 0x0600 //windows vista version, which included InepPton
-#endif
+#ifndef ARCH_COMMON_FREERTOS62541_H_
+#define ARCH_COMMON_FREERTOS62541_H_
 
 #include <stdlib.h>
-#if defined(_WIN32) && !defined(__clang__)
-# include <malloc.h>
+#include <string.h>
+
+#ifdef BYTE_ORDER
+# undef BYTE_ORDER
 #endif
 
+#define UA_sleep_ms(X) vTaskDelay(pdMS_TO_TICKS(X))
 
-#include <stdio.h>
-#include <errno.h>
-#include <winsock2.h>
-#include <windows.h>
-#include <ws2tcpip.h>
-
-#if defined (_MSC_VER) || defined(__clang__)
-# ifndef UNDER_CE
-#  include <io.h> //access
-#  define UA_access _access
-# endif
+#ifdef OPEN62541_FEERTOS_USE_OWN_MEM
+# define UA_free vPortFree
+# define UA_malloc pvPortMalloc
+# define UA_calloc pvPortCalloc
+# define UA_realloc pvPortRealloc
 #else
-# include <unistd.h> //access and tests
-# define UA_access access
-#endif
-
-#ifndef _SSIZE_T_DEFINED
-# define ssize_t int
-#endif
-
-#define OPTVAL_TYPE int
-#ifdef UA_sleep_ms
-void UA_sleep_ms(unsigned long ms);
-#else
-# define UA_sleep_ms(X) Sleep(X)
-#endif
-
-// Windows does not support ansi colors
-// #define UA_ENABLE_LOG_COLORS
-
-#define UA_IPV6 1
-
-#if defined(__MINGW32__) && !defined(__clang__) //mingw defines SOCKET as long long unsigned int, giving errors in logging and when comparing with UA_Int32
-# define UA_SOCKET int
-# define UA_INVALID_SOCKET -1
-#else
-# define UA_SOCKET SOCKET
-# define UA_INVALID_SOCKET INVALID_SOCKET
-#endif
-#define UA_ERRNO WSAGetLastError()
-#define UA_INTERRUPTED WSAEINTR
-#define UA_AGAIN WSAEWOULDBLOCK
-#define UA_EAGAIN EAGAIN
-#define UA_WOULDBLOCK WSAEWOULDBLOCK
-#define UA_ERR_CONNECTION_PROGRESS WSAEWOULDBLOCK
-
-#define UA_fd_set(fd, fds) FD_SET((UA_SOCKET)fd, fds)
-#define UA_fd_isset(fd, fds) FD_ISSET((UA_SOCKET)fd, fds)
-
-#ifdef UNDER_CE
-# define errno
-#endif
-
-#define UA_getnameinfo getnameinfo
-#define UA_send(sockfd, buf, len, flags) send(sockfd, buf, (int)(len), flags)
-#define UA_recv(sockfd, buf, len, flags) recv(sockfd, buf, (int)(len), flags)
-#define UA_sendto(sockfd, buf, len, flags, dest_addr, addrlen) sendto(sockfd, (const char*)(buf), (int)(len), flags, dest_addr, (int) (addrlen))
-#define UA_recvfrom(sockfd, buf, len, flags, src_addr, addrlen) recvfrom(sockfd, (char*)(buf), (int)(len), flags, src_addr, addrlen)
-#define UA_recvmsg
-#define UA_htonl htonl
-#define UA_ntohl ntohl
-#define UA_close closesocket
-#define UA_select(nfds, readfds, writefds, exceptfds, timeout) select((int)(nfds), readfds, writefds, exceptfds, timeout)
-#define UA_shutdown shutdown
-#define UA_socket socket
-#define UA_bind bind
-#define UA_listen listen
-#define UA_accept accept
-#define UA_connect(sockfd, addr, addrlen) connect(sockfd, addr, (int)(addrlen))
-#define UA_getaddrinfo getaddrinfo
-#define UA_getsockopt(sockfd, level, optname, optval, optlen) getsockopt(sockfd, level, optname, (char*) (optval), optlen)
-#define UA_setsockopt(sockfd, level, optname, optval, optlen) setsockopt(sockfd, level, optname, (const char*) (optval), optlen)
-#define UA_ioctl
-#define UA_freeaddrinfo freeaddrinfo
-#define UA_gethostname gethostname
-#define UA_getsockname getsockname
-#define UA_inet_pton InetPton
-
-#if UA_IPV6
-# include <iphlpapi.h>
-# define UA_if_nametoindex if_nametoindex
-#endif
-
-#ifdef maxStringLength //defined in mingw64
-# undef maxStringLength
-#endif
-
-/* Use the standard malloc */
-#ifndef UA_free
 # define UA_free free
 # define UA_malloc malloc
 # define UA_calloc calloc
 # define UA_realloc realloc
 #endif
 
-#ifdef __CODEGEARC__
-#define _snprintf_s(a,b,c,...) snprintf(a,b,__VA_ARGS__)
+#ifdef UA_ENABLE_DISCOVERY_SEMAPHORE
+# ifndef UA_fileExists
+#  define UA_fileExists(X) (0) //file managing is not part of freeRTOS. If the system provides it, please define it before
+# endif // UA_fileExists
 #endif
 
-/* 3rd Argument is the string */
-#define UA_snprintf(source, size, ...) _snprintf_s(source, size, _TRUNCATE, __VA_ARGS__)
-#define UA_strncasecmp _strnicmp
+// No log colors on freeRTOS
+// #define UA_ENABLE_LOG_COLORS
+
+#include <stdio.h>
+#define UA_snprintf snprintf
 
 #define UA_LOG_SOCKET_ERRNO_WRAP(LOG) { \
-    char *errno_str = NULL; \
-    FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, \
-    NULL, WSAGetLastError(), \
-    MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), \
-    (LPSTR)&errno_str, 0, NULL); \
+    char *errno_str = ""; \
     LOG; \
-    LocalFree(errno_str); \
 }
+
+#endif /* ARCH_COMMON_FREERTOS62541_H_ */
+
+/*********************************** amalgamated original file "C:/Projects/open62541-i4Component/arch/freertosLWIP/../common/ua_lwip.h" ***********************************/
+
+/* This work is licensed under a Creative Commons CCZero 1.0 Universal License.
+ * See http://creativecommons.org/publicdomain/zero/1.0/ for more information.
+ *
+ *    Copyright 2018 (c) Jose Cabral, fortiss GmbH
+ */
+
+#ifndef ARCH_COMMON_LWIP62541_H_
+#define ARCH_COMMON_LWIP62541_H_
+
+/*
+ * Needed flags to be set before including this file. Normally done in lwipopts.h
+ * #define LWIP_COMPAT_SOCKETS 0 // Don't do name define-transformation in networking function names.
+ * #define LWIP_SOCKET 1 // Enable Socket API (normally already set)
+ * #define LWIP_DNS 1 // enable the lwip_getaddrinfo function, struct addrinfo and more.
+ * #define SO_REUSE 1 // Allows to set the socket as reusable
+ * #define LWIP_TIMEVAL_PRIVATE 0 // This is optional. Set this flag if you get a compilation error about redefinition of struct timeval
+ *
+ * Why not define these here? This stack is used as middleware so other code might use this header file with other flags (specially LWIP_COMPAT_SOCKETS)
+ */
+#include <lwip/tcpip.h>
+#include <lwip/netdb.h>
+#include <lwip/init.h>
+#include <lwip/sockets.h>
+
+#define OPTVAL_TYPE int
+
+#define UA_fd_set(fd, fds) FD_SET((unsigned int)fd, fds)
+#define UA_fd_isset(fd, fds) FD_ISSET((unsigned int)fd, fds)
+
+#define UA_IPV6 LWIP_IPV6
+#define UA_SOCKET int
+#define UA_INVALID_SOCKET -1
+#define UA_ERRNO errno
+#define UA_INTERRUPTED EINTR
+#define UA_AGAIN EAGAIN
+#define UA_EAGAIN EAGAIN
+#define UA_WOULDBLOCK EWOULDBLOCK
+#define UA_ERR_CONNECTION_PROGRESS EINPROGRESS
+
+#define UA_send lwip_send
+#define UA_recv lwip_recv
+#define UA_sendto lwip_sendto
+#define UA_recvfrom lwip_recvfrom
+#define UA_htonl lwip_htonl
+#define UA_ntohl lwip_ntohl
+#define UA_close lwip_close
+#define UA_select lwip_select
+#define UA_shutdown lwip_shutdown
+#define UA_socket lwip_socket
+#define UA_bind lwip_bind
+#define UA_listen lwip_listen
+#define UA_accept lwip_accept
+#define UA_connect lwip_connect
+#define UA_getsockopt lwip_getsockopt
+#define UA_setsockopt lwip_setsockopt
+#define UA_freeaddrinfo lwip_freeaddrinfo
+#ifndef UA_gethostname
+#define UA_gethostname gethostname_lwip
+#else
+extern int UA_gethostname(char* name, size_t len);
+#endif
+#ifndef UA_getsockname
+#define UA_getsockname lwip_getsockname
+#else
+extern int UA_getsockname((int s, struct sockaddr *name, socklen_t *namelen);
+#endif
+#ifndef UA_getaddrinfo
+#define UA_getaddrinfo lwip_getaddrinfo
+#else
+extern int UA_getaddrinfo(const char *nodename, const char *servname,
+                 const struct addrinfo *hints, struct addrinfo **res);
+#endif
+
+#if UA_IPV6
+# define UA_inet_pton(af, src, dst) \
+    (((af) == AF_INET6) ? ip6addr_aton((src),(ip6_addr_t*)(dst)) \
+     : (((af) == AF_INET) ? ip4addr_aton((src),(ip4_addr_t*)(dst)) : 0))
+#else
+# define UA_inet_pton(af, src, dst) \
+     (((af) == AF_INET) ? ip4addr_aton((src),(ip4_addr_t*)(dst)) : 0)
+#endif
+
+#if UA_IPV6
+# define UA_if_nametoindex lwip_if_nametoindex
+
+# if LWIP_VERSION_IS_RELEASE //lwip_if_nametoindex is not yet released
+unsigned int lwip_if_nametoindex(const char *ifname);
+# endif
+#endif
+
+int gethostname_lwip(char* name, size_t len); //gethostname is not present in LwIP. We implement here a dummy. See ../freertosLWIP/ua_architecture_functions.c
+
 #define UA_LOG_SOCKET_ERRNO_GAI_WRAP UA_LOG_SOCKET_ERRNO_WRAP
 
+#endif /* ARCH_COMMON_LWIP62541_H_ */
+
+/*********************************** amalgamated original file "C:/Projects/open62541-i4Component/arch/freertosLWIP/ua_architecture.h" ***********************************/
+
+/* This work is licensed under a Creative Commons CCZero 1.0 Universal License.
+ * See http://creativecommons.org/publicdomain/zero/1.0/ for more information.
+ *
+ *    Copyright 2016-2017 (c) Julius Pfrommer, Fraunhofer IOSB
+ *    Copyright 2017-2018 (c) Stefan Profanter, fortiss GmbH
+ *    Copyright 2018 (c) Jose Cabral, fortiss GmbH
+ */
+
+#ifdef UA_ARCHITECTURE_FREERTOSLWIP
+
+
+
 #if UA_MULTITHREADING >= 100
-
-typedef struct {
-    CRITICAL_SECTION mutex;
-    int mutexCounter;
-} UA_Lock;
-
-static UA_INLINE void
-UA_LOCK_INIT(UA_Lock *lock) {
-    InitializeCriticalSection(&lock->mutex);
-    lock->mutexCounter = 0;
-}
-
-static UA_INLINE void
-UA_LOCK_DESTROY(UA_Lock *lock) {
-    DeleteCriticalSection(&lock->mutex);
-}
-
-static UA_INLINE void
-UA_LOCK(UA_Lock *lock) {
-    EnterCriticalSection(&lock->mutex);
-    UA_assert(++(lock->mutexCounter) == 1);
-}
-
-static UA_INLINE void
-UA_UNLOCK(UA_Lock *lock) {
-    UA_assert(--(lock->mutexCounter) == 0);
-    LeaveCriticalSection(&lock->mutex);
-}
-
-static UA_INLINE void
-UA_LOCK_ASSERT(UA_Lock *lock, int num) {
-    UA_assert(lock->mutexCounter == num);
-}
+#error Multithreading unsupported
 #else
 #define UA_LOCK_INIT(lock)
 #define UA_LOCK_DESTROY(lock)
@@ -329,15 +307,22 @@ UA_LOCK_ASSERT(UA_Lock *lock, int num) {
 #define UA_LOCK_ASSERT(lock, num)
 #endif
 
+#define UA_strncasecmp strncasecmp
 
-/* Fix redefinition of SLIST_ENTRY on mingw winnt.h */
-#if !defined(_SYS_QUEUE_H_) && defined(SLIST_ENTRY)
-# undef SLIST_ENTRY
+// freeRTOS does not have getifaddr
+#undef UA_HAS_GETIFADDR
+
+#ifndef IN6_IS_ADDR_UNSPECIFIED
+# define IN6_IS_ADDR_UNSPECIFIED(a) \
+        (((const uint32_t *) (a))[0] == 0                                      \
+         && ((const uint32_t *) (a))[1] == 0                                      \
+         && ((const uint32_t *) (a))[2] == 0                                      \
+         && ((const uint32_t *) (a))[3] == 0)
 #endif
 
-#endif /* PLUGINS_ARCH_WIN32_UA_ARCHITECTURE_H_ */
 
-#endif /* UA_ARCHITECTURE_WIN32 */
+
+#endif /* UA_ARCHITECTURE_FREERTOSLWIP */
 
 /*********************************** amalgamated original file "C:/Projects/open62541-i4Component/deps/ms_stdint.h" ***********************************/
 
@@ -14431,7 +14416,7 @@ _UA_END_DECLS
 
 /*********************************** amalgamated original file "C:/Projects/open62541-i4Component/buildWIN/src_generated/open62541/types_generated.h" ***********************************/
 
-/* Generated from Opc.Ua.Types.bsd with script C:/Projects/open62541-i4Component/tools/generate_datatypes.py * on host VM-WIN16-DEV by user Rudolf at 2021-05-24 11:36:01 */
+/* Generated from Opc.Ua.Types.bsd with script C:/Projects/open62541-i4Component/tools/generate_datatypes.py * on host VM-WIN16-DEV by user Rudolf at 2021-06-02 02:43:20 */
 
 
 #ifdef UA_ENABLE_AMALGAMATION
@@ -16887,7 +16872,7 @@ _UA_END_DECLS
 /*********************************** amalgamated original file "C:/Projects/open62541-i4Component/buildWIN/src_generated/open62541/types_generated_handling.h" ***********************************/
 
 /* Generated from Opc.Ua.Types.bsd with script C:/Projects/open62541-i4Component/tools/generate_datatypes.py
- * on host VM-WIN16-DEV by user Rudolf at 2021-05-24 11:36:01 */
+ * on host VM-WIN16-DEV by user Rudolf at 2021-06-02 02:43:20 */
 
 
 

@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <ProjectOutputs>
+    <ProjectOutput>
+      <FullPath>C:\Projects\open62541-i4Component\buildWIN\x64\Debug\ZERO_CHECK</FullPath>
+    </ProjectOutput>
+    <ProjectOutput>
+      <FullPath>C:\Projects\open62541-i4Component\buildWIN\x64\Debug\open62541-generator-ids-i4aas_inst</FullPath>
+    </ProjectOutput>
+    <ProjectOutput>
+      <FullPath>C:\Projects\open62541-i4Component\buildWIN\x64\Debug\open62541-generator-ids-i4aas</FullPath>
+    </ProjectOutput>
+    <ProjectOutput>
+      <FullPath>C:\Projects\open62541-i4Component\buildWIN\x64\Debug\open62541-generator-types-i4aas</FullPath>
+    </ProjectOutput>
+    <ProjectOutput>
+      <FullPath>C:\Projects\open62541-i4Component\buildWIN\x64\Debug\open62541-generator-ns-i4aas</FullPath>
+    </ProjectOutput>
+    <ProjectOutput>
+      <FullPath>C:\Projects\open62541-i4Component\buildWIN\x64\Debug\open62541-generator-types-i4aas_inst</FullPath>
+    </ProjectOutput>
+    <ProjectOutput>
+      <FullPath>C:\Projects\open62541-i4Component\buildWIN\x64\Debug\open62541-generator-ns-i4aas_inst</FullPath>
+    </ProjectOutput>
+  </ProjectOutputs>
+  <ContentFiles />
+  <SatelliteDlls />
+  <NonRecipeFileRefs />
+</Project>

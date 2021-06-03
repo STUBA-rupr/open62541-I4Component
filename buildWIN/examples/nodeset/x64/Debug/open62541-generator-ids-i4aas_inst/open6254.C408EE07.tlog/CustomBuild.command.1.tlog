@@ -1,0 +1,28 @@
+^C:\PROJECTS\OPEN62541-I4COMPONENT\BUILDWIN\CMAKEFILES\B697FB6ABC4207C1083D8840B93CBF54\I4AAS_INST_NODEIDS.H.RULE
+setlocal
+C:\Users\Rudolf\AppData\Local\Programs\Python\Python39\python.exe C:/Projects/open62541-i4Component/tools/generate_nodeid_header.py C:/Projects/open62541-i4Component/examples/nodeset/Nucleo-EnvSensor-AASX001_part2.csv C:/Projects/open62541-i4Component/buildWIN/src_generated/open62541/i4aas_inst_nodeids I4AAS_INST
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROJECTS\OPEN62541-I4COMPONENT\BUILDWIN\CMAKEFILES\E03B68722E184449A799942BD61DA185\OPEN62541-GENERATOR-IDS-I4AAS_INST.RULE
+setlocal
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROJECTS\OPEN62541-I4COMPONENT\EXAMPLES\NODESET\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Projects/open62541-i4Component -BC:/Projects/open62541-i4Component/buildWIN --check-stamp-file C:/Projects/open62541-i4Component/buildWIN/examples/nodeset/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

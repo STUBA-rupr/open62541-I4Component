@@ -45,9 +45,8 @@ unset(_expectedTargets)
 add_library(open62541::open62541 STATIC IMPORTED)
 
 set_target_properties(open62541::open62541 PROPERTIES
-  INTERFACE_COMPILE_DEFINITIONS "UA_ARCHITECTURE_WIN32"
+  INTERFACE_COMPILE_DEFINITIONS "UA_ARCHITECTURE_FREERTOSLWIP"
   INTERFACE_INCLUDE_DIRECTORIES "C:/Projects/open62541-i4Component/buildWIN"
-  INTERFACE_LINK_LIBRARIES "ws2_32;iphlpapi"
 )
 
 # Import target "open62541::open62541" for configuration "Debug"

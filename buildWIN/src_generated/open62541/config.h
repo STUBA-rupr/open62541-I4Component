@@ -11,8 +11,8 @@
 #define UA_OPEN62541_VER_MAJOR 0
 #define UA_OPEN62541_VER_MINOR 0
 #define UA_OPEN62541_VER_PATCH 0
-#define UA_OPEN62541_VER_LABEL "-210-gd7bbf512-dirty" /* Release candidate label, etc. */
-#define UA_OPEN62541_VER_COMMIT "v.1.2.2-210-gd7bbf512-dirty"
+#define UA_OPEN62541_VER_LABEL "-211-ga32db5c4-dirty" /* Release candidate label, etc. */
+#define UA_OPEN62541_VER_COMMIT "v.1.2.2-211-ga32db5c4-dirty"
 
 /**
  * Feature Options
@@ -112,6 +112,6 @@
 // specific architectures can undef this
 #define UA_HAS_GETIFADDR
 
-#include "win32/ua_architecture.h"
+#include "freertosLWIP/ua_architecture.h"
 
 #endif /* UA_CONFIG_H_ */
