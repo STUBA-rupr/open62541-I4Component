@@ -1,6 +1,8 @@
 # open62541-I4Component
 This branch is focused to embedded devices. It presetns **SDRAM** extension for heap memory functions to separate memory allocation for communication layer and application layer (node and addres space management). The target device is STM32F769I-DISC1.
 
+It is necessary to comment out two last lines from UA_Server_initNS0 (1.14 compatibility).
+
 ## Project InformationModelHelper 
 After generating Nodeset from AASX Package Explorer the nodeset XML needs to be adujsted to allow open62541 to compile it. 
 - The open62541 compiler requires one nodeset XML file for one namespace.
