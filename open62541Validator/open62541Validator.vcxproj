@@ -140,6 +140,7 @@
   <ItemGroup>
     <ClInclude Include="i4aas_inst_nodeids.h" />
     <ClInclude Include="i4aas_nodeids.h" />
+    <ClInclude Include="memoryWrappers.h" />
     <ClInclude Include="namespace_i4aas_generated.h" />
     <ClInclude Include="namespace_i4aas_inst_generated.h" />
     <ClInclude Include="open62541.h" />

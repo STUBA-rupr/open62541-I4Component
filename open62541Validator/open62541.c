@@ -15,6 +15,12 @@
  * A PARTICULAR PURPOSE.
  */
 
+extern int nodesMemorySize ;
+extern int arrayCopyMemorySize;
+extern int arrayNewMemorySize;
+extern int refResult_initNewMemorySize;
+
+
 #ifndef UA_DYNAMIC_LINKING_EXPORT
 # define UA_DYNAMIC_LINKING_EXPORT
 # define MDNSD_DYNAMIC_LINKING
@@ -9047,6 +9053,7 @@ UA_Array_new(size_t size, const UA_DataType *type) {
         return NULL;
     if(size == 0)
         return UA_EMPTY_ARRAY_SENTINEL;
+    arrayNewMemorySize += size * type->memSize;
     return UA_calloc(size, type->memSize);
 }
 
@@ -9066,6 +9073,7 @@ UA_Array_copy(const void *src, size_t size,
 
     /* calloc, so we don't have to check retval in every iteration of copying */
     *dst = UA_calloc(size, type->memSize);
+    arrayCopyMemorySize += type->memSize * size;
     if(!*dst)
         return UA_STATUSCODE_BADOUTOFMEMORY;
 
@@ -34914,6 +34922,7 @@ RefResult_init(RefResult *rr) {
         UA_Array_new(UA_REFTREE_INITIAL_SIZE, &UA_TYPES[UA_TYPES_REFERENCEDESCRIPTION]);
     if(!rr->descr)
         return UA_STATUSCODE_BADOUTOFMEMORY;
+    refResult_initNewMemorySize += ((const UA_DataType*)&UA_TYPES[UA_TYPES_REFERENCEDESCRIPTION])->memSize * UA_REFTREE_INITIAL_SIZE;
     rr->capacity = UA_REFTREE_INITIAL_SIZE;
     rr->size = 0;
     return UA_STATUSCODE_GOOD;
@@ -69644,6 +69653,7 @@ createEntry(UA_NodeClass nodeClass) {
         return NULL;
     }
     UA_NodeMapEntry *entry = (UA_NodeMapEntry*)UA_calloc(1, size);
+    nodesMemorySize += size;
     if(!entry)
         return NULL;
     entry->node.head.nodeClass = nodeClass;

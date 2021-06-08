@@ -18,6 +18,8 @@
 #ifndef OPEN62541_H_
 #define OPEN62541_H_
 
+#include "memoryWrappers.h"
+
 /*********************************** amalgamated original file "C:/Projects/open62541-i4Component/buildWIN/src_generated/open62541/config.h" ***********************************/
 
 /* This Source Code Form is subject to the terms of the Mozilla Public
@@ -261,13 +263,14 @@ void UA_sleep_ms(unsigned long ms);
 #endif
 
 /* Use the standard malloc */
+/*
 #ifndef UA_free
 # define UA_free free
 # define UA_malloc malloc
 # define UA_calloc calloc
 # define UA_realloc realloc
 #endif
-
+*/
 #ifdef __CODEGEARC__
 #define _snprintf_s(a,b,c,...) snprintf(a,b,__VA_ARGS__)
 #endif

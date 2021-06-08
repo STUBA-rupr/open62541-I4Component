@@ -2,9 +2,12 @@
 
 #pragma warning(disable : 4996)
 
+
 #include "namespace_i4aas_generated.h"
 #include "namespace_i4aas_inst_generated.h"
 #include "open62541.h"
+
+
 
 
 #include <netioapi.h>
@@ -22,6 +25,40 @@
 
 UA_ServerConfig *config;
 UA_Server *server;
+
+int nodesMemorySize = 0;
+int arrayCopyMemorySize = 0;
+int arrayNewMemorySize = 0;
+int refResult_initNewMemorySize = 0;
+size_t totalUsedRam = 0;
+
+// memory wrappers 
+void freeWrapper(void* memblock)
+{
+    totalUsedRam -= memblock ? _msize(memblock) : 0 ;
+    free(memblock);
+}
+
+void* mallocWrapper(size_t size)
+{
+    totalUsedRam += size;
+    return malloc(size);
+}
+
+void* callocWrapper(size_t number, size_t size)
+{
+    totalUsedRam += size * number;
+    return calloc(number, size);
+}
+
+void* reallocWrapper(void* memblock, size_t size)
+{
+    totalUsedRam += size - !memblock ?  0: _msize(memblock);
+    return realloc(memblock, size);
+}
+
+
+
 
 UA_Boolean running = true;
 static void
